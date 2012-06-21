@@ -1,4 +1,4 @@
-package com.rushfusion.mat.video.entity;
+package com.rushfusion.mat.bean;
 
 
 public class Movie {

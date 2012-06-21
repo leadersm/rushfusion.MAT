@@ -1,8 +1,10 @@
-package com.rushfusion.mat.video.db;
+package com.rushfusion.mat.utils.db;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.rushfusion.mat.video.entity.Movie;
+
+import com.rushfusion.mat.bean.Movie;
+
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ScrollView1"
     android:layout_width="fill_parent"
+    android:scrollbars="none"
     android:layout_height="200dip" >
 
     <LinearLayout
@@ -74,4 +75,4 @@
         android:text="其他" />
     </LinearLayout>
 
-</ScrollView>
+</HorizontalScrollView>

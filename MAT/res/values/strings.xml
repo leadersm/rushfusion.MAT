@@ -1,45 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="hello">Hello World, EpgActivity!</string>
-    <string name="app_name">CoolTv</string>
-    <string name="header">"主页 > 酷影 >"</string>
-    
-    <string name="vod_back">"返 回"</string>
-    <string name="vod_play">"播放"</string>
-
-    <string name="jinrituijian">"今日推荐"</string>
-    <string name="zhanghuguanli">"账户管理"</string>
-    <string name="vod_low_play">"标清播放"</string>
-    <string name="vod_high_play">"高清播放"</string>    
-    <string name="vod_collect">"收藏本片"</string>
-    
-    <string name="my_account">"我的账户"</string>
-    <string name="account_consume">"消费记录"</string>
-    <string name="account_collect">"收藏记录"</string>
-    <string name="account_watch">"观看记录"</string>
-    <string name="account_system">"系统通知"</string>
-    <string name="account_code">"验证码查询"</string>
-    <string name="account_set">"播放设置"</string>
-    <string name="account_dao">"至"</string>
-    <string name="account_off_line">"此影片已下线,请观看其他影片。"</string>
-    
-    <string name="search">"搜索"</string>
-    <string name="search_example">"例如：搜索“蜘蛛侠”，请输入“zzx”。"</string>
-    <string name="search_clean">"清除"</string>
-    
-    <string name="research">"重新搜索"</string>
-    <string name="qingshuru">"请输入关键字..."</string>
-    <string name="meiyoushuru">"您还没有输入..."</string>
-    <string name="sorry">"非常抱歉找不到与***相关的内容"</string>
-    <string name="searchinfo_a">"非常抱歉找不到与“" </string>
-    <string name="searchinfo_b">"”相关的内容"</string>
-    <string name="searchinfo_c">"搜索 “" </string>
-    <string name="searchinfo_d">"” ，共找到视频"</string>
-    <string name="searchinfo_e">"个"</string>
-    <string name="search_result_top">"观看排行："</string>
-    
-        
-        
+    <string name="app_name">MAT</string>
         
     <string name="director">"导演"</string>
     <string name="actor">"主演"</string>
@@ -52,44 +14,6 @@
     <string name="prev_page">"上一页"</string>
     <string name="next_page">"下一页"</string>
     
-    
-    <string name="header_navigator">"主页 > 酷影 > "</string>
-    <string name="header_info">"即将上映经典好莱坞大片，敬请关注！"</string>
-    
-    <string name="order_info">"单点价格：1元 服务周期：31天"</string>
-    
-    <string name="fuwuleixing">"服务类型"</string>
-    <string name="fuwuzhouqi">"服务周期"</string>
-    <string name="jiage">"价格(元)"</string>
-    <string name="dinggoufuwu">"订购服务"</string>
-    
-     <!-- 消费记录 -->   
-    <string name="liushuidingdanhao">"订单流水号"</string>
-    <string name="dingdanchanpin">"订单产品"</string>
-    <string name="jine">"金额"</string>
-    <string name="xiadanshijian">"下单时间"</string>
-    
-    <!-- 观看记录 -->
-    <string name="shoucangjilu">"你还没有收藏任何影片"</string>
-    <string name="guankanpaihang">"观看排行"</string>
-    
-    <!-- 系统通知 -->
-    <string name="xuhao">"序号"</string>
-    <string name="zhuti">主题</string>
-    <string name="shijian">时间</string>
-    
-    <!-- 验证码查询 -->
-    <string name="shurushoujihao">  请输入手机号码</string>
-    <string name="chaxun">查询</string>
-    <string name="shoujihao">"手机号"</string>
-    <string name="yanzhengma">验证码</string>
-    <string name="yanzhengmahyouxiaoxing">验证码有效性</string>
-    
-    <!-- 播放设置 -->
-    <string name="bofangshezhi">"为了提高您的播放质量,请进行播放服务器就近设置"</string>
-    <string name="zuijinsheng">"选择您所在省份："</string>
-    <string name="yunyingshang">"选择网络运营商："</string>
-    
     <string name="pause">暂停</string>
     <string name="play">播放</string>
     <string name="fastforward">快进</string>
@@ -100,68 +24,6 @@
     <string name="share">分享</string>
     <string name="settings">设置</string>
         
-    <!-- 我的账户 -->    
-    <string name="yonghuid">"用 户 ID："</string>
-    <string name="yonghuzhuangtai">"用户状态:"</string>
-    <string name="baotianfuwu">"您订购的是包天套餐服务"</string>
-    <string name="taocan">"包天套餐"</string>
-    <string name="dinggoushijian">"2011-7-3 22:11:11至2012-7-4 22:11:11"</string>
-    <string name="jiage1">"￥1"</string>
-    <string name="lijidinggou">"立即订购"</string>
-    
         
-        
-    <!-- 系统通知 -->    
-    <string name="xuliehao">"1"</string>
-    <string name="huanyingshiyong">"欢迎使用"</string>
-    <string name="xitongshijian">"2011-11-11 15:47"</string>
-    <string name="chakanlishi">"查看历史"</string>
-    
-        
-    <!-- 提示对话框 -->
-    <string name="btn_ok">确定</string>
-    <string name="dele_ok">影片删除成功！</string>
-    <string name="dele_fail">影片删除失败,请重试！</string>
-    <string name="coll_ok">影片收藏成功！</string>
-    <string name="coll_fail">影片收藏失败,请重试！</string>
-    
-    <!-- 订购服务设置 -->
-    <string name="account_order_style">"订购方式："</string>
-    <string name="account_order_service_cycle">"服务周期："</string>
-    <string name="account_order_service_range">"服务范围："</string>
-    <string name="account_order_cost">"资费："</string>
-    <string name="account_order_set_loacl">"你的所在地区："</string>
-    <string name="account_order_get_code">"选择发送指令获取验证码"</string>
-    <string name="account_order_get_eight_message">"请输入八位短信验证码"</string>
-    <string name="account_order_get_last_phone_num">"请输入手机号码后四位"</string>
-    <string name="account_order_agree">"同意订购协议"</string>
-    <string name="btn_set_ok">"确认"</string>
-    <string name="btn_set_details">"详情"</string>
-    
-        
-    <string name="noWatchRecord">您还没有观看任何影片。</string>
-  	<!--  观看记录dialog -->
-    <string name="dialog_watchRecord_continue">继续观看</string>
-    <string name="dialog_watchRecord_deleteAll">删除全部记录</string>
-    <string name="dialog_watchRecord_delThisRecord">删除此记录</string>
-    <string name="dialog_watchRecord_back">返 回</string>
-    <string name="delete_success">影片删除成功 !</string>
-    <string name="delete_failed">影片删除失败，请重试 ！</string>
-    <string name="dialog_sure">确定</string>
-    <string name="delete_offline">   此影片已下线，请观看其他影片。</string>
-    
-    <!-- 播放设置 -->    
-    <string name="play_setting_liantong">联通</string>
-    <string name="play_setting_dianxin">电信</string>
-    <string name="play_setting_yidong">移动(铁通)</string>
-    <string name="play_setting_changkuan">长宽</string>
-    
-  	<!--  收藏dialog -->
-    <string name="dialog_collect_continue">"立即播放"</string>
-    <string name="dialog_collect_deleteAll">"删除全部收藏"</string>
-    <string name="dialog_collect_delThisRecord">删除此收藏</string>
-    <string name="dialog_collect_back">返 回</string>
-    <string name="btn_set_save">保存</string>
-    
     
 </resources>

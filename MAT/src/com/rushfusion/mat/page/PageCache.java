@@ -2,9 +2,11 @@ package com.rushfusion.mat.page;
 
 import java.util.HashMap;
 
+import android.util.Log;
+
 public class PageCache{
 	
-	
+	private static final String TAG = "PageCache";
 	private static PageCache cache;
 	private HashMap<Integer,BasePage> data = null;
 	
@@ -29,6 +31,7 @@ public class PageCache{
 	
 	
 	public void release(){
+		Log.d(TAG, TAG+"---->release");
 		data = null;
 		cache = null;		
 	}

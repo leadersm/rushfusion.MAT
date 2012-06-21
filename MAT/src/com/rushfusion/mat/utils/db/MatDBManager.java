@@ -1,4 +1,4 @@
-package com.rushfusion.mat.video.db;
+package com.rushfusion.mat.utils.db;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
 
-import com.rushfusion.mat.video.entity.Movie;
+import com.rushfusion.mat.bean.Movie;
 
 public class MatDBManager {
 	public static final String DB_PATH = "/data" + Environment.getDataDirectory().getAbsolutePath() + "/" ;  

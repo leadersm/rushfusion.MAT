@@ -9,9 +9,10 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.rushfusion.mat.bean.Movie;
+import com.rushfusion.mat.page.PageCache;
 import com.rushfusion.mat.page.RecommendPage;
-import com.rushfusion.mat.video.db.MatDBManager;
-import com.rushfusion.mat.video.entity.Movie;
+import com.rushfusion.mat.utils.db.MatDBManager;
 
 public class MATActivity extends Activity {
     /** Called when the activity is first created. */
@@ -23,9 +24,7 @@ public class MATActivity extends Activity {
         ViewGroup parent = (ViewGroup) findViewById(R.id.parent);
         menu = findViewById(R.id.menu);
         initRecommendPage(parent);
-        //ViewGroup parent = (ViewGroup) findViewById(R.id.parent);
-        //initRecommendPage(parent);
-        query() ;
+//        query() ;
     }
     
     public void query() {
@@ -37,8 +36,8 @@ public class MATActivity extends Activity {
 
 	private void initRecommendPage(ViewGroup parent) {
 		RecommendPage recommendPage = new RecommendPage(this,parent);
-		recommendPage.setPageCache(recommendPage, R.layout.page_recommend);
 		recommendPage.loadPage("url?data?……TBD",R.layout.page_recommend);
+		recommendPage.setPageCache(recommendPage, R.layout.page_recommend);
 	}
 
 	@Override
@@ -64,8 +63,11 @@ public class MATActivity extends Activity {
 	}
 
 	
-	
-	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		PageCache.getInstance().release();
+	}
 	
 	
 }
