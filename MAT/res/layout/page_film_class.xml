@@ -26,14 +26,14 @@
             android:id="@+id/item1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            layout="@layout/film_class_page_item" />
+            layout="@layout/page_film_class_item" />
 
         <include
             android:id="@+id/item2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/item1"
-            layout="@layout/film_class_page_item"
+            layout="@layout/page_film_class_item"
             android:nextFocusRight="@+id/item3" />
 
         <include
@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/item2"
-            layout="@layout/film_class_page_item"
+            layout="@layout/page_film_class_item"
             android:nextFocusRight="@+id/item4" />
 
         <include
@@ -49,7 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/item3"
-            layout="@layout/film_class_page_item"
+            layout="@layout/page_film_class_item"
             android:nextFocusDown="@+id/item5"
             android:nextFocusRight="@+id/item5" />
 
@@ -60,7 +60,7 @@
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/item1"
             android:layout_marginTop="-30dip"
-            layout="@layout/film_class_page_item"
+            layout="@layout/page_film_class_item"
             android:nextFocusRight="@+id/item6" />
 
         <include
@@ -69,7 +69,7 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/item5"
             android:layout_toRightOf="@+id/item5"
-            layout="@layout/film_class_page_item" />
+            layout="@layout/page_film_class_item" />
 
         <include
             android:id="@+id/item7"
@@ -77,7 +77,7 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/item5"
             android:layout_toRightOf="@+id/item6"
-            layout="@layout/film_class_page_item" />
+            layout="@layout/page_film_class_item" />
 
         <include
             android:id="@+id/item8"
@@ -85,15 +85,8 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/item5"
             android:layout_toRightOf="@+id/item7"
-            layout="@layout/film_class_page_item" />
+            layout="@layout/page_film_class_item" />
 
-        <ProgressBar
-            android:id="@+id/content_progressbar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="10dip"
-            android:visibility="invisible" />
     </RelativeLayout>
 
     <View

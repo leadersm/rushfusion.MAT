@@ -5,14 +5,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-public class RecommendPage extends BasePage {
+public class TeleplayPage extends BasePage {
 
-	public RecommendPage(Context context, ViewGroup parent) {
+	public TeleplayPage(Context context, ViewGroup parent) {
 		super(context, parent);
 	}
 
-	public void loadPage(String url,int layoutId) {
-		// TODO Auto-generated method stub
+	@Override
+	public void loadPage(String url, int layoutId) {
 		loadPage(url, layoutId,new BasePage.onLoadingDataCallBack(){
 
 			@Override
@@ -36,14 +36,4 @@ public class RecommendPage extends BasePage {
 	}
 
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
-

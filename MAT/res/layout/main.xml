@@ -12,15 +12,24 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         layout="@layout/level1" />
-    <LinearLayout
+
+    <RelativeLayout
         android:id="@+id/parent"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/level1"
         android:orientation="vertical" >
-    </LinearLayout>
-    
+
+        <ProgressBar
+            android:id="@+id/content_progressbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="10dip"
+            android:visibility="invisible" />
+    </RelativeLayout>
+
     <include
         android:id="@+id/level2"
         android:layout_width="wrap_content"
@@ -36,6 +45,5 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/level2"
         layout="@layout/menu" />
-
 
 </RelativeLayout>
