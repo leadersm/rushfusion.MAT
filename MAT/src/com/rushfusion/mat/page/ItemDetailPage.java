@@ -1,21 +1,19 @@
 package com.rushfusion.mat.page;
 
-import java.util.List;
-
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-public class RecommendPage extends BasePage {
+public class ItemDetailPage extends BasePage {
 
-	public RecommendPage(Context context, ViewGroup parent) {
+	public ItemDetailPage(Context context, ViewGroup parent) {
 		super(context, parent);
+		// TODO Auto-generated constructor stub
 	}
 
-	public void loadPage(String url,int layoutId) {
+	@Override
+	public void loadPage(String url, int layoutId) {
 		// TODO Auto-generated method stub
 		loadPage(url, layoutId,new BasePage.onLoadingDataCallBack(){
 
@@ -39,15 +37,4 @@ public class RecommendPage extends BasePage {
 		});
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
-
