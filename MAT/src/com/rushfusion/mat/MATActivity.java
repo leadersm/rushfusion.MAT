@@ -19,7 +19,6 @@ import android.widget.Button;
 import com.rushfusion.mat.page.PageCache;
 import com.rushfusion.mat.page.RecommendPage;
 import com.rushfusion.mat.video.db.MatDBManager;
-import com.rushfusion.mat.video.entity.Movie;
 
 public class MATActivity extends Activity implements OnClickListener{
     /** Called when the activity is first created. */
@@ -28,8 +27,22 @@ public class MATActivity extends Activity implements OnClickListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        init(getLastWatchRecord());
+        //init(getLastWatchRecord());
+        
+        getTypes(MatDBManager.TELEPLAY) ;
+        
+        
+        
     }
+    
+    public void getTypes(String name) {
+    	MatDBManager dbManager = MatDBManager.getInstance(this) ;
+    	dbManager.openDatabase() ;
+    	List<String> types = dbManager.getTypes(name) ;
+    	Log.d("电影", types.toString()) ;
+    }
+    
+    
 	private void init(String name) {
 		initDataByName(name);
     	initMenu();

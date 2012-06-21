@@ -2,9 +2,10 @@ package com.rushfusion.mat.video.db;
 
 import java.util.List;
 
+import com.rushfusion.mat.video.entity.Movie;
+
 import android.content.Context;
 import android.util.Log;
-import com.rushfusion.mat.video.entity.Movie;
 
 
 public class TestDB {

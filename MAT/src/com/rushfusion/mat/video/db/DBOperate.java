@@ -1,13 +1,18 @@
 package com.rushfusion.mat.video.db;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+
+import com.rushfusion.mat.video.entity.Movie;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.rushfusion.mat.video.entity.Movie;
 
 public class DBOperate {
 	
@@ -128,6 +133,31 @@ public class DBOperate {
 		if (c != null && !c.isClosed())
 			c.close();
 		return movies;
+	}
+	
+	
+	public List<String> getAllType(SQLiteDatabase database, String category) {
+		List<String> types = new ArrayList<String>() ;
+		Set<String> typeSet = new HashSet<String>() ;
+		Cursor c = database.rawQuery("select type from movie where category = '"+ category +"' group by type", null);
+		while(c.moveToNext()) {
+			String str = c.getString(0) ;
+			if(str.contains(";")) {
+				String[] strs = str.split(";") ;
+				for(int i=0; i<strs.length; i++) {
+					typeSet.add(strs[i]) ;
+				}
+			} else {
+				typeSet.add(str) ;
+			}
+		}
+		for(Iterator<String> iterator = typeSet.iterator(); iterator.hasNext();) {
+			types.add(iterator.next().toString()) ;
+		}
+		
+		if (c != null && !c.isClosed())
+			c.close();
+		return types ;
 	}
 	
 	
