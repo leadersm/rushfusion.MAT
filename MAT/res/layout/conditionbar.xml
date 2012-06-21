@@ -5,45 +5,20 @@
     android:layout_height="wrap_content"
     android:background="@color/level"
     android:orientation="vertical" >
-
+
     <HorizontalScrollView
-        android:id="@+id/byType"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="horizontal" >
-
-            <TextView
-                android:id="@+id/textView1"
-                style="@style/font.text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/byType" />
-
-            <Button
-                android:id="@+id/typeall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/all" />
-        </LinearLayout>
-    </HorizontalScrollView>
-
-    <HorizontalScrollView
-        android:id="@+id/byArea"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
-
-        <LinearLayout
-            android:layout_width="fill_parent"
+            android:id="@+id/byArea"
+            android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:orientation="horizontal" >
 
             <TextView
                 android:id="@+id/TextView01"
-                style="@style/font.text"
+                style="@style/font.header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/byArea" />
@@ -55,20 +30,20 @@
                 android:text="@string/all" />
         </LinearLayout>
     </HorizontalScrollView>
-
+
     <HorizontalScrollView
-        android:id="@+id/byYear"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:id="@+id/byYear"
+            android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:orientation="horizontal" >
 
             <TextView
                 android:id="@+id/TextView02"
-                style="@style/font.text"
+                style="@style/font.header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/byYear" />
