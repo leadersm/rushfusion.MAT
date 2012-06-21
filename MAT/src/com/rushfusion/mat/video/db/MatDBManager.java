@@ -39,8 +39,24 @@ public class MatDBManager {
 		}
 	}
 	
+	/**
+	 * 所有电影
+	 * @param currentPage 当前页
+	 * @param count	每页显示多少条
+	 * @return
+	 */
 	public List<Movie> getAllMovie(int currentPage, int count) {
 		return dbOperate.queryAllMovie(database,currentPage,count) ;
+	}
+	
+	/**
+	 * 所有电视剧
+	 * @param currentPage 当前页
+	 * @param count 每页显示多少条
+	 * @return
+	 */
+	public List<Movie> getAllTeleplay(int currentPage, int count) {
+		return dbOperate.queryAllTeleplay(database, currentPage, count) ;
 	}
 	
 }
