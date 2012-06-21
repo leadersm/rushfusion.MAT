@@ -62,4 +62,10 @@ public class DBOperate {
 			c.close();
 		return movies;
 	}
+
+	public List<Movie> getAllMovieByYear(SQLiteDatabase database,
+			int currentPage, int count) {
+		
+		return null;
+	}
 }

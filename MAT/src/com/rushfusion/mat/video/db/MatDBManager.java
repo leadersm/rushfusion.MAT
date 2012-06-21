@@ -59,4 +59,15 @@ public class MatDBManager {
 		return dbOperate.queryAllTeleplay(database, currentPage, count) ;
 	}
 	
+	/**
+	 * 按年份查
+	 * @param currentPage
+	 * @param count
+	 * @param year 2012
+	 * @return
+	 */
+	public List<Movie> getAllMovieByYear(int currentPage, int count, int year) {
+		return dbOperate.getAllMovieByYear(database, currentPage, count) ;
+	}
+	
 }
