@@ -16,10 +16,10 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.rushfusion.mat.bean.Movie;
 import com.rushfusion.mat.page.PageCache;
 import com.rushfusion.mat.page.RecommendPage;
-import com.rushfusion.mat.utils.db.MatDBManager;
+import com.rushfusion.mat.video.db.MatDBManager;
+import com.rushfusion.mat.video.entity.Movie;
 
 public class MATActivity extends Activity implements OnClickListener{
     /** Called when the activity is first created. */
@@ -84,8 +84,8 @@ public class MATActivity extends Activity implements OnClickListener{
 	public void query() {
     	MatDBManager dbManager = MatDBManager.getInstance(this) ;
     	dbManager.openDatabase() ;
-    	List<Movie> movies = dbManager.getAllMovie(0,6) ;
-    	Log.d("电影", movies.toString()) ;
+//    	List<Movie> movies = dbManager.getAllMovie(0,6) ;
+//    	Log.d("电影", movies.toString()) ;
     }
 
 	private void initRecommendPage() {
