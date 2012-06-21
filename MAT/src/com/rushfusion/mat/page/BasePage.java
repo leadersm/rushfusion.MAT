@@ -1,7 +1,5 @@
 package com.rushfusion.mat.page;
 
-import java.util.HashMap;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,44 +75,6 @@ public abstract class BasePage {
 		 */
 		public void onFinshed(ProgressBar progress);
 	}
-	
-	
-	
-	static class PageCache{
-		int layoutId;
-		BasePage page;
-		static PageCache cache;
-		HashMap<Integer,BasePage> data = null;
-		
-		private PageCache(){
-			data = new HashMap<Integer, BasePage>();
-		}
-		
-		public static PageCache getInstance(){
-			if(cache==null){
-				cache = new PageCache();
-			}
-			return cache;
-		}
-		
-		public void set(int key,BasePage value){
-			data.put(key, value);
-		}
-		
-		public BasePage get(int key){
-			return data.get(key);
-		}
-		
-		
-		public void release(){
-			data = null;
-			cache = null;		
-		}
-	}
-	
-	
-	
-	
 	
 	
 	
