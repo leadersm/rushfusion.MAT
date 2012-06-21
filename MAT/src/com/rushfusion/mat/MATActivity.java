@@ -1,12 +1,17 @@
 package com.rushfusion.mat;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.rushfusion.mat.page.RecommendPage;
+import com.rushfusion.mat.video.db.MatDBManager;
+import com.rushfusion.mat.video.entity.Movie;
 
 public class MATActivity extends Activity {
     /** Called when the activity is first created. */
@@ -18,6 +23,16 @@ public class MATActivity extends Activity {
         ViewGroup parent = (ViewGroup) findViewById(R.id.parent);
         menu = findViewById(R.id.menu);
         initRecommendPage(parent);
+        //ViewGroup parent = (ViewGroup) findViewById(R.id.parent);
+        //initRecommendPage(parent);
+        query() ;
+    }
+    
+    public void query() {
+    	MatDBManager dbManager = MatDBManager.getInstance(this) ;
+    	dbManager.openDatabase() ;
+    	List<Movie> movies = dbManager.getAllMovie(0,6) ;
+    	Log.d("电影", movies.toString()) ;
     }
 
 	private void initRecommendPage(ViewGroup parent) {
