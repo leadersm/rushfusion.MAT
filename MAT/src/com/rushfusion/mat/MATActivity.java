@@ -1,7 +1,5 @@
 package com.rushfusion.mat;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -9,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,11 +16,11 @@ import android.widget.Button;
 import com.rushfusion.mat.page.PageCache;
 import com.rushfusion.mat.page.RecommendPage;
 import com.rushfusion.mat.video.db.MatDBManager;
-import com.rushfusion.mat.video.entity.Movie;
 
 public class MATActivity extends Activity implements OnClickListener{
     /** Called when the activity is first created. */
 	View menu;
+	View conditionBar;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,10 +30,23 @@ public class MATActivity extends Activity implements OnClickListener{
 	private void init(String name) {
 		initDataByName(name);
     	initMenu();
+    	initConditionBar();
     	initRecommendPage();//data?
     	updateHeaderInfo();
 	}
 
+	private void initConditionBar() {
+		// TODO Auto-generated method stub
+		conditionBar = findViewById(R.id.conditionBar);
+		Button byType = (Button) conditionBar.findViewById(R.id.byType);
+		Button byArea = (Button) conditionBar.findViewById(R.id.byArea);
+		Button byYear = (Button) conditionBar.findViewById(R.id.byYear);
+		byType.setOnClickListener(this);
+		byArea.setOnClickListener(this);
+		byYear.setOnClickListener(this);
+		
+		
+	}
 	private void initMenu() {
 		// TODO Auto-generated method stub
 		menu = findViewById(R.id.menu);
@@ -114,6 +124,8 @@ public class MATActivity extends Activity implements OnClickListener{
 		case R.id.sina:
 			updateLastWatchRecord("sina");
 			break;
+		//==================================
+			
 		default:
 			break;
 		}
