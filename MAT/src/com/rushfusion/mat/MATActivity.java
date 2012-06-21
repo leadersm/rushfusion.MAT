@@ -27,6 +27,8 @@ public class MATActivity extends Activity implements OnClickListener{
         setContentView(R.layout.main);
         init(getLastWatchRecord());
     }
+    
+    
 	private void init(String name) {
 		initDataByName(name);
     	initMenu();
@@ -38,13 +40,9 @@ public class MATActivity extends Activity implements OnClickListener{
 	private void initConditionBar() {
 		// TODO Auto-generated method stub
 		conditionBar = findViewById(R.id.conditionBar);
-		Button byType = (Button) conditionBar.findViewById(R.id.byType);
-		Button byArea = (Button) conditionBar.findViewById(R.id.byArea);
-		Button byYear = (Button) conditionBar.findViewById(R.id.byYear);
-		byType.setOnClickListener(this);
-		byArea.setOnClickListener(this);
-		byYear.setOnClickListener(this);
-		
+		View byType = conditionBar.findViewById(R.id.byType);
+		View byArea = conditionBar.findViewById(R.id.byArea);
+		View byYear = conditionBar.findViewById(R.id.byYear);
 		
 	}
 	private void initMenu() {

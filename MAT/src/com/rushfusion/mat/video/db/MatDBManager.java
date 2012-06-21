@@ -89,4 +89,8 @@ public class MatDBManager {
 		return dbOperate.queryByYearAndType(database, category, type, year, currentPage, count) ;
 	}
 	
+	public List<String> getTypes(String category) {
+		return dbOperate.getAllType(database, category) ;
+	}
+	
 }
