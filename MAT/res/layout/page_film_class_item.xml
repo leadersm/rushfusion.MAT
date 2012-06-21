@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+	android:orientation="vertical" android:layout_width="170dip"
+	android:layout_height="270dip"
+	android:focusable="true" 
+	android:background="@drawable/ring_box_selector" >
+
+	<ImageView
+	    android:id="@+id/ItemIcon"
+	    android:layout_width="150dip"
+	    android:layout_height="218dip"
+	    android:layout_centerHorizontal="true"
+	    android:scaleType="fitXY"
+	    android:src="@drawable/film_bg_loading" >
+</ImageView>
+		
+	<TextView
+		android:layout_centerHorizontal="true" 
+		android:layout_width="130dip" android:id="@+id/ItemTitle"
+		android:layout_height="wrap_content"
+		android:text="Applications" 
+		android:layout_below="@+id/ItemIcon"
+		android:layout_marginTop="2dip"
+		android:singleLine="true" 
+		android:marqueeRepeatLimit="marquee_forever"
+		android:gravity="center_horizontal">
+	</TextView>
+</RelativeLayout>

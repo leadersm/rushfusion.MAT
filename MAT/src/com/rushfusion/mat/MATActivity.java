@@ -9,6 +9,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ViewGroup;
+
+import com.rushfusion.mat.page.RecommendPage;
 
 public class MATActivity extends Activity {
 	private Context mContext ;
@@ -18,6 +21,8 @@ public class MATActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         mContext = MATActivity.this ;
+        ViewGroup parent = (ViewGroup) findViewById(R.id.parent);
+        initRecommendPage(parent);
         query() ;
     }
     
@@ -27,4 +32,10 @@ public class MATActivity extends Activity {
     	List<Movie> movies = dbManager.getAllMovie() ;
     	Log.d("电影", movies.toString()) ;
     }
+
+	private void initRecommendPage(ViewGroup parent) {
+		RecommendPage recommendPage = new RecommendPage(this,parent);
+		recommendPage.loadPage("url",R.layout.page_recommend);
+	}
+
 }
