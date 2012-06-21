@@ -18,7 +18,8 @@ public class MATActivity extends Activity {
 
 	private void initRecommendPage(ViewGroup parent) {
 		RecommendPage recommendPage = new RecommendPage(this,parent);
-		recommendPage.loadPage("url",R.layout.page_recommend);
+		recommendPage.loadPage("url?data?……TBD",R.layout.page_recommend);
+		recommendPage.setPageCache(recommendPage, R.layout.page_recommend);
 	}
 
 }

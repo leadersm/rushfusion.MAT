@@ -29,10 +29,6 @@ public abstract class BasePage {
 		return isLoading;
 	}
 
-	public void setLoading(boolean isLoading) {
-		this.isLoading = isLoading;
-	}
-
 	public View getContentView() {
 		return contentView;
 	}
@@ -50,11 +46,17 @@ public abstract class BasePage {
 		parent.addView(contentView);
 	}
 
+	public void setPageCache(BasePage page,int layoutId){
+		PageCache.getInstance().set(layoutId, page);
+	}
+	
 	public void loadPage(String url,int layoutId,onLoadingDataCallBack callback){
+		isLoading = true;
 		setContentView(layoutId);
 		callback.onPrepare(progress);
 		callback.onExcute(url);
 		callback.onFinshed(progress);
+		isLoading = false;
 	}
 	
 	public interface onLoadingDataCallBack{
@@ -93,6 +95,10 @@ public abstract class BasePage {
 				cache = new PageCache();
 			}
 			return cache;
+		}
+		
+		public void set(int key,BasePage value){
+			data.put(key, value);
 		}
 		
 		public BasePage get(int key){
