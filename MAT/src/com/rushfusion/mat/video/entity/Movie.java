@@ -19,7 +19,9 @@ public class Movie {
 	private String length ;	//时长
 	private String url ;	//播放地址
 	
-	public Movie(){}
+	public Movie(){
+		
+	}
 	public int getCount() {
 		return count;
 	}

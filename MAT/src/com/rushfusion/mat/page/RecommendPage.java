@@ -24,6 +24,8 @@ public class RecommendPage extends BasePage {
 			@Override
 			public boolean onExcute(String url) {
 				// TODO Auto-generated method stub
+//				List<Movie> movies = TestDB.getInstance(context).queryAllMovie(MatDBManager.MOVIE, 0, 6);//All by name
+//				Log.d("RecommendPage onExcute", movies.toString());
 				return false;
 			}
 

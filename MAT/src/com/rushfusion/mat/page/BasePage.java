@@ -13,7 +13,7 @@ public abstract class BasePage {
 	private boolean isLoading = false;
 	public View contentView;
 	
-	private Activity context;
+	public Activity context;
 	private ViewGroup parent;
 	public ProgressBar progress;
 	
@@ -66,6 +66,9 @@ public abstract class BasePage {
 		public void onPrepare(ProgressBar progress);
 		/**
 		 * handle your data here   //loading data
+		 * attach your data to the view
+		 * by use contentView.findViewById(R.id.xx);
+		 * 
 		 * @param url
 		 * @return
 		 */
