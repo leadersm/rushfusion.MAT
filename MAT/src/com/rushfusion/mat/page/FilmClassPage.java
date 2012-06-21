@@ -1,13 +1,13 @@
 package com.rushfusion.mat.page;
 
-import android.content.Context;
+import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 public class FilmClassPage extends BasePage {
 
-	public FilmClassPage(Context context, ViewGroup parent) {
+	public FilmClassPage(Activity context, ViewGroup parent) {
 		super(context, parent);
 	}
 

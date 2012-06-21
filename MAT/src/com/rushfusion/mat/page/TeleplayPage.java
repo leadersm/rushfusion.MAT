@@ -1,13 +1,13 @@
 package com.rushfusion.mat.page;
 
-import android.content.Context;
+import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 public class TeleplayPage extends BasePage {
 
-	public TeleplayPage(Context context, ViewGroup parent) {
+	public TeleplayPage(Activity context, ViewGroup parent) {
 		super(context, parent);
 	}
 

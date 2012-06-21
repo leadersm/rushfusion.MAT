@@ -1,6 +1,6 @@
 package com.rushfusion.mat.page;
 
-import android.content.Context;
+import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +13,14 @@ public abstract class BasePage {
 	private boolean isLoading = false;
 	public View contentView;
 	
-	private Context context;
+	private Activity context;
 	private ViewGroup parent;
 	public ProgressBar progress;
 	
-	public BasePage(Context context,ViewGroup parent) {
+	public BasePage(Activity context,ViewGroup parent) {
 		this.context = context;
 		this.parent = parent;
-		progress = (ProgressBar) parent.findViewById(R.id.content_progressbar);
+		progress = (ProgressBar) context.findViewById(R.id.content_progressbar);
 	}
 
 	public boolean isLoading() {
@@ -41,7 +41,8 @@ public abstract class BasePage {
 		}else
 			contentView = LayoutInflater.from(context).inflate(layoutId, null);
 		this.contentView = contentView;
-		parent.addView(contentView);
+		if(contentView.getParent()==null)
+			parent.addView(contentView);
 	}
 
 	public void setPageCache(BasePage page,int layoutId){

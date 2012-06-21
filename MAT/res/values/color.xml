@@ -4,4 +4,6 @@
 	<color name="white">#fff</color>
 	<color name="bg">#fff</color>
 	<color name="province_bg">#b4000000</color>
+	<color name="level">#556677</color>
+	
 </resources>

@@ -5,12 +5,29 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <include
-        android:id="@+id/level1"
+    <TextView
+        android:id="@+id/headerInfo"
+        style="@style/font.header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:text="乐视>首页>" />
+
+    <include
+        android:id="@+id/menu"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/headerInfo"
+        layout="@layout/menu" />
+
+    <include
+        android:id="@+id/level1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/menu"
         layout="@layout/level1" />
 
     <RelativeLayout
@@ -20,14 +37,6 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/level1"
         android:orientation="vertical" >
-
-        <ProgressBar
-            android:id="@+id/content_progressbar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="10dip"
-            android:visibility="invisible" />
     </RelativeLayout>
 
     <include
@@ -38,12 +47,11 @@
         android:layout_below="@+id/level1"
         layout="@layout/level2" />
 
-    <include
-        android:id="@+id/menu"
+    <ProgressBar
+        android:id="@+id/content_progressbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/level2"
-        layout="@layout/menu" />
+        android:layout_centerInParent="true"
+        android:visibility="invisible" />
 
 </RelativeLayout>

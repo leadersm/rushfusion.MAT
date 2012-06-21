@@ -1,13 +1,13 @@
 package com.rushfusion.mat.page;
 
-import android.content.Context;
+import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 public class ItemDetailPage extends BasePage {
 
-	public ItemDetailPage(Context context, ViewGroup parent) {
+	public ItemDetailPage(Activity context, ViewGroup parent) {
 		super(context, parent);
 		// TODO Auto-generated constructor stub
 	}

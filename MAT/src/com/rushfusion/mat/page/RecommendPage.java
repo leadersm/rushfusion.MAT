@@ -1,13 +1,13 @@
 package com.rushfusion.mat.page;
 
-import android.content.Context;
+import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 public class RecommendPage extends BasePage {
 
-	public RecommendPage(Context context, ViewGroup parent) {
+	public RecommendPage(Activity context, ViewGroup parent) {
 		super(context, parent);
 	}
 
