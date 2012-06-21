@@ -39,8 +39,8 @@ public class MatDBManager {
 		}
 	}
 	
-	public List<Movie> getAllMovie() {
-		return dbOperate.queryAllMovie(database) ;
+	public List<Movie> getAllMovie(int currentPage, int count) {
+		return dbOperate.queryAllMovie(database,currentPage,count) ;
 	}
 	
 }

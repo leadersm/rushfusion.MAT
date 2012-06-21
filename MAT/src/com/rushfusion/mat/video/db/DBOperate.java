@@ -10,9 +10,12 @@ public class DBOperate {
 	/**
 	 * 查询所有电影
 	 */
-	public List<Movie> queryAllMovie(SQLiteDatabase database) {
+	public List<Movie> queryAllMovie(SQLiteDatabase database, int currentPage, int count) {
+		int startCount = currentPage * count + 1 ;
+		int endCount = (currentPage+1) * count ;
+		
 		List<Movie> movies = new ArrayList<Movie>();
-		Cursor c = database.rawQuery("select * from movie", null);
+		Cursor c = database.rawQuery("select * from movie limit "+startCount+","+endCount, null);
 		Movie movie = null;
 		while(c.moveToNext()) {
 			movie = new Movie(c.getInt(0), c.getInt(1), c.getInt(2), c.getInt(3), 

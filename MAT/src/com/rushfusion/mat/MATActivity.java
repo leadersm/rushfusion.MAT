@@ -21,15 +21,15 @@ public class MATActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         mContext = MATActivity.this ;
-        ViewGroup parent = (ViewGroup) findViewById(R.id.parent);
-        initRecommendPage(parent);
+        //ViewGroup parent = (ViewGroup) findViewById(R.id.parent);
+        //initRecommendPage(parent);
         query() ;
     }
     
     public void query() {
     	MatDBManager dbManager = MatDBManager.getInstance(mContext) ;
     	dbManager.openDatabase() ;
-    	List<Movie> movies = dbManager.getAllMovie() ;
+    	List<Movie> movies = dbManager.getAllMovie(0,6) ;
     	Log.d("电影", movies.toString()) ;
     }
 
