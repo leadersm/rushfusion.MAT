@@ -12,6 +12,8 @@ public class MatDBManager {
 	public static final String DB_PATH = "/data" + Environment.getDataDirectory().getAbsolutePath() + "/" ;  
 	public static final String DB_NAME = "sina_video.db"; 
 	private static MatDBManager dbManager = null ;
+	public static final String TELEPLAY = "teleplay" ;	//电视剧
+	public static final String MOVIE = "movie" ;	//电影
 	private Context mContext;
 	private SQLiteDatabase database;
 	private DBOperate dbOperate ;
@@ -40,34 +42,51 @@ public class MatDBManager {
 	}
 	
 	/**
-	 * 所有电影
-	 * @param currentPage 当前页
+	 * 查询全部
+	 * @param category 电影或者是电视剧    通过  MatDBManager.TELEPLAY 或者是 MatDBManager.MOVIE 来指定
+	 * @param currentPage 当前第几页  从0开始
 	 * @param count	每页显示多少条
 	 * @return
 	 */
-	public List<Movie> getAllMovie(int currentPage, int count) {
-		return dbOperate.queryAllMovie(database,currentPage,count) ;
+	public List<Movie> getAll(String category, int currentPage, int count) {
+		return dbOperate.queryAll(database,category,currentPage,count) ;
 	}
 	
 	/**
-	 * 所有电视剧
-	 * @param currentPage 当前页
-	 * @param count 每页显示多少条
-	 * @return
-	 */
-	public List<Movie> getAllTeleplay(int currentPage, int count) {
-		return dbOperate.queryAllTeleplay(database, currentPage, count) ;
-	}
-	
-	/**
-	 * 按年份查
+	 * 通过年份查找
+	 * @param category
+	 * @param year 2012
 	 * @param currentPage
 	 * @param count
-	 * @param year 2012
 	 * @return
 	 */
-	public List<Movie> getAllMovieByYear(int currentPage, int count, int year) {
-		return dbOperate.getAllMovieByYear(database, currentPage, count) ;
+	public List<Movie> getAllByYear(String category, int year, int currentPage, int count) {
+		return dbOperate.queryByYear(database, category, year, currentPage, count) ;
+	}
+	
+	/**
+	 * 通过类别查找
+	 * @param category
+	 * @param type 动作
+	 * @param currentPage
+	 * @param count
+	 * @return
+	 */
+	public List<Movie> getAllByType(String category, String type, int currentPage, int count) {
+		return dbOperate.queryByType(database, category, type, currentPage, count) ;
+	}
+	
+	/**
+	 * 通过年份和类别查找
+	 * @param category
+	 * @param type
+	 * @param year
+	 * @param currentPage
+	 * @param count
+	 * @return
+	 */
+	public List<Movie> getAllByYearAndType(String category, String type, int year, int currentPage, int count) {
+		return dbOperate.queryByYearAndType(database, category, type, year, currentPage, count) ;
 	}
 	
 }

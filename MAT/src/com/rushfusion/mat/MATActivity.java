@@ -23,22 +23,13 @@ public class MATActivity extends Activity {
         ViewGroup parent = (ViewGroup) findViewById(R.id.parent);
         menu = findViewById(R.id.menu);
         initRecommendPage(parent);
-        //ViewGroup parent = (ViewGroup) findViewById(R.id.parent);
-        //initRecommendPage(parent);
-        query() ;
-    }
-    
-    public void query() {
-    	MatDBManager dbManager = MatDBManager.getInstance(this) ;
-    	dbManager.openDatabase() ;
-    	List<Movie> movies = dbManager.getAllMovie(0,6) ;
-    	Log.d("电影", movies.toString()) ;
+        
     }
 
 	private void initRecommendPage(ViewGroup parent) {
 		RecommendPage recommendPage = new RecommendPage(this,parent);
-		recommendPage.setPageCache(recommendPage, R.layout.page_recommend);
 		recommendPage.loadPage("url?data?……TBD",R.layout.page_recommend);
+		recommendPage.setPageCache(recommendPage, R.layout.page_recommend);
 	}
 
 	@Override
