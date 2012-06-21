@@ -136,6 +136,12 @@ public class DBOperate {
 	}
 	
 	
+	/**
+	 * 
+	 * @param database
+	 * @param category  电影 或者 电视剧
+	 * @return
+	 */
 	public List<String> getAllType(SQLiteDatabase database, String category) {
 		List<String> types = new ArrayList<String>() ;
 		Set<String> typeSet = new HashSet<String>() ;
@@ -160,7 +166,27 @@ public class DBOperate {
 		return types ;
 	}
 	
-	
+	/**
+	 * 获取区域
+	 * @param database
+	 * @param category
+	 * @return
+	 */
+	public List<String> getArea(SQLiteDatabase database, String category) {
+		List<String> areas = new ArrayList<String>() ;
+		Set<String> areaSet = new HashSet<String>() ;
+		Cursor c = database.rawQuery("select area from movie where category = '"+ category +"'", null);
+		while(c.moveToNext()) {
+			areaSet.add(c.getString(0)) ;
+		}
+		for(Iterator<String> iterator = areaSet.iterator(); iterator.hasNext();) {
+			areas.add(iterator.next().toString()) ;
+		}
+		
+		if (c != null && !c.isClosed())
+			c.close();
+		return areas ;
+	}
 	
 	
 }

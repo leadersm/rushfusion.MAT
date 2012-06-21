@@ -1,7 +1,5 @@
 package com.rushfusion.mat;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -9,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,20 +24,10 @@ public class MATActivity extends Activity implements OnClickListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        //init(getLastWatchRecord());
-        
-        getTypes(MatDBManager.TELEPLAY) ;
-        
-        
-        
+        init(getLastWatchRecord());
     }
     
-    public void getTypes(String name) {
-    	MatDBManager dbManager = MatDBManager.getInstance(this) ;
-    	dbManager.openDatabase() ;
-    	List<String> types = dbManager.getTypes(name) ;
-    	Log.d("电影", types.toString()) ;
-    }
+    
     
     
 	private void init(String name) {

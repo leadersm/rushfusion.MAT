@@ -89,8 +89,17 @@ public class MatDBManager {
 		return dbOperate.queryByYearAndType(database, category, type, year, currentPage, count) ;
 	}
 	
+	/**
+	 * 获取所有分类
+	 * @param category
+	 * @return
+	 */
 	public List<String> getTypes(String category) {
 		return dbOperate.getAllType(database, category) ;
+	}
+	
+	public List<String> getArea(String category) {
+		return dbOperate.getArea(database, category) ;
 	}
 	
 }

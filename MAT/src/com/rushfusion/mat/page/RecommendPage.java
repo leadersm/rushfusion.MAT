@@ -34,16 +34,5 @@ public class RecommendPage extends BasePage {
 			}
 		});
 	}
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
 
