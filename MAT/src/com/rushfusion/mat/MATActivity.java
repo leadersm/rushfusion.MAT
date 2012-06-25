@@ -1,7 +1,6 @@
 package com.rushfusion.mat;
 
 import java.util.List;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -41,6 +40,7 @@ public class MATActivity extends Activity implements OnClickListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        
         sp = getSharedPreferences("MatHistory",Context.MODE_WORLD_READABLE);
         editor = sp.edit();
         init();

@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/bg_color" >
+
+    <ImageView
+        android:id="@+id/field_pic"
+        android:layout_width="297dip"
+        android:layout_height="426dip"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="46dip"
+        android:layout_marginTop="60dip"
+        android:background="@drawable/ring_box"
+        android:paddingBottom="12dip"
+        android:paddingLeft="0dip"
+        android:paddingRight="0dip"
+        android:paddingTop="10dip"
+        android:scaleType="fitXY"
+        android:src="@drawable/film_bg_loading" >
+    </ImageView>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="27dip"
+        android:layout_toRightOf="@+id/field_pic"
+        android:background="#80000000" >
+
+        <RelativeLayout
+            android:id="@+id/info_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_above="@+id/button_layout"
+            android:layout_marginLeft="66dip"
+            android:layout_marginRight="80dip"
+            android:layout_marginTop="36dip" >
+
+            <TextView
+                android:id="@+id/field_filmname"
+                style="@style/font.filmname_big"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="xxxxxxxxxxx" />
+
+            <TextView
+                android:id="@+id/field_director"
+                style="@style/font.text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/field_filmname"
+                android:layout_marginTop="12dip"
+                android:layout_toLeftOf="@+id/field_area"
+                android:singleLine="true"
+                android:text="director :" />
+
+            <TextView
+                android:id="@+id/field_actor"
+                style="@style/font.text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/field_director"
+                android:layout_toLeftOf="@+id/field_year"
+                android:singleLine="true"
+                android:text="actor : " />
+
+            <TextView
+                android:id="@+id/field_area"
+                style="@style/font.text"
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/field_director"
+                android:layout_marginRight="0dip"
+                android:singleLine="true"
+                android:text="area :" />
+
+            <TextView
+                android:id="@+id/field_year"
+                style="@style/font.text"
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/field_area"
+                android:layout_below="@+id/field_area"
+                android:singleLine="true"
+                android:text="year:" />
+
+            <TextView
+                android:id="@+id/field_longtime"
+                style="@style/font.text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/field_actor"
+                android:text="longtime :" >
+            </TextView>
+            <TextView
+                android:id="@+id/field_introduction"
+                style="@style/font.text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/field_longtime"
+                android:text="introduction :" >
+            </TextView>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/button_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/line1"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/vod_collect"
+                style="@style/font.button"
+                android:layout_width="220dip"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dip"
+                android:background="@drawable/btn_background_selector"
+                android:text="播放" />
+
+            <Button
+                android:id="@+id/vod_back"
+                style="@style/font.button"
+                android:layout_width="220dip"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dip"
+                android:background="@drawable/btn_background_selector"
+                android:text="返回" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/line1"
+            android:layout_width="fill_parent"
+            android:layout_height="2dip"
+            android:layout_above="@+id/order_info"
+            android:layout_marginBottom="3dip"
+            android:layout_marginTop="2dip"
+            android:background="#88cecece" >
+        </View>
+
+        <TextView
+            android:id="@+id/order_info"
+            style="@style/font.text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/content_layout"
+            android:layout_marginBottom="5dip"
+            android:layout_marginLeft="64dip"
+            android:text="节目列表" >
+        </TextView>
+
+        <LinearLayout
+            android:id="@+id/content_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dip"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip"
+            android:background="@drawable/epg_dian_shi_ju_film_page_content_bg"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingRight="10dip" >
+
+                <Button
+                    android:id="@+id/item01"
+                    style="@style/ContentButton" />
+
+                <Button
+                    android:id="@+id/item02"
+                    style="@style/ContentButton" />
+
+                <Button
+                    android:id="@+id/item03"
+                    style="@style/ContentButton" />
+
+                <Button
+                    android:id="@+id/item04"
+                    style="@style/ContentButton" />
+
+                <Button
+                    android:id="@+id/item05"
+                    style="@style/ContentButton" />
+
+                <Button
+                    android:id="@+id/item06"
+                    style="@style/ContentButton" />
+
+                <Button
+                    android:id="@+id/item07"
+                    style="@style/ContentButton" />
+
+                <Button
+                    android:id="@+id/item08"
+                    style="@style/ContentButton" />
+
+                <Button
+                    android:id="@+id/item09"
+                    style="@style/ContentButton" />
+
+                <Button
+                    android:id="@+id/item10"
+                    style="@style/ContentButton" />
+
+                <Button
+                    android:id="@+id/item11"
+                    style="@style/ContentButton" />
+
+                <Button
+                    android:id="@+id/item12"
+                    style="@style/ContentButton" />
+
+                <View
+                    android:id="@+id/epg_dian_shi_ju_film_page_arrow_up"
+                    android:layout_width="15dip"
+                    android:layout_height="15dip" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-20dip"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingRight="10dip" >
+
+                <Button
+                    android:id="@+id/item13"
+                    style="@style/ContentButton" />
+
+                <Button
+                    android:id="@+id/item14"
+                    style="@style/ContentButton" />
+
+                <Button
+                    android:id="@+id/item15"
+                    style="@style/ContentButton" />
+
+                <Button
+                    android:id="@+id/item16"
+                    style="@style/ContentButton" />
+
+                <Button
+                    android:id="@+id/item17"
+                    style="@style/ContentButton" />
+
+                <Button
+                    android:id="@+id/item18"
+                    style="@style/ContentButton" />
+
+                <Button
+                    android:id="@+id/item19"
+                    style="@style/ContentButton" />
+
+                <Button
+                    android:id="@+id/item20"
+                    style="@style/ContentButton" />
+
+                <Button
+                    android:id="@+id/item21"
+                    style="@style/ContentButton" />
+
+                <Button
+                    android:id="@+id/item22"
+                    style="@style/ContentButton" />
+
+                <Button
+                    android:id="@+id/item23"
+                    style="@style/ContentButton" />
+
+                <Button
+                    android:id="@+id/item24"
+                    style="@style/ContentButton" />
+
+                <View
+                    android:id="@+id/epg_dian_shi_ju_film_page_arrow_down"
+                    android:layout_width="15dip"
+                    android:layout_height="15dip" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/content_progressbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="10dip"
+            android:visibility="invisible" />
+    </RelativeLayout>
+
+</RelativeLayout>
