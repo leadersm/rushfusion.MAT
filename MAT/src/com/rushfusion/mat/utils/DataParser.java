@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +15,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
+import android.widget.ImageView;
 
 public class DataParser {
 	
@@ -68,7 +71,13 @@ public class DataParser {
 		HttpUtil httpUtil = HttpUtil.getInstance(mContext) ;
 		String strUrl = url.get("year") ;
 		if(httpUtil.connectServerByURL(strUrl)) {
-			return loadData(httpUtil.getInputStreamFromUrl(strUrl)) ;
+			List<String> list = new LinkedList<String>() ;
+			List<String> listStr = loadData(httpUtil.getInputStreamFromUrl(strUrl)) ;
+			Object[] str = listStr.toArray() ;
+			for(int i=str.length-1; i>=0; i--) {
+				list.add(str[i].toString()) ;
+			}
+			return list ;
 		}
 		return null;
 	}
@@ -95,7 +104,7 @@ public class DataParser {
 			String total = jsonObject.getString("total") ;
 			JSONArray itemsArray = jsonObject.getJSONArray("items") ;
 			dataList = new ArrayList<String>() ;
-			dataList.add(total) ;
+			//dataList.add(total) ;
 			for(int i=0; i<itemsArray.length(); i++) {
 				dataList.add(itemsArray.getString(i)) ;
 			}
@@ -108,4 +117,5 @@ public class DataParser {
 		}
 		return dataList;
 	}
+	
 }
