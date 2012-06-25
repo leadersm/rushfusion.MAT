@@ -48,7 +48,7 @@ public class MATActivity extends Activity implements OnClickListener{
     
     
 	private void init() {
-		currentOrigin = getLastWatchRecord();
+		currentOrigin = "sina";//getLastWatchRecord().equals("")?"sina":getLastWatchRecord();
     	initMenu();
     	initCategory(currentOrigin);
     	initChooseBar();
