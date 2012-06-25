@@ -41,8 +41,7 @@ public abstract class BasePage {
 		}else
 			contentView = LayoutInflater.from(context).inflate(layoutId, null);
 		this.contentView = contentView;
-		if(contentView.getParent()==null)
-			parent.addView(contentView);
+		parent.addView(contentView);
 	}
 
 	public void setPageCache(BasePage page,int layoutId){

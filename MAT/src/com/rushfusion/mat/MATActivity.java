@@ -53,7 +53,8 @@ public class MATActivity extends Activity implements OnClickListener{
     	initCategory(currentOrigin);
     	initChooseBar();
     	initConditionBar();
-    	initRecommendPage();//data?
+    	currentCategory = "首页";//??
+    	initRecommendPage();
     	updateHeaderInfo();
 	}
 
@@ -84,10 +85,23 @@ public class MATActivity extends Activity implements OnClickListener{
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					currentCategory = name;
-					initConditionBar();
-					currentType = types.contains(currentType)?currentType:"";
-					updatePage(currentCategory,currentType, null, null, null);
+			    	new AsyncTask<String, String, String>(){
+
+						@Override
+						protected String doInBackground(String... params) {
+							currentCategory = params[0];
+							initConditionBar();
+							currentType = types.contains(currentType)?currentType:"";
+							return currentType;
+						}
+						@Override
+						protected void onPostExecute(String result) {
+							super.onPostExecute(result);
+							updatePage(currentCategory,result, null, null, null);
+						}
+						
+					}.execute(name);
+					
 				}
 			});
 			level1.addView(btn);
@@ -140,7 +154,7 @@ public class MATActivity extends Activity implements OnClickListener{
 						updatePage(currentCategory,currentType, null, null, null);
 					}
 				});
-				areaView.addView(btn);
+				typeView.addView(btn);
 			}
 		
 		final List<String> areas = DataParser.getInstance(this,currentOrigin).getAreas();
@@ -228,6 +242,8 @@ public class MATActivity extends Activity implements OnClickListener{
 	
 	private void initRecommendPage() {
 		ViewGroup parent = (ViewGroup) findViewById(R.id.parent);
+		View level2 = findViewById(R.id.level_2);
+		level2.setVisibility(View.GONE);
 		RecommendPage recommendPage = new RecommendPage(this,parent);
 		recommendPage.loadPage("url?data?……TBD",R.layout.page_recommend);
 		recommendPage.setPageCache(recommendPage, R.layout.page_recommend);
@@ -237,23 +253,23 @@ public class MATActivity extends Activity implements OnClickListener{
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.leshi:
-			updateLastWatchRecord("乐视");
+//			updateLastWatchRecord("乐视");
 			changeDataByOriginName("leshi");
 			break;
 		case R.id.qiyi:
-			updateLastWatchRecord("奇艺");
+//			updateLastWatchRecord("奇艺");
 			changeDataByOriginName("qiyi");
 			break;
 		case R.id.souhu:
-			updateLastWatchRecord("搜狐");
+//			updateLastWatchRecord("搜狐");
 			changeDataByOriginName("souhu");
 			break;
 		case R.id.tudou:
-			updateLastWatchRecord("土豆");
+//			updateLastWatchRecord("土豆");
 			changeDataByOriginName("tudou");
 			break;
 		case R.id.sina:
-			updateLastWatchRecord("新浪");
+//			updateLastWatchRecord("新浪");
 			changeDataByOriginName("sina");
 			break;
 		//==================================
@@ -267,7 +283,7 @@ public class MATActivity extends Activity implements OnClickListener{
 			
 			break;
 		case R.id.byCondition:
-			
+			showConditionBar();
 			break;
 		//==================================
 			
@@ -277,6 +293,15 @@ public class MATActivity extends Activity implements OnClickListener{
 	}
 	
 	
+	private void showConditionBar() {
+		// TODO Auto-generated method stub
+		if(conditionBar.getVisibility()==View.VISIBLE){
+			conditionBar.setVisibility(View.INVISIBLE);
+		}else
+			conditionBar.setVisibility(View.VISIBLE);
+	}
+
+
 	private void changeDataByOriginName(String origin) {
 		// TODO Auto-generated method stub
 		initCategory(origin);
