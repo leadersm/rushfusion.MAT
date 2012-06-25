@@ -1,152 +1,78 @@
 package com.rushfusion.mat.utils;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Log;
-import android.widget.ImageView;
+import android.content.Context;
+
 
 public class HttpUtil {
-	public static final String TAG = "HttpUtil" ;
-	private static int NETWORK_CONNECT_TIMEOUT = 20000;
-	private static int NETWORK_SO_TIMEOUT = 20000;
+	private HttpResponse mHttpResponse ;
+	private static HttpUtil httpClient = null ;
+	static Map<String,String> urlMap = null ;
+	private static Context mContext ;
+	private HttpUtil() {
+	}
 	
-	public static Bitmap loadBitmap(String url) {
-		Log.d(TAG, "loadbitmap url:" + url);
-		if (url == null || "".equals(url)) {
-			return null;
+	public static HttpUtil getInstance(Context context) {
+		mContext = context ;
+		if(httpClient==null) {
+			httpClient = new HttpUtil() ;
 		}
-
-		HttpParams p = new BasicHttpParams();
-		HttpConnectionParams.setConnectionTimeout(p, NETWORK_CONNECT_TIMEOUT);
-		HttpConnectionParams.setSoTimeout(p, NETWORK_SO_TIMEOUT);
-
-		DefaultHttpClient mHttpClient = new DefaultHttpClient(p);
-
-		HttpGet mHttpGet = null;
+		return httpClient ;
+	}
+	
+	/**
+	 * 获取网络连接 200
+	 * @param url
+	 * @return
+	 */
+	public boolean connectServerByURL(String url) {
+		HttpGet httpRequest = new HttpGet(url) ;
 		try {
-			mHttpGet = new HttpGet(url);
-		} catch (Exception e) {
+			HttpClient httpClient = new DefaultHttpClient() ;
+			HttpResponse httpResponse= httpClient.execute(httpRequest) ;
+			if(httpResponse.getStatusLine().getStatusCode()==HttpStatus.SC_OK) {
+				mHttpResponse = httpResponse ;
+				return true ;
+			}
+		} catch (ClientProtocolException e) {
 			e.printStackTrace();
-			return null;
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+		return false;
+	}
 
-		InputStream inputStream = null;
-		HttpEntity resEntity = null;
+	/**
+	 * getInputStream
+	 * @param url
+	 * @return
+	 */
+	public InputStream getInputStreamFromUrl(String url) {
+		InputStream inputStream = null ;
 		try {
-			HttpResponse response = mHttpClient.execute(mHttpGet);
-			int statusCode = response.getStatusLine().getStatusCode();
-			if (statusCode != HttpStatus.SC_OK) {
-				Log.d(TAG, "loadbitmap statusCode:" + statusCode);
-				return null;
+			if(connectServerByURL(url)) {
+				HttpEntity entity = mHttpResponse.getEntity() ;
+				inputStream = entity.getContent() ;
 			}
-			resEntity = response.getEntity();
-			inputStream = resEntity.getContent();
-
-			Bitmap bmp = BitmapFactory.decodeStream(inputStream);
-			inputStream.close();
-
-			if (bmp == null) {
-				Log.d(TAG,
-						"BitmapFactory.decodeStream error,try to use other method.");
-				return loadBitmap1(url);
-			} else
-				return bmp;
-		} catch (OutOfMemoryError oe) {
-			Log.i(TAG, "OutOfMemoryError : " + oe);
-			return null;
-		} catch (Exception e) {
-			Log.i(TAG, "Exception : " + e);
-			return null;
-		}
-	}
-	
-	public static Bitmap loadBitmap1(String url){
-		if(url == null || "".equals(url)){
-			return null;
-		}
-		
-		HttpParams p = new BasicHttpParams();
-		HttpConnectionParams.setConnectionTimeout(p,NETWORK_CONNECT_TIMEOUT);
-		HttpConnectionParams.setSoTimeout(p,NETWORK_SO_TIMEOUT);
-	
-		DefaultHttpClient mHttpClient = new DefaultHttpClient(p);
-
-		HttpGet mHttpGet = null;
-		try{
-			mHttpGet= new HttpGet(url);
-		}catch(Exception e){
+		} catch (IllegalStateException e) {
 			e.printStackTrace();
-			return null;
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-
-		InputStream inputStream = null;
-		HttpEntity resEntity = null; 
-		try{
-			HttpResponse response = mHttpClient.execute(mHttpGet);
-			int statusCode = response.getStatusLine().getStatusCode();
-			if (statusCode != HttpStatus.SC_OK) {
-				return null;
-			}
-			resEntity = response.getEntity();
-			inputStream = resEntity.getContent();
-			int length = (int)resEntity.getContentLength();
-			if(length<=0) return null;
-			byte[] buffer = new byte[length+4096];
-			
-			if(buffer == null){
-				inputStream.close();
-				return null;
-			}
-			
-			int n;
-			int rlength = 0;
-			while ((n = inputStream.read(buffer,rlength,40960)) >= 0) {
-				rlength += n;
-				if(rlength > length){
-					buffer = null;
-					inputStream.close();
-					return null;
-				}
-			}
-			inputStream.close();
-			Bitmap bmp = BitmapFactory.decodeByteArray(buffer,0,rlength);
-			buffer=null;
-			return bmp;
-			
-		}catch(OutOfMemoryError oe){
-			Log.i(TAG, "OutOfMemoryError : " + oe);
-			return null;
-		}catch(Exception e){
-			Log.i(TAG, "Exception : " + e);
-			return null;
-		}
+		return inputStream;
 	}
 	
-	public static void imageLoad(ImageView view,String url){
-		final String  mUrl = url;
-		final ImageView mView= view;
-		new Thread(new Runnable(){
-			public void run() {
-				Log.d("loadImage","murl:"+mUrl);
-				final Bitmap bmp = loadBitmap(mUrl);
-				if(bmp !=null){
-					mView.post(new Runnable(){
-						public void run() {
-							mView.setImageBitmap(bmp);
-							Log.d("loadImage","setImageDrawable");
-						}});
-				}
-			}}).start();
-	}
 }

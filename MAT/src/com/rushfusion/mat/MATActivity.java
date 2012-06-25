@@ -1,7 +1,6 @@
 package com.rushfusion.mat;
 
 import java.util.List;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -42,6 +41,7 @@ public class MATActivity extends Activity implements OnClickListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        
         sp = getSharedPreferences("MatHistory",Context.MODE_WORLD_READABLE);
         editor = sp.edit();
         init();
@@ -61,7 +61,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		// TODO Auto-generated method stub
 		ViewGroup level1 = (ViewGroup) findViewById(R.id.level1);
 		level1.removeAllViews();
-		level1s = DataParser.getInstance(this).getCategory();
+		level1s = DataParser.getInstance(this,"").getCategory();
 		for(int i = 0;i<level1s.size();i++){
 			Button btn = new Button(this);
 			final String name = level1s.get(i);
@@ -156,11 +156,11 @@ public class MATActivity extends Activity implements OnClickListener{
 			areaView.addView(cdtBtn);
 		}
 		
-		final List<Integer> years = getYears();
+		final List<String> years = getYears();
 		if(years!=null)
 		for(int i = 0;i<years.size();i++){
 			Button cdtBtn = new Button(this);
-			final int year = years.get(i);
+			final String year = years.get(i);
 			cdtBtn.setText(year);
 			cdtBtn.setOnClickListener(new OnClickListener() {
 				
@@ -177,13 +177,13 @@ public class MATActivity extends Activity implements OnClickListener{
 		
 		
 	}
-	private List<Integer> getYears() {
-		return DataParser.getInstance(this).getYears();
+	private List<String> getYears() {
+		return DataParser.getInstance(this,"").getYears();
 	}
 
 
 	private List<String> getAreas() {
-		return DataParser.getInstance(this).getAreas();
+		return DataParser.getInstance(this,"").getAreas();
 	}
 
 
