@@ -1,7 +1,6 @@
 package com.rushfusion.mat.video.db;
 
 import java.util.List;
-
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
@@ -100,6 +99,10 @@ public class MatDBManager {
 	
 	public List<String> getArea(String category) {
 		return dbOperate.getArea(database, category) ;
+	}
+	
+	public List<Movie> getRecommend() {
+		return dbOperate.getRecommend(database) ;
 	}
 	
 }

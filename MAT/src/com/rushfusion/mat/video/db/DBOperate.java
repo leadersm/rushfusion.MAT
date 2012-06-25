@@ -1,9 +1,11 @@
 package com.rushfusion.mat.video.db;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -186,6 +188,22 @@ public class DBOperate {
 		if (c != null && !c.isClosed())
 			c.close();
 		return areas ;
+	}
+	
+	public List<Movie> getRecommend(SQLiteDatabase database) {
+		List<Movie> movies = new ArrayList<Movie>();
+		Cursor c = database.rawQuery("select * from movie where year = 2012", null);
+		Movie movie = null;
+		while(c.moveToNext()) {
+			movie = new Movie(c.getInt(1), c.getInt(2), c.getInt(3), c.getInt(4), 
+					c.getInt(5), c.getString(6), c.getString(7), c.getString(8), 
+					c.getInt(9), c.getString(10), c.getString(11), c.getString(12), 
+					c.getString(13), c.getString(14), c.getString(15), c.getString(16)) ;
+			movies.add(movie);
+		}
+		if (c != null && !c.isClosed())
+			c.close();
+		return movies;
 	}
 	
 	

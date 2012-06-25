@@ -98,6 +98,10 @@ public class MATActivity extends Activity implements OnClickListener{
 		String param = "";
 		if(currentLevel1.equals("电影")){
 			param = MatDBManager.MOVIE;
+		} 
+		
+		if(currentLevel1.equals("电视剧")) {
+			param = MatDBManager.TELEPLAY ;
 		}
 		List<String> level2s = TestDB.getInstance(MATActivity.this).getLevel2(param);
 		for(int i = 0;i<level2s.size();i++){
