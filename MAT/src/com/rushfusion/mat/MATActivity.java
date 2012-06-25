@@ -140,7 +140,7 @@ public class MATActivity extends Activity implements OnClickListener{
 						updatePage(currentCategory,currentType, null, null, null);
 					}
 				});
-				areaView.addView(btn);
+				typeView.addView(btn);
 			}
 		
 		final List<String> areas = DataParser.getInstance(this,currentOrigin).getAreas();
