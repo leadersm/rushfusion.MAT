@@ -34,7 +34,8 @@ public class TestDB {
 		MatDBManager dbManager = MatDBManager.getInstance(mContext) ;
 		dbManager.openDatabase() ;
 		List<String> types = dbManager.getTypes(level1Name) ;
-		Log.d("电影", types.toString()) ;
+		Log.d("getLevel2", types.toString()) ;
+		dbManager.closeDatabase();
 		return types;
 	}
 
@@ -52,6 +53,7 @@ public class TestDB {
 		types.add("动漫");
 		
 		types.add("……");
+//		dbManager.closeDatabase();
 		return types; 
     }
 	
@@ -59,14 +61,16 @@ public class TestDB {
     	MatDBManager dbManager = MatDBManager.getInstance(mContext) ;
     	dbManager.openDatabase() ;
     	List<Movie> movies = dbManager.getAll(name,currentPage,count) ;
-    	Log.d("电影", movies.toString()) ;
+    	Log.d("queryAllTeleplay", movies.toString()) ;
+		dbManager.closeDatabase();
 	}
 
 	public List<Movie> queryAllMovie(String name, int currentPage, int count) {
     	MatDBManager dbManager = MatDBManager.getInstance(mContext) ;
     	dbManager.openDatabase() ;
     	List<Movie> movies = dbManager.getAll(name,currentPage,count) ;
-    	Log.d("电影", movies.toString()) ;
+    	Log.d("queryAllMovie", movies.toString()) ;
+    	dbManager.closeDatabase();
     	return movies;
     }
 	
@@ -75,20 +79,23 @@ public class TestDB {
 		MatDBManager dbManager = MatDBManager.getInstance(mContext) ;
     	dbManager.openDatabase() ;
     	List<Movie> movies = dbManager.getAllByYear(name, year, currentPage, count) ;
-    	Log.d("电影", movies.toString()) ;
+    	Log.d("queryAllByYear", movies.toString()) ;
+    	dbManager.closeDatabase();
 	}
 	
 	public void queryAllByType(String name, String type, int currentPage, int count) {
 		MatDBManager dbManager = MatDBManager.getInstance(mContext) ;
     	dbManager.openDatabase() ;
     	List<Movie> movies = dbManager.getAllByType(name, type, currentPage, count) ;
-    	Log.d("电影", movies.toString()) ;
+    	Log.d("queryAllByType", movies.toString()) ;
+    	dbManager.closeDatabase();
 	}
 	
 	public void queryAllByYearAndType(String name, String type, int year, int currentPage, int count) {
 		MatDBManager dbManager = MatDBManager.getInstance(mContext) ;
     	dbManager.openDatabase() ;
     	List<Movie> movies = dbManager.getAllByYearAndType(name, type, year, currentPage, count) ;
-    	Log.d("电影", movies.toString()) ;
+    	Log.d("queryAllByYearAndType", movies.toString()) ;
+    	dbManager.closeDatabase();
 	}
 }
