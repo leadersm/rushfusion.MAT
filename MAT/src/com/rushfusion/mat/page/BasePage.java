@@ -15,7 +15,7 @@ public abstract class BasePage {
 	private boolean isLoading = false;
 	public View contentView;
 	
-	private Context context;
+	public Context context;
 	private ViewGroup parent;
 	public ProgressBar progress;
 	
