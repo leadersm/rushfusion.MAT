@@ -61,7 +61,7 @@ public class ItemDetailPage extends BasePage {
 				directors.setText(movie.getDirectors());
 				artists.setText(movie.getArtists());
 				
-				
+				 
 				
 				return false;
 			}
