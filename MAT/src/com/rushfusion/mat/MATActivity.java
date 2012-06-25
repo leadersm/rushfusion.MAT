@@ -20,16 +20,20 @@ import android.widget.TextView;
 
 import com.rushfusion.mat.page.PageCache;
 import com.rushfusion.mat.page.RecommendPage;
-import com.rushfusion.mat.video.db.MatDBManager;
-import com.rushfusion.mat.video.db.TestDB;
+import com.rushfusion.mat.utils.DataParser;
 
 public class MATActivity extends Activity implements OnClickListener{
     /** Called when the activity is first created. */
 	private View menu;
 	private View conditionBar;
-	private static String currentOrigin="";
-	private static String currentLevel1="";
-	private static String currentLevel2="";
+	
+	
+	private String currentOrigin="";
+	private String currentLevel1="";
+	private String currentLevel2="";
+	
+	List<String> level1s;
+	List<String> level2s;
 	
 	private SharedPreferences sp;
 	private SharedPreferences.Editor editor;
@@ -38,13 +42,13 @@ public class MATActivity extends Activity implements OnClickListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        sp = getSharedPreferences("MatHistory",Context.MODE_WORLD_READABLE);
+        editor = sp.edit();
         init();
     }
     
     
 	private void init() {
-		sp = getSharedPreferences("MatHistory",Context.MODE_WORLD_READABLE);
-		editor = sp.edit();
 		currentOrigin = getLastWatchRecord();
     	initMenu();
     	initLevel1(currentOrigin);
@@ -57,7 +61,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		// TODO Auto-generated method stub
 		ViewGroup level1 = (ViewGroup) findViewById(R.id.level1);
 		level1.removeAllViews();
-		List<String> level1s = TestDB.getInstance(this).getLevel1(origin);
+		level1s = DataParser.getInstance(this).getCategory();
 		for(int i = 0;i<level1s.size();i++){
 			Button btn = new Button(this);
 			final String name = level1s.get(i);
@@ -69,18 +73,19 @@ public class MATActivity extends Activity implements OnClickListener{
 					// TODO Auto-generated method stub
 					currentLevel1 = name;
 					updateLevel2(currentLevel1);
-					String url = "www.x.x/xx?type=all&area=all&year=all";
-					updatePage(url);
-					
+					currentLevel2 = level2s.contains(currentLevel2)?currentLevel2:"";
+					updatePage(currentLevel1,currentLevel2);
 				}
 			});
 			level1.addView(btn);
 		}
 	}
 
-	private void updatePage(String url) {
-		updateHeaderInfo();
+	private void updatePage(String level1,String level2) {
 		// TODO Auto-generated method stub
+		String url = "www.xx.xx/xx?type="+currentLevel2+"&area=all&year=all";//根据level1 和level2 拼url、、
+//		String url = "www.xx.xx/xx?type="+currentLevel2+"&area="+area+"&year=all";
+		updateHeaderInfo();
 		if(currentLevel1.equals("首页")){
 			initRecommendPage();
 		}else{
@@ -90,12 +95,13 @@ public class MATActivity extends Activity implements OnClickListener{
 	}
 
 
-	protected void updateLevel2(String currentLevel1) {
+	protected void updateLevel2(final String level1) {
 		// TODO Auto-generated method stub
-		Log.d("MAT", "currentLevel1==>"+currentLevel1);
+		Log.d("MAT", "currentLevel1==>"+level1);
 		ViewGroup level2 = (ViewGroup) findViewById(R.id.level2);
 		level2.removeAllViews();
 		String param = "";
+/*<<<<<<< HEAD
 		if(currentLevel1.equals("电影")){
 			param = MatDBManager.MOVIE;
 		} 
@@ -104,7 +110,10 @@ public class MATActivity extends Activity implements OnClickListener{
 			param = MatDBManager.TELEPLAY ;
 		}
 		List<String> level2s = TestDB.getInstance(MATActivity.this).getLevel2(param);
-		for(int i = 0;i<level2s.size();i++){
+=======
+		level2s = DataParser.getInstance(this).getTypes();
+>>>>>>> refs/remotes/origin/lsm
+*/		for(int i = 0;i<level2s.size();i++){
 			Button btn = new Button(this);
 			final String name = level2s.get(i);
 			btn.setText(name);
@@ -114,8 +123,7 @@ public class MATActivity extends Activity implements OnClickListener{
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					currentLevel2 = name;
-					String url = "www.xx.xx/xx?type="+currentLevel2+"&area=all&year=all";
-					updatePage(url);
+					updatePage(level1,currentLevel2);
 				}
 			});
 			level2.addView(btn);
@@ -142,9 +150,7 @@ public class MATActivity extends Activity implements OnClickListener{
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					String url = "www.xx.xx/xx?type="+currentLevel2+"&area="+area+"&year=all";
-					//TestDB.getInstance(MATActivity.this).queryAllByType(MatDBManager.MOVIE, area, 0, 6) ;
-					updatePage(url);
+					updatePage(currentLevel1,currentLevel2);
 				}
 			});
 			areaView.addView(cdtBtn);
@@ -163,7 +169,7 @@ public class MATActivity extends Activity implements OnClickListener{
 					// TODO Auto-generated method stub
 					String url = "www.xx.xx/xx?type="+currentLevel2+"&area=all&year="+year;
 					//TestDB.getInstance(MATActivity.this).queryAllByYear(MatDBManager.MOVIE, year, 0, 6) ;
-					updatePage(url);
+					updatePage(currentLevel1,currentLevel2);
 				}
 			});
 			yearView.addView(cdtBtn);
@@ -172,19 +178,16 @@ public class MATActivity extends Activity implements OnClickListener{
 		
 	}
 	private List<Integer> getYears() {
-		// TODO Auto-generated method stub
-		return null;
+		return DataParser.getInstance(this).getYears();
 	}
 
 
 	private List<String> getAreas() {
-		// TODO Auto-generated method stub
-		return null;
+		return DataParser.getInstance(this).getAreas();
 	}
 
 
 	private void initMenu() {
-		// TODO Auto-generated method stub
 		menu = findViewById(R.id.menu);
 		Button leshi = (Button) findViewById(R.id.leshi);
 		Button qiyi = (Button) findViewById(R.id.qiyi);
@@ -200,13 +203,11 @@ public class MATActivity extends Activity implements OnClickListener{
 
 
 	private void updateHeaderInfo() {
-		// TODO Auto-generated method stub
 		TextView headerInfo = (TextView) findViewById(R.id.headerInfo);
 		headerInfo.setText(currentOrigin+">"+currentLevel1+">"+currentLevel2);
 	}
 
     private String getLastWatchRecord() {
-		// TODO Auto-generated method stub
 		return sp.getString("origin", "qiyi");
 	}
     private void updateLastWatchRecord(String origin){
@@ -215,13 +216,11 @@ public class MATActivity extends Activity implements OnClickListener{
 
 			@Override
 			protected void onPreExecute() {
-				// TODO Auto-generated method stub
 				super.onPreExecute();
 				updateHeaderInfo();
 			}
 			@Override
 			protected String doInBackground(String... params) {
-				// TODO Auto-generated method stub
 				editor.putString("origin", params[0]);
 				editor.commit();
 				return null;
@@ -239,27 +238,26 @@ public class MATActivity extends Activity implements OnClickListener{
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.leshi:
 			updateLastWatchRecord("乐视");
-			changeUrlByOriginName("leshi");
+			changeDataByOriginName("leshi");
 			break;
 		case R.id.qiyi:
 			updateLastWatchRecord("奇艺");
-			changeUrlByOriginName("qiyi");
+			changeDataByOriginName("qiyi");
 			break;
 		case R.id.souhu:
 			updateLastWatchRecord("搜狐");
-			changeUrlByOriginName("souhu");
+			changeDataByOriginName("souhu");
 			break;
 		case R.id.tudou:
 			updateLastWatchRecord("土豆");
-			changeUrlByOriginName("tudou");
+			changeDataByOriginName("tudou");
 			break;
 		case R.id.sina:
 			updateLastWatchRecord("新浪");
-			changeUrlByOriginName("sina");
+			changeDataByOriginName("sina");
 			break;
 		//==================================
 			
@@ -269,9 +267,14 @@ public class MATActivity extends Activity implements OnClickListener{
 	}
 	
 	
-	private void changeUrlByOriginName(String string) {
+	private void changeDataByOriginName(String origin) {
 		// TODO Auto-generated method stub
-		
+		initLevel1(origin);
+		if(level1s.contains(currentLevel1))
+			updateLevel2(currentLevel1);
+		else
+			updateLevel2(level1s.get(0));
+		updatePage(currentLevel1,currentLevel2);
 	}
 
 
@@ -292,7 +295,6 @@ public class MATActivity extends Activity implements OnClickListener{
 	
 	@Override
 	protected Dialog onCreateDialog(int id) {
-		// TODO Auto-generated method stub
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("提示");
 		builder.setMessage("确定退出吗？");
@@ -300,7 +302,6 @@ public class MATActivity extends Activity implements OnClickListener{
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
 				finish();
 			}
 		});
@@ -308,7 +309,6 @@ public class MATActivity extends Activity implements OnClickListener{
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
 				dismissDialog(0);
 			}
 		});
@@ -316,7 +316,6 @@ public class MATActivity extends Activity implements OnClickListener{
 	}
 
 	private void showMenu() {
-		// TODO Auto-generated method stub
 		if(menu.getVisibility()==View.VISIBLE)
 			menu.setVisibility(View.GONE);
 		else
