@@ -8,7 +8,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 
 import com.rushfusion.mat.page.PageCache;
 import com.rushfusion.mat.page.RecommendPage;
+import com.rushfusion.mat.video.db.MatDBManager;
 import com.rushfusion.mat.video.db.TestDB;
 
 public class MATActivity extends Activity implements OnClickListener{
@@ -28,6 +31,9 @@ public class MATActivity extends Activity implements OnClickListener{
 	private static String currentLevel1="";
 	private static String currentLevel2="";
 	
+	private SharedPreferences sp;
+	private SharedPreferences.Editor editor;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +43,8 @@ public class MATActivity extends Activity implements OnClickListener{
     
     
 	private void init() {
+		sp = getSharedPreferences("MatHistory",Context.MODE_WORLD_READABLE);
+		editor = sp.edit();
 		currentOrigin = getLastWatchRecord();
     	initMenu();
     	initLevel1(currentOrigin);
@@ -84,10 +92,14 @@ public class MATActivity extends Activity implements OnClickListener{
 
 	protected void updateLevel2(String currentLevel1) {
 		// TODO Auto-generated method stub
+		Log.d("MAT", "currentLevel1==>"+currentLevel1);
 		ViewGroup level2 = (ViewGroup) findViewById(R.id.level2);
 		level2.removeAllViews();
-		
-		List<String> level2s = TestDB.getInstance(MATActivity.this).getLevel2(currentLevel1);
+		String param = "";
+		if(currentLevel1.equals("电影")){
+			param = MatDBManager.MOVIE;
+		}
+		List<String> level2s = TestDB.getInstance(MATActivity.this).getLevel2(param);
 		for(int i = 0;i<level2s.size();i++){
 			Button btn = new Button(this);
 			final String name = level2s.get(i);
@@ -191,14 +203,26 @@ public class MATActivity extends Activity implements OnClickListener{
 
     private String getLastWatchRecord() {
 		// TODO Auto-generated method stub
-    	SharedPreferences sp = getSharedPreferences("MatHistory",Context.MODE_WORLD_READABLE);
 		return sp.getString("origin", "qiyi");
 	}
     private void updateLastWatchRecord(String origin){
-    	SharedPreferences sp = getSharedPreferences("MatHistory",Context.MODE_WORLD_READABLE);
-    	SharedPreferences.Editor editor = sp.edit();
-    	editor.putString("origin", origin);
-    	editor.commit();
+    	currentOrigin = origin;
+    	new AsyncTask<String, String, String>(){
+
+			@Override
+			protected void onPreExecute() {
+				// TODO Auto-generated method stub
+				super.onPreExecute();
+				updateHeaderInfo();
+			}
+			@Override
+			protected String doInBackground(String... params) {
+				// TODO Auto-generated method stub
+				editor.putString("origin", params[0]);
+				editor.commit();
+				return null;
+			}
+		}.execute(origin);
     }
 	
 	
