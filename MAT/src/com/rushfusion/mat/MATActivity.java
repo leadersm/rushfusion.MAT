@@ -10,7 +10,6 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,11 +28,11 @@ public class MATActivity extends Activity implements OnClickListener{
 	
 	
 	private String currentOrigin="";
-	private String currentLevel1="";
-	private String currentLevel2="";
+	private String currentCategory="";
+	private String currentType="";
 	
-	List<String> level1s;
-	List<String> level2s;
+	List<String> categories;
+	List<String> types;
 	
 	private SharedPreferences sp;
 	private SharedPreferences.Editor editor;
@@ -51,42 +50,63 @@ public class MATActivity extends Activity implements OnClickListener{
 	private void init() {
 		currentOrigin = getLastWatchRecord();
     	initMenu();
-    	initLevel1(currentOrigin);
+    	initCategory(currentOrigin);
+    	initChooseBar();
     	initConditionBar();
     	initRecommendPage();//data?
     	updateHeaderInfo();
 	}
 
-	private void initLevel1(String origin) {
+	private void initChooseBar() {
+		// TODO Auto-generated method stub
+		Button byRecent = (Button) findViewById(R.id.byRecent);
+		Button byScore = (Button) findViewById(R.id.byScore);
+		Button byComment = (Button) findViewById(R.id.byComment);
+		Button byCondition = (Button) findViewById(R.id.byCondition);
+		byRecent.setOnClickListener(this);
+		byScore.setOnClickListener(this);
+		byComment.setOnClickListener(this);
+		byCondition.setOnClickListener(this);
+	}
+
+
+	private void initCategory(String origin) {
 		// TODO Auto-generated method stub
 		ViewGroup level1 = (ViewGroup) findViewById(R.id.level1);
 		level1.removeAllViews();
-		level1s = DataParser.getInstance(this).getCategory();
-		for(int i = 0;i<level1s.size();i++){
+		categories = DataParser.getInstance(this,currentOrigin).getCategory();
+		for(int i = 0;i<categories.size();i++){
 			Button btn = new Button(this);
-			final String name = level1s.get(i);
+			final String name = categories.get(i);
 			btn.setText(name);
 			btn.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					currentLevel1 = name;
-					updateLevel2(currentLevel1);
-					currentLevel2 = level2s.contains(currentLevel2)?currentLevel2:"";
-					updatePage(currentLevel1,currentLevel2);
+					currentCategory = name;
+					initConditionBar();
+					currentType = types.contains(currentType)?currentType:"";
+					updatePage(currentCategory,currentType, null, null, null);
 				}
 			});
 			level1.addView(btn);
 		}
 	}
 
-	private void updatePage(String level1,String level2) {
+	/**
+	 * 
+	 * @param category
+	 * @param type
+	 * @param year
+	 * @param area
+	 * @param sort
+	 */
+	private void updatePage(String category,String type,String year,String area,String sort) {
 		// TODO Auto-generated method stub
-		String url = "www.xx.xx/xx?type="+currentLevel2+"&area=all&year=all";//根据level1 和level2 拼url、、
-//		String url = "www.xx.xx/xx?type="+currentLevel2+"&area="+area+"&year=all";
+		String url = "http://tvsrv.webhop.net:9061/query?source="+currentOrigin+"&category="+category+"&area="+area+"&sort="+sort+"&page=1&pagesize=8";
 		updateHeaderInfo();
-		if(currentLevel1.equals("首页")){
+		if(currentCategory.equals("首页")){
 			initRecommendPage();
 		}else{
 			//to other page...
@@ -94,41 +114,36 @@ public class MATActivity extends Activity implements OnClickListener{
 		
 	}
 
-
-	protected void updateLevel2(final String level1) {
-		// TODO Auto-generated method stub
-		Log.d("MAT", "currentLevel1==>"+level1);
-		ViewGroup level2 = (ViewGroup) findViewById(R.id.level2);
-		level2.removeAllViews();
-		String param = "";
-		level2s = DataParser.getInstance(this).getTypes();
-		for(int i = 0;i<level2s.size();i++){
-			Button btn = new Button(this);
-			final String name = level2s.get(i);
-			btn.setText(name);
-			btn.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					currentLevel2 = name;
-					updatePage(level1,currentLevel2);
-				}
-			});
-			level2.addView(btn);
-		}
-	}
-
-
 	private void initConditionBar() {
 		// TODO Auto-generated method stub
 		conditionBar = findViewById(R.id.conditionBar);
+		ViewGroup typeView = (ViewGroup) conditionBar.findViewById(R.id.byType);
 		ViewGroup areaView = (ViewGroup) conditionBar.findViewById(R.id.byArea);
 		ViewGroup yearView = (ViewGroup) conditionBar.findViewById(R.id.byYear);
+		
+		typeView.removeAllViews();
 		areaView.removeAllViews();
 		yearView.removeAllViews();
 		
-		final List<String> areas = getAreas();
+		types = DataParser.getInstance(this,currentOrigin).getTypes();
+		if(types!=null)
+			for(int i = 0;i<types.size();i++){
+				Button btn = new Button(this);
+				final String name = types.get(i);
+				btn.setText(name);
+				btn.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						currentType = name;
+						updatePage(currentCategory,currentType, null, null, null);
+					}
+				});
+				areaView.addView(btn);
+			}
+		
+		final List<String> areas = DataParser.getInstance(this,currentOrigin).getAreas();
 		if(areas!=null)
 		for(int i = 0;i<areas.size();i++){
 			Button cdtBtn = new Button(this);
@@ -139,40 +154,30 @@ public class MATActivity extends Activity implements OnClickListener{
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					updatePage(currentLevel1,currentLevel2);
+					updatePage(currentCategory,null, null, area, null);
 				}
 			});
 			areaView.addView(cdtBtn);
 		}
 		
-		final List<Integer> years = getYears();
+		final List<String> years = DataParser.getInstance(this,currentOrigin).getYears();
 		if(years!=null)
 		for(int i = 0;i<years.size();i++){
 			Button cdtBtn = new Button(this);
-			final int year = years.get(i);
+			final String year = years.get(i);
 			cdtBtn.setText(year);
 			cdtBtn.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					String url = "www.xx.xx/xx?type="+currentLevel2+"&area=all&year="+year;
-					//TestDB.getInstance(MATActivity.this).queryAllByYear(MatDBManager.MOVIE, year, 0, 6) ;
-					updatePage(currentLevel1,currentLevel2);
+					updatePage(currentCategory,null, year, null, null);
 				}
 			});
 			yearView.addView(cdtBtn);
 		}
 		
 		
-	}
-	private List<Integer> getYears() {
-		return DataParser.getInstance(this).getYears();
-	}
-
-
-	private List<String> getAreas() {
-		return DataParser.getInstance(this).getAreas();
 	}
 
 
@@ -193,12 +198,15 @@ public class MATActivity extends Activity implements OnClickListener{
 
 	private void updateHeaderInfo() {
 		TextView headerInfo = (TextView) findViewById(R.id.headerInfo);
-		headerInfo.setText(currentOrigin+">"+currentLevel1+">"+currentLevel2);
+		headerInfo.setText(currentOrigin+">"+currentCategory+">"+currentType);
 	}
 
     private String getLastWatchRecord() {
 		return sp.getString("origin", "qiyi");
 	}
+    
+    
+    
     private void updateLastWatchRecord(String origin){
     	currentOrigin = origin;
     	new AsyncTask<String, String, String>(){
@@ -249,6 +257,19 @@ public class MATActivity extends Activity implements OnClickListener{
 			changeDataByOriginName("sina");
 			break;
 		//==================================
+		case R.id.byRecent:
+			
+			break;
+		case R.id.byComment:
+			
+			break;
+		case R.id.byScore:
+			
+			break;
+		case R.id.byCondition:
+			
+			break;
+		//==================================
 			
 		default:
 			break;
@@ -258,12 +279,7 @@ public class MATActivity extends Activity implements OnClickListener{
 	
 	private void changeDataByOriginName(String origin) {
 		// TODO Auto-generated method stub
-		initLevel1(origin);
-		if(level1s.contains(currentLevel1))
-			updateLevel2(currentLevel1);
-		else
-			updateLevel2(level1s.get(0));
-		updatePage(currentLevel1,currentLevel2);
+		initCategory(origin);
 	}
 
 
@@ -317,5 +333,8 @@ public class MATActivity extends Activity implements OnClickListener{
 		super.onStop();
 		PageCache.getInstance().release();
 	}
+	
+	
+	
 	
 }

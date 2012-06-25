@@ -6,13 +6,16 @@ import android.content.Context;
 
 public class DataParser {
 	
+	
+	private static String mSource;
 	private static DataParser parser;
 	private static Context mContext;
 	private DataParser() {
 		
 	}
 	
-	public static DataParser getInstance(Context context){
+	public static DataParser getInstance(Context context,String source){
+		mSource = source;
 		if(parser==null){
 			mContext = context;
 			parser = new DataParser();
@@ -30,7 +33,7 @@ public class DataParser {
 		return null;
 	}
 
-	public List<Integer> getYears() {
+	public List<String> getYears() {
 		// TODO Auto-generated method stub
 		return null;
 		
