@@ -243,7 +243,7 @@ public class MATActivity extends Activity implements OnClickListener{
 	private void initRecommendPage() {
 		ViewGroup parent = (ViewGroup) findViewById(R.id.parent);
 		View level2 = findViewById(R.id.level_2);
-		level2.setVisibility(View.GONE);
+//		level2.setVisibility(View.GONE);
 		RecommendPage recommendPage = new RecommendPage(this,parent);
 		recommendPage.loadPage("url?data?……TBD",R.layout.page_recommend);
 		recommendPage.setPageCache(recommendPage, R.layout.page_recommend);
