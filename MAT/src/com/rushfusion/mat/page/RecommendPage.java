@@ -4,9 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 public class RecommendPage extends BasePage {
 
