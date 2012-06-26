@@ -44,9 +44,9 @@ public class DataParser {
 			url = new HashMap<String, String>() ;
 		}
 		url.put("category", "http://tvsrv.webhop.net:9061/category?source="+mSource) ;
-		url.put("type", "http://tvsrv.webhop.net:9061/type?source="+mSource+"&category=movie") ;
-		url.put("year", "http://tvsrv.webhop.net:9061/year?source="+mSource+"&category=movie") ;
-		url.put("area", "http://tvsrv.webhop.net:9061/area?source="+mSource+"&category=movie") ;
+		url.put("type", "http://tvsrv.webhop.net:9061/type?source="+mSource+"&category=") ;
+		url.put("year", "http://tvsrv.webhop.net:9061/year?source="+mSource+"&category=") ;
+		url.put("area", "http://tvsrv.webhop.net:9061/area?source="+mSource+"&category=") ;
 	}
 	
 	public List<String> getCategory() {
@@ -58,18 +58,18 @@ public class DataParser {
 		return null;
 	}
 
-	public List<String> getTypes() {
+	public List<String> getTypes(String category) {
 		HttpUtil httpUtil = HttpUtil.getInstance(mContext) ;
-		String strUrl = url.get("type") ;
+		String strUrl = url.get("type")+category ;
 		if(httpUtil.connectServerByURL(strUrl)) {
 			return loadData(httpUtil.getInputStreamFromUrl(strUrl)) ;
 		}
 		return null;
 	}
 
-	public List<String> getYears() {
+	public List<String> getYears(String category) {
 		HttpUtil httpUtil = HttpUtil.getInstance(mContext) ;
-		String strUrl = url.get("year") ;
+		String strUrl = url.get("year")+category ;
 		if(httpUtil.connectServerByURL(strUrl)) {
 			List<String> list = new LinkedList<String>() ;
 			List<String> listStr = loadData(httpUtil.getInputStreamFromUrl(strUrl)) ;
@@ -82,9 +82,9 @@ public class DataParser {
 		return null;
 	}
 
-	public List<String> getAreas() {
+	public List<String> getAreas(String category) {
 		HttpUtil httpUtil = HttpUtil.getInstance(mContext) ;
-		String strUrl = url.get("area") ;
+		String strUrl = url.get("area")+category ;
 		if(httpUtil.connectServerByURL(strUrl)) {
 			return loadData(httpUtil.getInputStreamFromUrl(strUrl)) ;
 		}

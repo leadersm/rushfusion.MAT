@@ -52,7 +52,7 @@ public class MATActivity extends Activity implements OnClickListener{
     	initMenu();
     	initCategory(currentOrigin);
     	initChooseBar();
-    	initConditionBar();
+    	//initConditionBar();
     	currentCategory = "首页";//??
     	initRecommendPage();
     	updateHeaderInfo();
@@ -86,11 +86,11 @@ public class MATActivity extends Activity implements OnClickListener{
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 			    	new AsyncTask<String, String, String>(){
-
+			    		
 						@Override
 						protected String doInBackground(String... params) {
 							currentCategory = params[0];
-							initConditionBar();
+							initConditionBar(currentCategory);
 							currentType = types.contains(currentType)?currentType:"";
 							return currentType;
 						}
@@ -128,7 +128,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		
 	}
 
-	private void initConditionBar() {
+	private void initConditionBar(String category) {
 		// TODO Auto-generated method stub
 		conditionBar = findViewById(R.id.conditionBar);
 		ViewGroup typeView = (ViewGroup) conditionBar.findViewById(R.id.byType);
@@ -139,7 +139,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		areaView.removeAllViews();
 		yearView.removeAllViews();
 		
-		types = DataParser.getInstance(this,currentOrigin).getTypes();
+		types = DataParser.getInstance(this,currentOrigin).getTypes(category);
 		if(types!=null)
 			for(int i = 0;i<types.size();i++){
 				Button btn = new Button(this);
@@ -157,7 +157,7 @@ public class MATActivity extends Activity implements OnClickListener{
 				typeView.addView(btn);
 			}
 		
-		final List<String> areas = DataParser.getInstance(this,currentOrigin).getAreas();
+		final List<String> areas = DataParser.getInstance(this,currentOrigin).getAreas(category);
 		if(areas!=null)
 		for(int i = 0;i<areas.size();i++){
 			Button cdtBtn = new Button(this);
@@ -174,7 +174,7 @@ public class MATActivity extends Activity implements OnClickListener{
 			areaView.addView(cdtBtn);
 		}
 		
-		final List<String> years = DataParser.getInstance(this,currentOrigin).getYears();
+		final List<String> years = DataParser.getInstance(this,currentOrigin).getYears(category);
 		if(years!=null)
 		for(int i = 0;i<years.size();i++){
 			Button cdtBtn = new Button(this);
