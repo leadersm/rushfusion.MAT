@@ -58,7 +58,7 @@ public class DataParser {
 		return null;
 	}
 
-	public List<String> getTypes() {
+	public List<String> getTypes(String category) {
 		HttpUtil httpUtil = HttpUtil.getInstance(mContext) ;
 		String strUrl = url.get("type") ;
 		if(httpUtil.connectServerByURL(strUrl)) {
@@ -67,7 +67,7 @@ public class DataParser {
 		return null;
 	}
 
-	public List<String> getYears() {
+	public List<String> getYears(String category) {
 		HttpUtil httpUtil = HttpUtil.getInstance(mContext) ;
 		String strUrl = url.get("year") ;
 		if(httpUtil.connectServerByURL(strUrl)) {
@@ -82,7 +82,7 @@ public class DataParser {
 		return null;
 	}
 
-	public List<String> getAreas() {
+	public List<String> getAreas(String category) {
 		HttpUtil httpUtil = HttpUtil.getInstance(mContext) ;
 		String strUrl = url.get("area") ;
 		if(httpUtil.connectServerByURL(strUrl)) {
