@@ -18,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.rushfusion.mat.A;
 import com.rushfusion.mat.R;
 import com.rushfusion.mat.utils.DataParser;
 import com.rushfusion.mat.utils.ImageLoadTask;
@@ -78,7 +77,7 @@ public class FilmClassPage extends BasePage {
 							Integer.parseInt(map.get("comment")),map.get("category"),map.get("name"),map.get("type"),Integer.parseInt(map.get("year")),
 							map.get("directors"),map.get("artists"),map.get("area"),map.get("description"),
 							map.get("thumb"),map.get("length"),map.get("url"),Integer.parseInt(map.get("play")),Integer.parseInt(map.get("id")),Integer.parseInt(map.get("recent"))) ;
-					Intent intent = new Intent(mContext,A.class) ;
+					Intent intent = new Intent(mContext,ItemDetailPage.class) ;
 					Bundle bundle = new Bundle() ;
 					bundle.putSerializable("movieInfo", movie) ;
 					intent.putExtras(bundle) ;
