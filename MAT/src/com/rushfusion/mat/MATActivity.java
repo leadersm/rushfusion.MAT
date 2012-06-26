@@ -331,15 +331,14 @@ public class MATActivity extends Activity implements OnClickListener{
 	 */
 	private void updatePage(String category,String type,String area,String year,String sort) {
 		// TODO Auto-generated method stub
-		String url = "http://tvsrv.webhop.net:9061/query?" 
-		+"source="+currentOrigin
-		+"&category="+category
-		+"&type="+type
-		+"&area="+area
-		+"&year="+year
-		+"&sort="+sort
-		+"&page="+FilmClassPage
-		+"&pagesize="+FilmClassPageSize;
+		StringBuffer baseUrl = new StringBuffer("http://tvsrv.webhop.net:9061/query?source="+currentOrigin);
+		if(!category.equals(""))baseUrl.append("&category="+category);
+		if(!type.equals(""))baseUrl.append("&type="+type);
+		if(!area.equals(""))baseUrl.append("&area="+area);
+		if(!year.equals(""))baseUrl.append("&year="+year);
+		if(!sort.equals(""))baseUrl.append("&sort="+sort);
+		baseUrl.append("&page="+FilmClassPage+"&pagesize="+FilmClassPageSize);
+		String url = baseUrl.toString();
 		Log.d("MAT","LoadPage url==>"+url);
 		updateHeaderInfo();
 		if(currentCategory.equals("首页")){
