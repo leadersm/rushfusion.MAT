@@ -364,7 +364,7 @@ public class MATActivity extends Activity implements OnClickListener{
 	private void initFilmClassPage(String url) {
 		FilmClassPage page = new FilmClassPage(this, parent);
 		page.loadPage(url, R.layout.page_film_class);
-		page.setPageCache(page, R.layout.page_film_class);
+//		page.setPageCache(page, R.layout.page_film_class);
 	}	
 	
 	@Override

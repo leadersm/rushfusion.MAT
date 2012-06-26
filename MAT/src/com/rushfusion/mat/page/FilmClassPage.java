@@ -1,15 +1,12 @@
 package com.rushfusion.mat.page;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -24,6 +21,7 @@ public class FilmClassPage extends BasePage {
 	private static final int FILM_NUM = 8 ;
 	private Context mContext ;
 	private ViewGroup mParent ;
+	private List<Map<String, String>> nodeList;
 	//private View mContentView ;
 	protected ViewGroup filmItems[];
 	protected int filmItemResIds[] = { R.id.item1, R.id.item2, R.id.item3, R.id.item4,
@@ -36,10 +34,6 @@ public class FilmClassPage extends BasePage {
 		//mContentView = getContentView() ;
 	}
 	
-	/*public void initView() {
-		loadPage("http://tvsrv.webhop.net:9061/query?source=sina&category=movie&area=&sort=play&page=1&pagesize=8",R.layout.page_film_class) ;
-	}
-*/
 	@Override
 	public void loadPage(String url, int layoutId) {
 		loadPage(url, layoutId,new BasePage.onLoadingDataCallBack(){
@@ -47,6 +41,7 @@ public class FilmClassPage extends BasePage {
 			@Override
 			public void onPrepare(ProgressBar progress) {
 				// TODO Auto-generated method stub
+				Log.d("progress", progress.getVisibility()+"") ;
 				progress.setVisibility(View.VISIBLE);
 				initPage() ;
 			}
@@ -61,7 +56,7 @@ public class FilmClassPage extends BasePage {
 					protected List<Map<String, String>> doInBackground(
 							String... params) {
 						String strUrl = params[0] ;
-						List<Map<String, String>> nodeList = DataParser.getInstance(context, "").get(strUrl) ;
+						nodeList = DataParser.getInstance(context, "").get(strUrl);
 						return nodeList ;
 					}
 					
@@ -82,7 +77,7 @@ public class FilmClassPage extends BasePage {
 	}
 	
 	private void initPage(){
-		int size = itemSize();
+		int size = FILM_NUM ;
 		filmItems = new ViewGroup[size];
 		for(int i = 0; i<size; i++){
 			filmItems[i] = (ViewGroup)contentView.findViewById(filmItemResIds[i]);
@@ -92,12 +87,14 @@ public class FilmClassPage extends BasePage {
 				}
 			});
 			
+			filmItems[i].setVisibility(View.INVISIBLE) ;
+			
 			filmItems[i].setOnFocusChangeListener(new View.OnFocusChangeListener() {
 				
 				@Override
 				public void onFocusChange(View v, boolean hasFocus) {
 					if(hasFocus){
-						updateData() ;
+						//updateData() ;
 					}
 				}
 			});
@@ -105,7 +102,11 @@ public class FilmClassPage extends BasePage {
 	}
 	
 	private void updateData() {
-		//TextView textView = (TextView)contentView.findViewById(R.id.) ;
+		TextView filmName = (TextView)contentView.findViewById(R.id.field_filmname) ;
+		TextView director = (TextView)contentView.findViewById(R.id.field_director) ;
+		TextView actor = (TextView)contentView.findViewById(R.id.field_actor) ;
+		TextView area = (TextView)contentView.findViewById(R.id.field_area) ;
+		TextView introduction = (TextView)contentView.findViewById(R.id.field_introduction) ;
 	}
 	
 	private void fillData(List<Map<String,String>> params) {
@@ -116,11 +117,16 @@ public class FilmClassPage extends BasePage {
 			ImageLoadTask.imageLoad(itemIcon, nodeMap.get("thumb")) ;
 			TextView itemTitle = (TextView)filmItems[i].findViewById(R.id.ItemTitle) ;
 			itemTitle.setText(nodeMap.get("name")) ;
+			filmItems[i].setVisibility(View.VISIBLE) ;
 		}
 	}
 	
 	protected int itemSize(){
-		return FILM_NUM;
+		int size = FILM_NUM ;
+		if(nodeList.size()<=FILM_NUM) {
+			size = nodeList.size() ;
+		}
+		return size ;
 	}
 	
 }
