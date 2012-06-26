@@ -1,77 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ScrollView1"
     android:layout_width="fill_parent"
-    android:layout_height="200dip" >
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
-            <Button
-        android:id="@+id/button1"
-        android:layout_width="100dip"
-        android:layout_height="wrap_content"
-        android:text="喜剧" />
+    android:layout_height="wrap_content"
+    android:background="@color/level"
+    android:orientation="horizontal" >
 
     <Button
-        android:id="@+id/button2"
-        android:layout_width="100dip"
+        android:id="@+id/byPlay"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="爱情" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="热播" />
 
     <Button
-        android:id="@+id/button3"
-        android:layout_width="100dip"
+        android:id="@+id/byScore"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="动作" />
+        android:layout_alignBaseline="@+id/byPlay"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/byPlay"
+        android:text="好评" />
 
     <Button
-        android:id="@+id/button4"
-        android:layout_width="100dip"
+        android:id="@+id/byComment"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="恐怖" />
+        android:layout_alignBaseline="@+id/byPlay"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/byScore"
+        android:text="热议" />
 
     <Button
-        android:id="@+id/button5"
-        android:layout_width="100dip"
+        android:id="@+id/byRecent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="科幻" />
+        android:layout_alignBaseline="@+id/byPlay"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/byComment"
+        android:text="最近" />
 
     <Button
-        android:id="@+id/button6"
-        android:layout_width="100dip"
+        android:id="@+id/byCondition"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="剧情" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="分类" />
 
-    <Button
-        android:id="@+id/button7"
-        android:layout_width="100dip"
-        android:layout_height="wrap_content"
-        android:text="犯罪" />
-
-    <Button
-        android:id="@+id/button7"
-        android:layout_width="100dip"
-        android:layout_height="wrap_content"
-        android:text="战争" />
-
-    <Button
-        android:id="@+id/button7"
-        android:layout_width="100dip"
-        android:layout_height="wrap_content"
-        android:text="悬疑" />
-
-    <Button
-        android:id="@+id/button7"
-        android:layout_width="100dip"
-        android:layout_height="wrap_content"
-        android:text="历史" />
-
-    <Button
-        android:id="@+id/button7"
-        android:layout_width="100dip"
-        android:layout_height="wrap_content"
-        android:text="其他" />
-    </LinearLayout>
-
-</ScrollView>
+</RelativeLayout>

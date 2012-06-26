@@ -18,6 +18,10 @@ public class Movie {
 	private String thumb ;	//图片
 	private String length ;	//时长
 	private String url ;	//播放地址
+	
+	public Movie(){
+		
+	}
 	public int getCount() {
 		return count;
 	}

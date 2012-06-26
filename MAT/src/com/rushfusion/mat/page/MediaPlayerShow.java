@@ -40,17 +40,17 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	int videoHeight = 0 ;
 	int contiuePosition = 0;
 	boolean isContinue = false ;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.playershow);
 		surfaceView = (SurfaceView) findViewById(R.id.page_playershow_surfaceview);
-		
+
 		Intent it = getIntent();
 		Bundle bd = it.getExtras();
-		
+
 		surfaceHolder = surfaceView.getHolder();
 		surfaceHolder.addCallback(this);
 		surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
@@ -72,38 +72,38 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 				contiuePosition = prefs.getInt("position", 0);
 			}
 		}
-		
+
 		try {
 			mediaPlayer.setDataSource(filePath);
 		} catch (IllegalArgumentException e) {
-			Toast.makeText(this, "mediaplayer ÉèÖÃÊı¾İÖĞ³ö´í£¬´íÎóĞÅÏ¢£º"+e.toString(), 1000).show();
-			System.out.println("mediaplayer ÉèÖÃÊı¾İÖĞ³ö´í£¬´íÎóĞÅÏ¢£º"+e.toString());
+			Toast.makeText(this, "mediaplayer è®¾ç½®æ•°æ®ä¸­å‡ºé”™ï¼Œé”™è¯¯ä¿¡æ¯ï¼š"+e.toString(), 1000).show();
+			System.out.println("mediaplayer è®¾ç½®æ•°æ®ä¸­å‡ºé”™ï¼Œé”™è¯¯ä¿¡æ¯ï¼š"+e.toString());
 		} catch (IllegalStateException e) {
-			Toast.makeText(this, "mediaplayer ÉèÖÃÊı¾İÖĞ³ö´í£¬´íÎóĞÅÏ¢£º"+e.toString(), 1000).show();
-			System.out.println("mediaplayer ÉèÖÃÊı¾İÖĞ³ö´í£¬´íÎóĞÅÏ¢£º"+e.toString());
+			Toast.makeText(this, "mediaplayer è®¾ç½®æ•°æ®ä¸­å‡ºé”™ï¼Œé”™è¯¯ä¿¡æ¯ï¼š"+e.toString(), 1000).show();
+			System.out.println("mediaplayer è®¾ç½®æ•°æ®ä¸­å‡ºé”™ï¼Œé”™è¯¯ä¿¡æ¯ï¼š"+e.toString());
 		} catch (IOException e) {
-			Toast.makeText(this, "mediaplayer ÉèÖÃÊı¾İÖĞ³ö´í£¬´íÎóĞÅÏ¢£º"+e.toString(), 1000).show();
-			System.out.println("mediaplayer ÉèÖÃÊı¾İÖĞ³ö´í£¬´íÎóĞÅÏ¢£º"+e.toString());
+			Toast.makeText(this, "mediaplayer è®¾ç½®æ•°æ®ä¸­å‡ºé”™ï¼Œé”™è¯¯ä¿¡æ¯ï¼š"+e.toString(), 1000).show();
+			System.out.println("mediaplayer è®¾ç½®æ•°æ®ä¸­å‡ºé”™ï¼Œé”™è¯¯ä¿¡æ¯ï¼š"+e.toString());
 		}
 		currentDisplay = getWindowManager().getDefaultDisplay(); 
 		controller = new MediaController(this);
 		surfaceView.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				if(controller.isShowing()){
-					System.out.println("Òş²ØÇ°¿ØÖÆ×´Ì¬£º"+controller.isShowing());
+					System.out.println("éšè—å‰æ§åˆ¶çŠ¶æ€ï¼š"+controller.isShowing());
 					controller.hide();
-					System.out.println("Òş²Øºó¿ØÖÆ×´Ì¬£º"+controller.isShowing());
+					System.out.println("éšè—åæ§åˆ¶çŠ¶æ€ï¼š"+controller.isShowing());
 				}else{
-					System.out.println("ÏÔÊ¾Ç°¿ØÖÆÔ­×´Ì¬£º"+controller.isShowing());
+					System.out.println("æ˜¾ç¤ºå‰æ§åˆ¶åŸçŠ¶æ€ï¼š"+controller.isShowing());
 					controller.show();
-					System.out.println("ÏÔÊ¾ºó¿ØÖÆ×´Ì¬£º"+controller.isShowing());
+					System.out.println("æ˜¾ç¤ºåæ§åˆ¶çŠ¶æ€ï¼š"+controller.isShowing());
 				}
 			}
 		}) ;
 	}
-	
+
 
 	@Override
 	public boolean canPause() {
@@ -168,14 +168,14 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 		try {
 			mediaPlayer.prepare();
 		} catch (IllegalStateException e) {
-			Toast.makeText(this, "surface×¼±¸ÖĞ³ö´í £¬´íÎóĞÅÏ¢ £º"+e.toString(), 1000).show();
+			Toast.makeText(this, "surfaceå‡†å¤‡ä¸­å‡ºé”™ ï¼Œé”™è¯¯ä¿¡æ¯ ï¼š"+e.toString(), 1000).show();
 			e.printStackTrace();
 			System.out.println(e.toString()); 
 		} catch (IOException e) {
-			Toast.makeText(this, "surface×¼±¸ÖĞ³ö´í £¬´íÎóĞÅÏ¢ £º"+e.toString(), 1000).show();
+			Toast.makeText(this, "surfaceå‡†å¤‡ä¸­å‡ºé”™ ï¼Œé”™è¯¯ä¿¡æ¯ ï¼š"+e.toString(), 1000).show();
 			e.printStackTrace();
 		}
-		Toast.makeText(this, "surface ×¼±¸ÖĞ", 800).show();
+		Toast.makeText(this, "surface å‡†å¤‡ä¸­", 800).show();
 	}
 
 	@Override
@@ -217,7 +217,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 
 	@Override
 	public void onPrepared(MediaPlayer mp) {
-		Toast.makeText(this, "½øÈë×¼±¸", 500).show();
+		Toast.makeText(this, "è¿›å…¥å‡†å¤‡", 500).show();
 		videoWidth = mp.getVideoWidth();
 		videoHeight = mp.getVideoHeight();
 		if(videoWidth > currentDisplay.getWidth() || videoHeight > currentDisplay.getHeight()){
@@ -240,10 +240,10 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 		controller.setEnabled(true);
 		controller.show();
 		if(isContinue){
-			Toast.makeText(this, "¿ªÊ¼¼ÌĞø²¥·Å",500).show();
+			Toast.makeText(this, "å¼€å§‹ç»§ç»­æ’­æ”¾",500).show();
 			mp.seekTo(contiuePosition);
 		}else{
-			Toast.makeText(this, "´ÓÍ·¿ªÊ¼²¥·Å",500).show();
+			Toast.makeText(this, "ä»å¤´å¼€å§‹æ’­æ”¾",500).show();
 		}
 		mp.start();
 	}
@@ -257,28 +257,28 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 
 	@Override
 	public void onBufferingUpdate(MediaPlayer mp, int percent) {
-//		Toast.makeText(this, "»º³å½ø¶È:"+percent+"%", 200).show();
-		System.out.println( "»º³å½ø¶È:"+percent+"%");
+//		Toast.makeText(this, "ç¼“å†²è¿›åº¦:"+percent+"%", 200).show();
+		System.out.println( "ç¼“å†²è¿›åº¦:"+percent+"%");
 	}
 
 	@Override
 	public boolean onInfo(MediaPlayer mp, int what, int extra) {
-		Toast.makeText(this, "ĞÅÏ¢¶ÁÈ¡×´Ì¬´úÂë£º"+what, 500).show();
+		Toast.makeText(this, "ä¿¡æ¯è¯»å–çŠ¶æ€ä»£ç ï¼š"+what, 500).show();
 		return false;
 	}
 
 	@Override
 	public boolean onError(MediaPlayer mp, int what, int extra) {
-		Toast.makeText(this, "´íÎó´úÂë£º"+what , 500).show();
+		Toast.makeText(this, "é”™è¯¯ä»£ç ï¼š"+what , 500).show();
 		return false;
 	}
 
 	@Override
 	public void onCompletion(MediaPlayer arg0) {
-		Toast.makeText(this, "²¥·ÅÍê±Ï", 500).show();
+		Toast.makeText(this, "æ’­æ”¾å®Œæ¯•", 500).show();
 	}
 
-	
-	
-	
+
+
+
 }

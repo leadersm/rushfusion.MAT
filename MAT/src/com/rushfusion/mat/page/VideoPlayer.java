@@ -172,7 +172,7 @@ public class VideoPlayer extends Activity implements SurfaceHolder.Callback,OnCo
 //		}else{
 //			handler_sent.removeCallbacks(run_sent);
 //			play_video_seekbar.setProgress(0);
-//			Toast.makeText(this, "Ó°Æ¬²¥·Å½áÊø,Ð»Ð»¹ÛÉÍ", Toast.LENGTH_LONG).show();
+//			Toast.makeText(this, "Ó°Æ¬ï¿½ï¿½ï¿½Å½ï¿½ï¿½ï¿½,Ð»Ð»ï¿½ï¿½ï¿½ï¿½", Toast.LENGTH_LONG).show();
 //		}
 	}
 

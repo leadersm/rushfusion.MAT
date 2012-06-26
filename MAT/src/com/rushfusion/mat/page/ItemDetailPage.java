@@ -1,46 +1,25 @@
 package com.rushfusion.mat.page;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Context;
-import android.content.Intent;
-import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnBufferingUpdateListener;
-import android.media.MediaPlayer.OnCompletionListener;
-import android.media.MediaPlayer.OnErrorListener;
-import android.media.MediaPlayer.OnInfoListener;
-import android.media.MediaPlayer.OnPreparedListener;
-import android.media.MediaPlayer.OnSeekCompleteListener;
-import android.media.MediaPlayer.OnVideoSizeChangedListener;
+import android.app.Activity;
 import android.net.Uri;
-import android.os.Bundle;
-import android.view.Display;
-import android.view.SurfaceHolder;
-import android.view.SurfaceHolder.Callback;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.MediaController;
-import android.widget.MediaController.MediaPlayerControl;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.rushfusion.mat.R;
 import com.rushfusion.mat.utils.ItemDetailGridViewAdapter;
 import com.rushfusion.mat.video.entity.Movie;
 
 public class ItemDetailPage extends BasePage {
-	
+
 	ImageView image;
 	TextView name;
 	TextView description;
@@ -50,17 +29,16 @@ public class ItemDetailPage extends BasePage {
 	TextView directors;
 	TextView artists;
 	GridView episode;
-	
+
 	ItemDetailGridViewAdapter gda;
-	
-	
-	
+
+
+
 	List<String> list;
-	Movie movie = new Movie(1, 1, 80, 1364, 334, "movie", "ÀõÑóµÄÉú»î", "¼ÒÍ¥;Â×Àí", 2012, "ÀõÑó", "ÀõÑó;ÍõÓ¢", "´óÂ½", "ÀõÑóÒ»¼ÒµÄÉú»î£¬ÒÔ¼°Ò»ÄêÒÔÀ´µÄ±ä¹Ê", "http://tp4.sinaimg.cn/2010098347/50/5600263031/1", "01:51:58", "http://v.iask.com/v_play_ipad.php?vid=59551380");
-	
-	public ItemDetailPage(Context context, ViewGroup parent) {
+	Movie movie = new Movie(1, 1, 80, 1364, 334, "movie", "æ —æ´‹çš„ç”Ÿæ´»", "å®¶åº­;ä¼¦ç†", 2012, "æ —æ´‹", "æ —æ´‹;ç‹è‹±", "å¤§é™†", "æ —æ´‹ä¸€å®¶çš„ç”Ÿæ´»ï¼Œä»¥åŠä¸€å¹´ä»¥æ¥çš„å˜æ•…", "http://tp4.sinaimg.cn/2010098347/50/5600263031/1", "01:51:58", "http://v.iask.com/v_play_ipad.php?vid=59551380");
+
+	public ItemDetailPage(Activity context, ViewGroup parent) {
 		super(context, parent);
-	
 	}
 
 	@Override
@@ -73,7 +51,7 @@ public class ItemDetailPage extends BasePage {
 				// TODO Auto-generated method stub
 				progress.setVisibility(View.VISIBLE);
 			}
-		
+
 			@Override
 			public boolean onExcute(String url) {
 				image = (ImageView) contentView.findViewById(R.id.page_item_detail_image);
@@ -85,14 +63,14 @@ public class ItemDetailPage extends BasePage {
 				directors = (TextView) contentView.findViewById(R.id.page_item_detail_directors);
 				artists = (TextView) contentView.findViewById(R.id.page_item_detail_artists);
 				episode = (GridView) contentView.findViewById(R.id.page_item_detail_episode);
-				
-				
+
+
 				image.setImageURI(Uri.parse(movie.getThumb()));
 				name.setText(movie.getName());
 				description.setText(movie.getDescription());
-				socres.setText(movie.getScore());
+				socres.setText(movie.getScore()+"");
 				length.setText(movie.getLength());
-				year.setText(movie.getYear());
+				year.setText(movie.getYear()+"");
 				directors.setText(movie.getDirectors());
 				artists.setText(movie.getArtists());
 				String[] str = movie.getUrl().split(";");
@@ -107,7 +85,7 @@ public class ItemDetailPage extends BasePage {
 					@Override
 					public void onItemClick(AdapterView<?> arg0, View arg1,
 							int arg2, long arg3) {
-						// ²¥·Å  163:http://163.letv.com/dianying/E7JRABGJ9/M7KS70Q27_mini.html
+						// æ’­æ”¾  163:http://163.letv.com/dianying/E7JRABGJ9/M7KS70Q27_mini.html
 //						Intent it =  new Intent(context, MediaPlayerShow.class);
 //						Bundle bd = new Bundle();
 //						bd.putString("url", list.get(arg2));
@@ -115,14 +93,14 @@ public class ItemDetailPage extends BasePage {
 //						context.startActivity(it);
 						String path = list.get(arg2);
 						if(path.indexOf("html")==(path.length()-4)){
-							
+
 						}
-						
+
 					}
-					
+
 				});
-				 
-				
+
+
 				return false;
 			}
 
