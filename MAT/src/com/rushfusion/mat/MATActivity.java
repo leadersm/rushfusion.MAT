@@ -160,6 +160,66 @@ public class MATActivity extends Activity implements OnClickListener{
 		final ViewGroup areaView = (ViewGroup) conditionBar.findViewById(R.id.byArea);
 		final ViewGroup yearView = (ViewGroup) conditionBar.findViewById(R.id.byYear);
 		
+		new AsyncTask<String, Void, HashMap<String,List<String>>>() {
+			
+			@Override
+			protected void onPreExecute() {
+				// TODO Auto-generated method stub
+				super.onPreExecute();
+				if(types!=null)
+				types.clear();
+				if(years!=null)
+				years.clear();
+				if(areas!=null)
+				areas.clear();
+			}
+
+			@Override
+			protected HashMap<String,List<String>> doInBackground(String... params) {
+				// TODO Auto-generated method stub
+				
+				types = DataParser.getInstance(MATActivity.this,currentOrigin).getTypes(params[0]);
+				years = DataParser.getInstance(MATActivity.this,currentOrigin).getYears(params[0]);
+				areas = DataParser.getInstance(MATActivity.this,currentOrigin).getAreas(params[0]);
+				conditions.put("type", types);
+				conditions.put("year", years);
+				conditions.put("area", areas);
+				return conditions;
+			}
+			
+			@Override
+			protected void onPostExecute(HashMap<String,List<String>> result) {
+				// TODO Auto-generated method stub
+				super.onPostExecute(result);
+				if(result!=null){
+					List<String> types = result.get("type");
+					List<String> years = result.get("year");
+					List<String> areas = result.get("area");
+					addConditionButtons(typeView, areaView, yearView, types, years, areas);
+				}
+			}
+		}.execute(currentCategory);
+	}
+
+
+	private void initMenu() {
+		menu = findViewById(R.id.menu);
+		Button leshi = (Button) findViewById(R.id.leshi);
+		Button qiyi = (Button) findViewById(R.id.qiyi);
+		Button souhu = (Button) findViewById(R.id.souhu);
+		Button tudou = (Button) findViewById(R.id.tudou);
+		Button sina = (Button) findViewById(R.id.sina);
+		leshi.setOnClickListener(this);
+		qiyi.setOnClickListener(this);
+		souhu.setOnClickListener(this);
+		tudou.setOnClickListener(this);
+		sina.setOnClickListener(this);
+	}
+
+	private void addConditionButtons(final ViewGroup typeView,
+			final ViewGroup areaView, final ViewGroup yearView,
+			List<String> types, List<String> years, List<String> areas) {
+		
 		typeView.removeAllViews();
 		areaView.removeAllViews();
 		yearView.removeAllViews();
@@ -204,111 +264,56 @@ public class MATActivity extends Activity implements OnClickListener{
 		areaView.addView(allYear);
 		yearView.addView(allArea);
 		
-		new AsyncTask<String, Void, HashMap<String,List<String>>>() {
-			
-			
-			
-			@Override
-			protected void onPreExecute() {
-				// TODO Auto-generated method stub
-				super.onPreExecute();
-				if(types!=null)
-				types.clear();
-				if(years!=null)
-				years.clear();
-				if(areas!=null)
-				areas.clear();
-			}
-
-			@Override
-			protected HashMap<String,List<String>> doInBackground(String... params) {
-				// TODO Auto-generated method stub
+		
+		for(int i = 0;i<types.size();i++){
+			Button cdtBtn = new Button(MATActivity.this);
+			final String type = types.get(i);
+			cdtBtn.setText(type);
+			cdtBtn.setOnClickListener(new OnClickListener() {
 				
-				types = DataParser.getInstance(MATActivity.this,currentOrigin).getTypes(params[0]);
-				years = DataParser.getInstance(MATActivity.this,currentOrigin).getYears(params[0]);
-				areas = DataParser.getInstance(MATActivity.this,currentOrigin).getAreas(params[0]);
-				conditions.put("type", types);
-				conditions.put("year", years);
-				conditions.put("area", areas);
-				return conditions;
-			}
-			
-			@Override
-			protected void onPostExecute(HashMap<String,List<String>> result) {
-				// TODO Auto-generated method stub
-				super.onPostExecute(result);
-				if(result!=null){
-					List<String> types = result.get("type");
-					List<String> years = result.get("year");
-					List<String> areas = result.get("area");
-					for(int i = 0;i<types.size();i++){
-						Button cdtBtn = new Button(MATActivity.this);
-						final String type = types.get(i);
-						cdtBtn.setText(type);
-						cdtBtn.setOnClickListener(new OnClickListener() {
-							
-							@Override
-							public void onClick(View v) {
-								// TODO Auto-generated method stub
-								currentType = type;
-								updatePage(currentCategory,currentType, currentArea, currentYear, currentSort);
-							}
-						});
-						typeView.addView(cdtBtn);
-					}
-					
-					for(int i = 0;i<areas.size();i++){
-						Button cdtBtn = new Button(MATActivity.this);
-						final String area = areas.get(i);
-						cdtBtn.setText(area);
-						cdtBtn.setOnClickListener(new OnClickListener() {
-							
-							@Override
-							public void onClick(View v) {
-								// TODO Auto-generated method stub
-								currentArea = area;
-								updatePage(currentCategory,currentType, currentArea, currentYear, currentSort);
-							}
-						});
-						areaView.addView(cdtBtn);
-					}
-					
-					for(int i = 0;i<years.size();i++){
-						Button cdtBtn = new Button(MATActivity.this);
-						final String year = years.get(i);
-						cdtBtn.setText(year);
-						cdtBtn.setOnClickListener(new OnClickListener() {
-							
-							@Override
-							public void onClick(View v) {
-								// TODO Auto-generated method stub
-								currentYear = year;
-								updatePage(currentCategory,currentType, currentArea, currentYear, currentSort);
-							}
-						});
-						yearView.addView(cdtBtn);
-					}
-					
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					currentType = type;
+					updatePage(currentCategory,currentType, currentArea, currentYear, currentSort);
 				}
-			}
-		}.execute(currentCategory);
+			});
+			typeView.addView(cdtBtn);
+		}
+		
+		for(int i = 0;i<areas.size();i++){
+			Button cdtBtn = new Button(MATActivity.this);
+			final String area = areas.get(i);
+			cdtBtn.setText(area);
+			cdtBtn.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					currentArea = area;
+					updatePage(currentCategory,currentType, currentArea, currentYear, currentSort);
+				}
+			});
+			areaView.addView(cdtBtn);
+		}
+		
+		for(int i = 0;i<years.size();i++){
+			Button cdtBtn = new Button(MATActivity.this);
+			final String year = years.get(i);
+			cdtBtn.setText(year);
+			cdtBtn.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					currentYear = year;
+					updatePage(currentCategory,currentType, currentArea, currentYear, currentSort);
+				}
+			});
+			yearView.addView(cdtBtn);
+		}
 	}
-
-
-	private void initMenu() {
-		menu = findViewById(R.id.menu);
-		Button leshi = (Button) findViewById(R.id.leshi);
-		Button qiyi = (Button) findViewById(R.id.qiyi);
-		Button souhu = (Button) findViewById(R.id.souhu);
-		Button tudou = (Button) findViewById(R.id.tudou);
-		Button sina = (Button) findViewById(R.id.sina);
-		leshi.setOnClickListener(this);
-		qiyi.setOnClickListener(this);
-		souhu.setOnClickListener(this);
-		tudou.setOnClickListener(this);
-		sina.setOnClickListener(this);
-	}
-
+	
 
 	private void updateHeaderInfo() {
 		TextView headerInfo = (TextView) findViewById(R.id.headerInfo);
@@ -335,7 +340,6 @@ public class MATActivity extends Activity implements OnClickListener{
 		+"&sort="+sort
 		+"&page="+FilmClassPage
 		+"&pagesize="+FilmClassPageSize;
-		
 		Log.d("MAT","LoadPage url==>"+url);
 		updateHeaderInfo();
 		if(currentCategory.equals("首页")){
