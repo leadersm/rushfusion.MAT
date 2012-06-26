@@ -179,11 +179,11 @@
              android:layout_height="fill_parent"
              android:numColumns="8"
        android:background="#00000000"
-       android:gravity="center"
-       android:padding="25dip"
+       android:gravity="center">
+       <!--  android:padding="25dip"
        android:verticalSpacing="35dip"
-       android:horizontalSpacing="30dip">
-       <!--  android:listSelector=""
+       android:horizontalSpacing="30dip"
+       android:listSelector=""
     			android:drawSelectorOnTop="false" 
     			选中 状态 的图片 以及 是否 覆盖该item绘画该图形 -->
        			</GridView>

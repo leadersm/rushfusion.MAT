@@ -3,6 +3,10 @@ package com.rushfusion.mat.page;
 import java.io.IOException;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -40,7 +44,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	int videoHeight = 0 ;
 	int contiuePosition = 0;
 	boolean isContinue = false ;
-
+	ProgressDialog pDialog ;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -63,9 +67,21 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 		mediaPlayer.setOnVideoSizeChangedListener(this);
 		mediaPlayer.setOnBufferingUpdateListener(this);
 		SharedPreferences prefs = getSharedPreferences("myDataStorage", MODE_PRIVATE);
+		String testStr = prefs.getString("url", "123");
+		int testPosition = prefs.getInt("position", 0);
+		System.out.println(testStr + "::::" + testPosition);
 		if(bd==null){
+			System.out.println("into bg==null");
 			filePath = "http://v.iask.com/v_play_ipad.php?vid=33184708";
+			System.out.println(filePath);
+			System.out.println(prefs.getString("url", " "));
+			System.out.println(filePath.equals(prefs.getString("url", " ")));
+			if(filePath.equals(prefs.getString("url", " "))){
+				isContinue = true;
+				contiuePosition = prefs.getInt("position", 0);
+			}
 		}else{
+			System.out.println("into bg!=null");
 			filePath = bd.getString("url") ;
 			if(filePath.equals(prefs.getString("url", " "))){
 				isContinue = true;
@@ -76,13 +92,10 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 		try {
 			mediaPlayer.setDataSource(filePath);
 		} catch (IllegalArgumentException e) {
-			Toast.makeText(this, "mediaplayer 设置数据中出错，错误信息："+e.toString(), 1000).show();
 			System.out.println("mediaplayer 设置数据中出错，错误信息："+e.toString());
 		} catch (IllegalStateException e) {
-			Toast.makeText(this, "mediaplayer 设置数据中出错，错误信息："+e.toString(), 1000).show();
 			System.out.println("mediaplayer 设置数据中出错，错误信息："+e.toString());
 		} catch (IOException e) {
-			Toast.makeText(this, "mediaplayer 设置数据中出错，错误信息："+e.toString(), 1000).show();
 			System.out.println("mediaplayer 设置数据中出错，错误信息："+e.toString());
 		}
 		currentDisplay = getWindowManager().getDefaultDisplay(); 
@@ -92,13 +105,9 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 			@Override
 			public void onClick(View v) {
 				if(controller.isShowing()){
-					System.out.println("隐藏前控制状态："+controller.isShowing());
 					controller.hide();
-					System.out.println("隐藏后控制状态："+controller.isShowing());
 				}else{
-					System.out.println("显示前控制原状态："+controller.isShowing());
 					controller.show();
-					System.out.println("显示后控制状态："+controller.isShowing());
 				}
 			}
 		}) ;
@@ -120,10 +129,6 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 		return true;
 	}
 
-	@Override
-	public int getBufferPercentage() {
-		return 0;
-	}
 
 	@Override
 	public int getCurrentPosition() {
@@ -166,25 +171,20 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	public void surfaceCreated(SurfaceHolder holder) {
 		mediaPlayer.setDisplay(holder);
 		try {
-			mediaPlayer.prepare();
+			mediaPlayer.prepareAsync();
 		} catch (IllegalStateException e) {
-			Toast.makeText(this, "surface准备中出错 ，错误信息 ："+e.toString(), 1000).show();
-			e.printStackTrace();
-			System.out.println(e.toString()); 
-		} catch (IOException e) {
-			Toast.makeText(this, "surface准备中出错 ，错误信息 ："+e.toString(), 1000).show();
-			e.printStackTrace();
-		}
-		Toast.makeText(this, "surface 准备中", 800).show();
+			System.out.println("surface准备中出错 ，错误信息 ："+e.toString()); 
+		} 
+		pDialog = new ProgressDialog(this);
+		pDialog.setTitle("视频加载中，请稍后");
+		pDialog.setCancelable(false);
+		pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		pDialog.show();
 	}
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		if(mediaPlayer!=null){
-			SharedPreferences prefs = getSharedPreferences("myDataStorage", MODE_PRIVATE);
-			Editor editor = prefs.edit();
-			editor.putString("url", filePath);
-			editor.putInt("position",mediaPlayer.getCurrentPosition() );
 			mediaPlayer.stop();
 			mediaPlayer.release();
 		}
@@ -194,21 +194,23 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	public void onVideoSizeChanged(MediaPlayer mp, int arg1, int arg2) {
 		videoWidth = mp.getVideoWidth();
 		videoHeight = mp.getVideoHeight();
-		if(videoWidth > currentDisplay.getWidth() || videoHeight > currentDisplay.getHeight()){
-			float heightRatio = (float) videoHeight / (float) currentDisplay.getHeight();
-			float widthRatio = (float) videoWidth / (float) currentDisplay.getWidth();
-			if(heightRatio > 1 || widthRatio > 1){
-				if(heightRatio > widthRatio){
-					videoHeight = (int) Math.ceil((float)videoHeight / (float)heightRatio);
-					videoWidth = (int) Math.ceil((float)videoWidth / (float)heightRatio);
-				}else{
-					videoHeight = (int) Math.ceil((float)videoHeight / (float)widthRatio);
-					videoWidth = (int) Math.ceil((float)videoWidth / (float)widthRatio);
-				}
-			} 
-		}
-		surfaceView.setLayoutParams(new LinearLayout.LayoutParams(videoWidth, videoHeight));
-//		surfaceHolder.setFixedSize(videoWidth, videoHeight);
+//		if(videoWidth > currentDisplay.getWidth() || videoHeight > currentDisplay.getHeight()){
+//			float heightRatio = (float) videoHeight / (float) currentDisplay.getHeight();
+//			float widthRatio = (float) videoWidth / (float) currentDisplay.getWidth();
+//			if(heightRatio > 1 || widthRatio > 1){
+//				if(heightRatio > widthRatio){
+//					videoHeight = (int) Math.ceil((float)videoHeight / (float)heightRatio);
+//					videoWidth = (int) Math.ceil((float)videoWidth / (float)heightRatio);
+//				}else{
+//					videoHeight = (int) Math.ceil((float)videoHeight / (float)widthRatio);
+//					videoWidth = (int) Math.ceil((float)videoWidth / (float)widthRatio);
+//				}
+//			} 
+//			surfaceView.setLayoutParams(new LinearLayout.LayoutParams(videoWidth, videoHeight));
+//		}else{
+//			surfaceHolder.setFixedSize(videoWidth, videoHeight);
+//		}
+		surfaceHolder.setFixedSize(videoWidth, videoHeight);
 	}
 
 	@Override
@@ -220,9 +222,13 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 		Toast.makeText(this, "进入准备", 500).show();
 		videoWidth = mp.getVideoWidth();
 		videoHeight = mp.getVideoHeight();
+		System.out.println(videoWidth+" * "+videoHeight +"比例： "+ Math.ceil(videoWidth/videoHeight));
+		System.out.println(currentDisplay.getWidth()+" * "+currentDisplay.getHeight() +"比例： "+ Math.ceil(currentDisplay.getWidth()/currentDisplay.getHeight()));
+		
 		if(videoWidth > currentDisplay.getWidth() || videoHeight > currentDisplay.getHeight()){
 			float heightRatio = (float) videoHeight / (float) currentDisplay.getHeight();
 			float widthRatio = (float) videoWidth / (float) currentDisplay.getWidth();
+			System.out.println(heightRatio +":::"+widthRatio);
 			if(heightRatio > 1 || widthRatio > 1){
 				if(heightRatio > widthRatio){
 					videoHeight = (int) Math.ceil((float)videoHeight / (float)heightRatio);
@@ -232,44 +238,70 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 					videoWidth = (int) Math.ceil((float)videoWidth / (float)widthRatio);
 				}
 			}
+			surfaceView.setLayoutParams(new LinearLayout.LayoutParams(videoWidth, videoHeight));
+			System.out.println(videoWidth+" * "+videoHeight +"比例： "+ Math.ceil(videoWidth/videoHeight));
+		}else{
+			surfaceHolder.setFixedSize(videoWidth, videoHeight); 
 		}
-		surfaceView.setLayoutParams(new LinearLayout.LayoutParams(videoWidth, videoHeight));
 //		surfaceHolder.setFixedSize(videoWidth, videoHeight); 
+//		System.out.println(surfaceView.getWidth()+" * "+surfaceView.getHeight() +"比例： "+ (int)Math.ceil(surfaceView.getWidth()/surfaceView.getHeight()));
+		pDialog.cancel();
 		controller.setMediaPlayer(this);
 		controller.setAnchorView(this.findViewById(R.id.page_playershow_mainview));
 		controller.setEnabled(true);
 		controller.show();
 		if(isContinue){
-			Toast.makeText(this, "开始继续播放",500).show();
-			mp.seekTo(contiuePosition);
+			AlertDialog dialog = new AlertDialog.Builder(this).create();
+			dialog.setMessage("是否从上次中断处继续播放？");
+			dialog.setButton(Dialog.BUTTON_POSITIVE, "继续上次播放", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					mediaPlayer.seekTo(contiuePosition);
+//					Toast.makeText(MediaPlayerShow.this, "开始继续播放",500).show();
+				}
+			});
+			dialog.setButton(Dialog.BUTTON_NEGATIVE, "从头播放", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+//					Toast.makeText(MediaPlayerShow.this, "从头开始播放",500).show();
+				}
+			});
+			dialog.show();
 		}else{
-			Toast.makeText(this, "从头开始播放",500).show();
+//			Toast.makeText(this, "从头开始播放",500).show();
 		}
 		mp.start();
 	}
 
+
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
+		SharedPreferences prefs = getSharedPreferences("myDataStorage", MODE_PRIVATE);
+		Editor editor = prefs.edit();
+		editor.putString("url", filePath);
+		editor.putInt("position",mediaPlayer.getCurrentPosition() );
+		editor.commit();
+		System.out.println(filePath+":"+mediaPlayer.getCurrentPosition());
 		super.onPause();
 	}
 
 
 	@Override
 	public void onBufferingUpdate(MediaPlayer mp, int percent) {
-//		Toast.makeText(this, "缓冲进度:"+percent+"%", 200).show();
-		System.out.println( "缓冲进度:"+percent+"%");
+//		System.out.println("已经缓冲了："+percent+"%");
 	}
 
 	@Override
 	public boolean onInfo(MediaPlayer mp, int what, int extra) {
-		Toast.makeText(this, "信息读取状态代码："+what, 500).show();
+//		Toast.makeText(this, "信息读取状态代码："+what, 500).show();
 		return false;
 	}
 
 	@Override
 	public boolean onError(MediaPlayer mp, int what, int extra) {
-		Toast.makeText(this, "错误代码："+what , 500).show();
+//		Toast.makeText(this, "错误代码："+what , 500).show();
 		return false;
 	}
 
@@ -279,6 +311,10 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	}
 
 
+	@Override
+	public int getBufferPercentage() {
+		return 0;
+	}
 
 
 }

@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -76,8 +78,10 @@ public class ItemDetailPage extends BasePage {
 				String[] str = movie.getUrl().split(";");
 				list = new ArrayList<String>();
 				for(String urlstr : str){
+					System.out.println(urlstr);
 					list.add(urlstr);
 				}
+				System.out.println(list.size());
 				gda = new ItemDetailGridViewAdapter(context, list);
 				episode.setAdapter(gda);
 				episode.setOnItemClickListener(new OnItemClickListener() {
@@ -86,14 +90,18 @@ public class ItemDetailPage extends BasePage {
 					public void onItemClick(AdapterView<?> arg0, View arg1,
 							int arg2, long arg3) {
 						// 播放  163:http://163.letv.com/dianying/E7JRABGJ9/M7KS70Q27_mini.html
-//						Intent it =  new Intent(context, MediaPlayerShow.class);
-//						Bundle bd = new Bundle();
-//						bd.putString("url", list.get(arg2));
-//						it.putExtras(bd);
-//						context.startActivity(it);
+
 						String path = list.get(arg2);
 						if(path.indexOf("html")==(path.length()-4)){
-
+							Intent it = new Intent(Intent.ACTION_VIEW , Uri.parse(path));
+							context.startActivity(it);
+							
+						}else{
+							Intent it =  new Intent(context, MediaPlayerShow.class);
+							Bundle bd = new Bundle();
+							bd.putString("url", list.get(arg2));
+							it.putExtras(bd);
+							context.startActivity(it);
 						}
 
 					}
