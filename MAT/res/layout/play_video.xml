@@ -1,8 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
-    
-
-</LinearLayout>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+>
+	<LinearLayout android:id="@+id/page_playvideo_show"  
+	  android:layout_width="fill_parent"
+	  android:layout_height="fill_parent"
+	  android:gravity="center">
+		<SurfaceView android:id="@+id/page_playvideo_surface"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_gravity="center"></SurfaceView>
+	</LinearLayout>
+	<LinearLayout android:id="@+id/page_playvideo_control"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:layout_gravity="bottom"
+	android:visibility="gone"
+	android:orientation="vertical">
+		<LinearLayout android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:orientation="horizontal">
+			<TextView android:id="@+id/page_playvideo_current"
+	  		android:layout_width="wrap_content"
+	  		android:layout_height="wrap_content"></TextView>
+	  		<SeekBar android:id="@+id/page_playvideo_seekbar"
+	  		android:layout_width="fill_parent"
+	  		android:layout_weight="1"
+	  		android:layout_height="wrap_content"
+	  		style="?android:attr/progressBarStyleHorizontal"></SeekBar>
+	  		<TextView android:id="@+id/page_playvideo_duration"
+	  		android:layout_width="wrap_content"
+	  		android:layout_height="wrap_content"></TextView>
+			</LinearLayout>
+		<LinearLayout android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center">
+		  	<Button android:id="@+id/page_playvideo_btn_back_video"
+		  	android:layout_width="wrap_content"
+		  	android:layout_height="wrap_content"
+		  	android:text="Prev"></Button>
+		  	<Button android:id="@+id/page_playvideo_btn_play_video"
+		  	android:layout_width="wrap_content"
+		  	android:layout_height="wrap_content"
+		  	android:text="Pause"></Button>
+		  	<Button android:id="@+id/page_playvideo_btn_next_video"
+		  	android:layout_width="wrap_content"
+		  	android:layout_height="wrap_content"
+		  	android:text="Next"></Button>
+		  </LinearLayout>
+	</LinearLayout>
+</FrameLayout>

@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class ItemDetailGridViewAdapter extends BaseAdapter{
@@ -41,7 +40,7 @@ public class ItemDetailGridViewAdapter extends BaseAdapter{
 		TextView tv = new TextView(con);
 		tv.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 		tv.setGravity(Gravity.CENTER);
-		tv.setText(position+1);
+		tv.setText(position+1+"");
 		return null;
 	}
 
