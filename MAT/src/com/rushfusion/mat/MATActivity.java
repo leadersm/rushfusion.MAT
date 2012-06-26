@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,20 +19,29 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.rushfusion.mat.page.ItemDetailPage;
+import com.rushfusion.mat.page.FilmClassPage;
 import com.rushfusion.mat.page.PageCache;
 import com.rushfusion.mat.page.RecommendPage;
 import com.rushfusion.mat.utils.DataParser;
 
 public class MATActivity extends Activity implements OnClickListener{
     /** Called when the activity is first created. */
+	
+	private static final int FilmClassPage = 1;
+	private static final int FilmClassPageSize = 8;
+	
+	private ViewGroup parent;
 	private View menu;
 	private View conditionBar;
-	
+	private View chooseBar;
 	
 	private String currentOrigin="";
 	private String currentCategory="";
 	private String currentType="";
+	private String currentYear="";
+	private String currentArea="";
+	private String currentSort="";
+	
 	
 	private List<String> categories;
 	private HashMap<String,List<String>> conditions = new HashMap<String, List<String>>();
@@ -57,19 +67,26 @@ public class MATActivity extends Activity implements OnClickListener{
 		currentOrigin = "sina";//getLastWatchRecord().equals("")?"sina":getLastWatchRecord();
     	initMenu();
     	initCategory(currentOrigin);
-    	initChooseBar();
-    	//initConditionBar();
     	currentCategory = "首页";//??
-    	initRecommendPage();
+    	initChooseBar();
+    	parent = (ViewGroup) findViewById(R.id.parent);
+    	String url = "shouye url ???";
+    	initRecommendPage(url);
     	updateHeaderInfo();
 	}
 
 	private void initChooseBar() {
 		// TODO Auto-generated method stub
+		chooseBar = findViewById(R.id.level_2);
+		if(currentCategory.equals("首页"))
+			chooseBar.setVisibility(View.GONE);
+		else
+			chooseBar.setVisibility(View.VISIBLE);
 		Button byRecent = (Button) findViewById(R.id.byRecent);
 		Button byScore = (Button) findViewById(R.id.byScore);
 		Button byComment = (Button) findViewById(R.id.byComment);
 		Button byCondition = (Button) findViewById(R.id.byCondition);
+		
 		byRecent.setOnClickListener(this);
 		byScore.setOnClickListener(this);
 		byComment.setOnClickListener(this);
@@ -81,6 +98,28 @@ public class MATActivity extends Activity implements OnClickListener{
 		// TODO Auto-generated method stub
 		ViewGroup level1 = (ViewGroup) findViewById(R.id.level1);
 		level1.removeAllViews();
+		Button shouye = new Button(this);
+		shouye.setText("首页");
+		shouye.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				currentCategory = "首页";
+				initConditionBar();
+				while(types==null){
+					try {
+						Thread.sleep(10);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				currentType = types.contains(currentType)?currentType:"";
+				updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
+			}
+		});
+		level1.addView(shouye);
+
 		categories = DataParser.getInstance(this,currentOrigin).getCategory();
 		for(int i = 0;i<categories.size();i++){
 			Button btn = new Button(this);
@@ -101,36 +140,22 @@ public class MATActivity extends Activity implements OnClickListener{
 						}
 					}
 					currentType = types.contains(currentType)?currentType:"";
-					updatePage(currentCategory,currentType, null, null, null);
+					updatePage(currentCategory,currentType, currentArea, currentYear, currentSort);
 				}
 			});
 			level1.addView(btn);
 		}
 	}
 
-	/**
-	 * 
-	 * @param category
-	 * @param type
-	 * @param year
-	 * @param area
-	 * @param sort
-	 */
-	private void updatePage(String category,String type,String year,String area,String sort) {
-		// TODO Auto-generated method stub
-		String url = "http://tvsrv.webhop.net:9061/query?source="+currentOrigin+"&category="+category+"&area="+area+"&sort="+sort+"&page=1&pagesize=8";
-		updateHeaderInfo();
-		if(currentCategory.equals("首页")){
-			initRecommendPage();
-		}else{
-			//to other page...
-		}
-		
-	}
 
 	private void initConditionBar() {
 		// TODO Auto-generated method stub
 		conditionBar = findViewById(R.id.conditionBar);
+		if(currentCategory.equals("首页")){
+			conditionBar.setVisibility(View.GONE);
+			chooseBar.setVisibility(View.GONE);
+		}else
+			chooseBar.setVisibility(View.VISIBLE);
 		final ViewGroup typeView = (ViewGroup) conditionBar.findViewById(R.id.byType);
 		final ViewGroup areaView = (ViewGroup) conditionBar.findViewById(R.id.byArea);
 		final ViewGroup yearView = (ViewGroup) conditionBar.findViewById(R.id.byYear);
@@ -139,8 +164,62 @@ public class MATActivity extends Activity implements OnClickListener{
 		areaView.removeAllViews();
 		yearView.removeAllViews();
 		
+		Button allType = new Button(this);
+		Button allYear = new Button(this);
+		Button allArea = new Button(this);
+		
+		allType.setText("全部");
+		allYear.setText("全部");
+		allArea.setText("全部");
+		
+		allType.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				currentType = "";
+				updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
+			}
+		});
+		allArea.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				currentArea = "";
+				updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
+			}
+		});
+		allYear.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				currentYear = "";
+				updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
+			}
+		});
+		
+		typeView.addView(allType);
+		areaView.addView(allYear);
+		yearView.addView(allArea);
+		
 		new AsyncTask<String, Void, HashMap<String,List<String>>>() {
 			
+			
+			
+			@Override
+			protected void onPreExecute() {
+				// TODO Auto-generated method stub
+				super.onPreExecute();
+				if(types!=null)
+				types.clear();
+				if(years!=null)
+				years.clear();
+				if(areas!=null)
+				areas.clear();
+			}
+
 			@Override
 			protected HashMap<String,List<String>> doInBackground(String... params) {
 				// TODO Auto-generated method stub
@@ -172,7 +251,7 @@ public class MATActivity extends Activity implements OnClickListener{
 							public void onClick(View v) {
 								// TODO Auto-generated method stub
 								currentType = type;
-								updatePage(currentCategory,currentType, null, null, null);
+								updatePage(currentCategory,currentType, currentArea, currentYear, currentSort);
 							}
 						});
 						typeView.addView(cdtBtn);
@@ -187,7 +266,8 @@ public class MATActivity extends Activity implements OnClickListener{
 							@Override
 							public void onClick(View v) {
 								// TODO Auto-generated method stub
-								updatePage(currentCategory,null, null, area, null);
+								currentArea = area;
+								updatePage(currentCategory,currentType, currentArea, currentYear, currentSort);
 							}
 						});
 						areaView.addView(cdtBtn);
@@ -202,7 +282,8 @@ public class MATActivity extends Activity implements OnClickListener{
 							@Override
 							public void onClick(View v) {
 								// TODO Auto-generated method stub
-								updatePage(currentCategory,null, year, null, null);
+								currentYear = year;
+								updatePage(currentCategory,currentType, currentArea, currentYear, currentSort);
 							}
 						});
 						yearView.addView(cdtBtn);
@@ -234,41 +315,53 @@ public class MATActivity extends Activity implements OnClickListener{
 		headerInfo.setText(currentOrigin+">"+currentCategory+">"+currentType);
 	}
 
-    private String getLastWatchRecord() {
-		return sp.getString("origin", "qiyi");
+    
+	/**
+	 * 
+	 * @param category
+	 * @param type
+	 * @param year
+	 * @param area
+	 * @param sort
+	 */
+	private void updatePage(String category,String type,String area,String year,String sort) {
+		// TODO Auto-generated method stub
+		String url = "http://tvsrv.webhop.net:9061/query?" 
+		+"source="+currentOrigin
+		+"&category="+category
+		+"&type="+type
+		+"&area="+area
+		+"&year="+year
+		+"&sort="+sort
+		+"&page="+FilmClassPage
+		+"&pagesize="+FilmClassPageSize;
+		
+		Log.d("MAT","LoadPage url==>"+url);
+		updateHeaderInfo();
+		if(currentCategory.equals("首页")){
+			initRecommendPage(url);
+		}else{
+			//to other page...
+			initFilmClassPage(url);
+		}
+		
 	}
-    
-    
-    
-    private void updateLastWatchRecord(String origin){
-    	currentOrigin = origin;
-    	new AsyncTask<String, String, String>(){
-
-			@Override
-			protected void onPreExecute() {
-				super.onPreExecute();
-				updateHeaderInfo();
-			}
-			@Override
-			protected String doInBackground(String... params) {
-				editor.putString("origin", params[0]);
-				editor.commit();
-				return null;
-			}
-		}.execute(origin);
-    }
 	
-	
-	private void initRecommendPage() {
-		ViewGroup parent = (ViewGroup) findViewById(R.id.parent);
-//		RecommendPage recommendPage = new RecommendPage(this,parent);
-//		recommendPage.loadPage("url?data?……TBD",R.layout.page_recommend);
-//		recommendPage.setPageCache(recommendPage, R.layout.page_recommend);
-		ItemDetailPage page = new ItemDetailPage(this, parent);
-		page.loadPage("", R.layout.page_item_detail);
+	private void initRecommendPage(String url) {
+		RecommendPage recommendPage = new RecommendPage(this,parent);
+		recommendPage.loadPage(url,R.layout.page_recommend);
+		recommendPage.setPageCache(recommendPage, R.layout.page_recommend);
+//		ItemDetailPage page = new ItemDetailPage(this, parent);
+//		page.loadPage("", R.layout.page_item_detail);
 		
 	}
 
+	private void initFilmClassPage(String url) {
+		FilmClassPage page = new FilmClassPage(this, parent);
+		page.loadPage(url, R.layout.page_film_class);
+		page.setPageCache(page, R.layout.page_film_class);
+	}	
+	
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -294,13 +387,16 @@ public class MATActivity extends Activity implements OnClickListener{
 			break;
 		//==================================
 		case R.id.byRecent:
-			
+			currentSort = "recent";
+			updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			break;
 		case R.id.byComment:
-			
+			currentSort = "comment";
+			updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);			
 			break;
 		case R.id.byScore:
-			
+			currentSort = "score";
+			updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			break;
 		case R.id.byCondition:
 			showConditionBar();
@@ -379,7 +475,28 @@ public class MATActivity extends Activity implements OnClickListener{
 		PageCache.getInstance().release();
 	}
 	
-	
-	
+    private String getLastWatchRecord() {
+		return sp.getString("origin", "qiyi");
+	}
+    
+    
+    
+    private void updateLastWatchRecord(String origin){
+    	currentOrigin = origin;
+    	new AsyncTask<String, String, String>(){
+
+			@Override
+			protected void onPreExecute() {
+				super.onPreExecute();
+				updateHeaderInfo();
+			}
+			@Override
+			protected String doInBackground(String... params) {
+				editor.putString("origin", params[0]);
+				editor.commit();
+				return null;
+			}
+		}.execute(origin);
+    }
 	
 }
