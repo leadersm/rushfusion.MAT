@@ -1,11 +1,16 @@
 package com.rushfusion.mat.page;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Parcelable;
+import android.sax.StartElementListener;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +21,7 @@ import android.widget.TextView;
 import com.rushfusion.mat.R;
 import com.rushfusion.mat.utils.DataParser;
 import com.rushfusion.mat.utils.ImageLoadTask;
+import com.rushfusion.mat.video.entity.Movie;
 
 public class FilmClassPage extends BasePage {
 	private static final int FILM_NUM = 8 ;
@@ -66,29 +72,45 @@ public class FilmClassPage extends BasePage {
 			filmItems[i].setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					Map<String,String> map = (Map<String, String>)v.getTag() ;
+					Movie movie = new Movie(Integer.parseInt(map.get("count")),Integer.parseInt(map.get("total")),Integer.parseInt(map.get("score")),
+							Integer.parseInt(map.get("comment")),map.get("category"),map.get("name"),map.get("type"),Integer.parseInt(map.get("year")),
+							map.get("directors"),map.get("artists"),map.get("area"),map.get("description"),
+							map.get("thumb"),map.get("length"),map.get("url"),Integer.parseInt(map.get("play")),Integer.parseInt(map.get("id")),Integer.parseInt(map.get("recent"))) ;
+					Intent intent = new Intent(mContext,ItemDetailPage.class) ;
+					Bundle bundle = new Bundle() ;
+					bundle.putSerializable("movieInfo", movie) ;
+					intent.putExtras(bundle) ;
+					mContext.startActivity(intent) ;
 				}
 			});
 			
 			filmItems[i].setVisibility(View.INVISIBLE) ;
 			
 			filmItems[i].setOnFocusChangeListener(new View.OnFocusChangeListener() {
-				
 				@Override
 				public void onFocusChange(View v, boolean hasFocus) {
 					if(hasFocus){
-						//updateData() ;
+						Map<String,String> map = (Map<String, String>) v.getTag() ;
+						updateData(map) ;
 					}
 				}
 			});
 		}
 	}
 	
-	private void updateData() {
+	private void updateData(Map<String,String> map) {
+		//Map<String, String> map = nodeList.get(index) ;
 		TextView filmName = (TextView)contentView.findViewById(R.id.field_filmname) ;
+		filmName.setText(map.get("name")) ;
 		TextView director = (TextView)contentView.findViewById(R.id.field_director) ;
+		director.setText(mContext.getString(R.string.director) + ":" +map.get("directors")) ;
 		TextView actor = (TextView)contentView.findViewById(R.id.field_actor) ;
+		actor.setText(mContext.getString(R.string.actor) + ":" +map.get("artists")) ;
 		TextView area = (TextView)contentView.findViewById(R.id.field_area) ;
+		area.setText(mContext.getString(R.string.area) + ":" +map.get("area")) ;
 		TextView introduction = (TextView)contentView.findViewById(R.id.field_introduction) ;
+		introduction.setText(mContext.getString(R.string.introduction) + ":" +map.get("description")) ;
 	}
 	
 	private void fillData(List<Map<String,String>> params) {
@@ -99,6 +121,7 @@ public class FilmClassPage extends BasePage {
 			ImageLoadTask.imageLoad(itemIcon, nodeMap.get("thumb")) ;
 			TextView itemTitle = (TextView)filmItems[i].findViewById(R.id.ItemTitle) ;
 			itemTitle.setText(nodeMap.get("name")) ;
+			filmItems[i].setTag(params.get(i)) ;
 			filmItems[i].setVisibility(View.VISIBLE) ;
 		}
 	}

@@ -1,11 +1,17 @@
 package com.rushfusion.mat.video.entity;
 
+import java.io.Serializable;
 
-public class Movie {
+
+public class Movie implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private int count ;
 	private int total ;
 	private int score ;
-	private int click ;
 	private int comment ;
 	private String category ;
 	private String name ;
@@ -18,6 +24,9 @@ public class Movie {
 	private String thumb ;	//图片
 	private String length ;	//时长
 	private String url ;	//播放地址
+	private int play ;
+	private int id ;
+	private int recent ;
 	
 	public Movie(){
 		
@@ -39,12 +48,6 @@ public class Movie {
 	}
 	public void setScore(int score) {
 		this.score = score;
-	}
-	public int getClick() {
-		return click;
-	}
-	public void setClick(int click) {
-		this.click = click;
 	}
 	public int getComment() {
 		return comment;
@@ -118,15 +121,32 @@ public class Movie {
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	public Movie(int count, int total, int score, int click, int comment,
-			String category, String name, String type, int year,
-			String directors, String artists, String area, String description,
-			String thumb, String length, String url) {
+	public int getPlay() {
+		return play;
+	}
+	public void setPlay(int play) {
+		this.play = play;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public int getRecent() {
+		return recent;
+	}
+	public void setRecent(int recent) {
+		this.recent = recent;
+	}
+	public Movie(int count, int total, int score, int comment, String category,
+			String name, String type, int year, String directors,
+			String artists, String area, String description, String thumb,
+			String length, String url, int play, int id, int recent) {
 		super();
 		this.count = count;
 		this.total = total;
 		this.score = score;
-		this.click = click;
 		this.comment = comment;
 		this.category = category;
 		this.name = name;
@@ -139,6 +159,9 @@ public class Movie {
 		this.thumb = thumb;
 		this.length = length;
 		this.url = url;
+		this.play = play;
+		this.id = id;
+		this.recent = recent;
 	}
 	
 	

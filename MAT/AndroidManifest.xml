@@ -23,7 +23,7 @@
         <activity android:name=".page.MediaPlayerShow">
             
         </activity>
-        <activity android:name=".page.ItemDetailPage2">
+        <activity android:name=".page.ItemDetailPage">
             
         </activity>
     </application>
