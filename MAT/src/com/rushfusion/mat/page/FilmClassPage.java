@@ -36,10 +36,10 @@ public class FilmClassPage extends BasePage {
 		//mContentView = getContentView() ;
 	}
 	
-	public void initView() {
+	/*public void initView() {
 		loadPage("http://tvsrv.webhop.net:9061/query?source=sina&category=movie&area=&sort=play&page=1&pagesize=8",R.layout.page_film_class) ;
 	}
-
+*/
 	@Override
 	public void loadPage(String url, int layoutId) {
 		loadPage(url, layoutId,new BasePage.onLoadingDataCallBack(){
@@ -97,11 +97,15 @@ public class FilmClassPage extends BasePage {
 				@Override
 				public void onFocusChange(View v, boolean hasFocus) {
 					if(hasFocus){
-						
+						updateData() ;
 					}
 				}
 			});
 		}
+	}
+	
+	private void updateData() {
+		//TextView textView = (TextView)contentView.findViewById(R.id.) ;
 	}
 	
 	private void fillData(List<Map<String,String>> params) {
