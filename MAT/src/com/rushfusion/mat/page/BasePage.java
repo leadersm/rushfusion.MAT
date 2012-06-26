@@ -1,6 +1,10 @@
 package com.rushfusion.mat.page;
 
+import java.util.List;
+import java.util.Map;
+
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,15 +52,34 @@ public abstract class BasePage {
 		PageCache.getInstance().set(layoutId, page);
 	}
 	
-	public void loadPage(String url,int layoutId,onLoadingDataCallBack callback){
-		isLoading = true;
+	public void loadPage(String url,int layoutId,final onLoadingDataCallBack callback){
 		setContentView(layoutId);
-		context.showDialog(1);
-		callback.onPrepare(progress);
-		callback.onExcute(url);
-		context.dismissDialog(1);
-		callback.onFinshed(progress);
-		isLoading = false;
+		new AsyncTask<String, Void, List<Map<String, String>>>(){
+			
+			@Override
+			protected void onPreExecute() {
+				// TODO Auto-generated method stub
+				super.onPreExecute();
+				isLoading = true;
+				progress.setVisibility(View.VISIBLE);
+				progress.bringToFront();
+				callback.onPrepare();
+			}
+
+			@Override
+			protected void onPostExecute(List<Map<String, String>> result) {
+				// TODO Auto-generated method stub
+				super.onPostExecute(result);
+				callback.onFinished(result);
+				progress.setVisibility(View.INVISIBLE);
+				isLoading = false;
+			}
+
+			@Override
+			protected List<Map<String, String>> doInBackground(String... params) {
+				// TODO Auto-generated method stub
+				return callback.onExcute(params[0]);
+			}}.execute(url);
 	}
 	
 	public interface onLoadingDataCallBack{
@@ -64,7 +87,7 @@ public abstract class BasePage {
 		 * //show prograss
 		 * @param progress
 		 */
-		public void onPrepare(ProgressBar progress);
+		public void onPrepare();
 		/**
 		 * handle your data here   //loading data
 		 * attach your data to the view
@@ -73,12 +96,13 @@ public abstract class BasePage {
 		 * @param url
 		 * @return
 		 */
-		public boolean onExcute(String url);
+		public List<Map<String, String>> onExcute(String url);
 		/**
 		 * //hide ..
+		 * @param result 
 		 * @param progress
 		 */
-		public void onFinshed(ProgressBar progress);
+		public void onFinished(List<Map<String,String>> result);
 	}
 	
 	

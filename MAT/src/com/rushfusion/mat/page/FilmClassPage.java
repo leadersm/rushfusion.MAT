@@ -9,6 +9,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.sax.StartElementListener;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,16 +18,17 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.rushfusion.mat.A;
 import com.rushfusion.mat.R;
 import com.rushfusion.mat.utils.DataParser;
 import com.rushfusion.mat.utils.ImageLoadTask;
+import com.rushfusion.mat.video.entity.Movie;
 
 public class FilmClassPage extends BasePage {
 	private static final int FILM_NUM = 8 ;
 	private Context mContext ;
 	private ViewGroup mParent ;
 	private List<Map<String, String>> nodeList;
-	//private View mContentView ;
 	protected ViewGroup filmItems[];
 	protected int filmItemResIds[] = { R.id.item1, R.id.item2, R.id.item3, R.id.item4,
 			R.id.item5, R.id.item6, R.id.item7, R.id.item8 };
@@ -34,7 +37,6 @@ public class FilmClassPage extends BasePage {
 		super(context, parent);
 		mContext = context ;
 		mParent = parent ;
-		//mContentView = getContentView() ;
 	}
 	
 	@Override
@@ -42,39 +44,23 @@ public class FilmClassPage extends BasePage {
 		loadPage(url, layoutId,new BasePage.onLoadingDataCallBack(){
 
 			@Override
-			public void onPrepare(ProgressBar progress) {
+			public void onPrepare() {
 				// TODO Auto-generated method stub
-				Log.d("progress", progress.getVisibility()+"") ;
-				progress.setVisibility(View.VISIBLE);
 				initPage() ;
 			}
 			
 			@Override
-			public boolean onExcute(String url) {
+			public List<Map<String, String>> onExcute(String url) {
 				// TODO Auto-generated method stub
 				//contentView.findViewById(R.id.image) ;
-				new AsyncTask<String, Void, List<Map<String,String>>>(){
-
-					@Override
-					protected List<Map<String, String>> doInBackground(
-							String... params) {
-						String strUrl = params[0] ;
-						nodeList = DataParser.getInstance(context, "").get(strUrl);
-						return nodeList ;
-					}
-					
-					protected void onPostExecute(List<Map<String,String>> params) {
-						fillData(params) ;
-					};
-					
-				}.execute(url) ;
-				return false;
+				String strUrl = url ;
+				nodeList = DataParser.getInstance(context, "").get(strUrl);
+				return nodeList ;
 			}
 
 			@Override
-			public void onFinshed(ProgressBar progress) {
-				// TODO Auto-generated method stub
-				progress.setVisibility(View.INVISIBLE);
+			public void onFinished(List<Map<String, String>> result) {
+				fillData(result) ;
 			}
 		});
 	}
@@ -87,13 +73,16 @@ public class FilmClassPage extends BasePage {
 			filmItems[i].setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					Bundle map =  (Bundle) v.getTag() ;
-					ItemDetailPage detailPage = new ItemDetailPage(context, mParent) ;
-					detailPage.loadPage("", R.layout.page_teleplay) ;
-					//Intent intent = new Intent() ;
-					//Bundle bundle = new Bundle() ;
-					//bundle.putAll(map) ;
-					//detailPage.doLoadPage(map);
+					Map<String,String> map = (Map<String, String>)v.getTag() ;
+					Movie movie = new Movie(Integer.parseInt(map.get("count")),Integer.parseInt(map.get("total")),Integer.parseInt(map.get("score")),
+							Integer.parseInt(map.get("comment")),map.get("category"),map.get("name"),map.get("type"),Integer.parseInt(map.get("year")),
+							map.get("directors"),map.get("artists"),map.get("area"),map.get("description"),
+							map.get("thumb"),map.get("length"),map.get("url"),Integer.parseInt(map.get("play")),Integer.parseInt(map.get("id")),Integer.parseInt(map.get("recent"))) ;
+					Intent intent = new Intent(mContext,A.class) ;
+					Bundle bundle = new Bundle() ;
+					bundle.putSerializable("movieInfo", movie) ;
+					intent.putExtras(bundle) ;
+					mContext.startActivity(intent) ;
 				}
 			});
 			

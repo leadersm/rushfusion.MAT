@@ -57,9 +57,8 @@ public class MATActivity extends Activity implements OnClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.main);
-        
         sp = getSharedPreferences("MatHistory",Context.MODE_WORLD_READABLE);
         editor = sp.edit();
         init();
@@ -375,15 +374,13 @@ public class MATActivity extends Activity implements OnClickListener{
 		RecommendPage recommendPage = new RecommendPage(this,parent);
 		recommendPage.loadPage(url,R.layout.page_recommend);
 		recommendPage.setPageCache(recommendPage, R.layout.page_recommend);
-//		ItemDetailPage page = new ItemDetailPage(this, parent);
-//		page.loadPage("", R.layout.page_item_detail);
 		
 	}
 
 	private void initFilmClassPage(String url) {
 		FilmClassPage page = new FilmClassPage(this, parent);
 		page.loadPage(url, R.layout.page_film_class);
-//		page.setPageCache(page, R.layout.page_film_class);
+		page.setPageCache(page, R.layout.page_film_class);
 	}	
 	
 	@Override
