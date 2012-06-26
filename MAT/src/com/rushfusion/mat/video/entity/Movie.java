@@ -2,6 +2,28 @@ package com.rushfusion.mat.video.entity;
 
 
 public class Movie {
+	/**
+	 * total": 1,
+      "score": 79,
+      "comment": 622214,
+      "artists": "杨千嬅;余文乐",
+      "name": "志明与春娇",
+      "area": "香港",
+      "play": 9011,
+      "count": 1,
+      "length": "01:42:03",
+      "recent": 189,
+      "year": 2010,
+      "directors": "彭浩翔",
+      "thumb": "http://cache.mars.sina.com.cn/nd/movievideo/thumb/71/3071_120160.jpg",
+      "url": "http://v.iask.com/v_play_ipad.php?vid=51734192",
+      "type": "爱情;喜剧",
+      "id": 3071,
+      "description": "一纸戒烟令让狭窄的后巷成为新型社交区域，无数抽数的男男女女不得不躲进那里抽烟。来自广告公司的志明和在化妆品专柜工作的春娇在那相识，志明的不幸遭遇以及为春娇点烟的举动让春娇对这个斯文的男人略生好感。在接下来的几个日日夜夜，两人不时的传送短信和相约街角吸烟。感情通过拇指传送，爱情在烟雾之中滋生……",
+      "category": "movie"
+
+	 */
+	
 	private int count ;
 	private int total ;
 	private int score ;

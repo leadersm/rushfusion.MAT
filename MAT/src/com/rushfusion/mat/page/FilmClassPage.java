@@ -1,11 +1,14 @@
 package com.rushfusion.mat.page;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,29 +87,42 @@ public class FilmClassPage extends BasePage {
 			filmItems[i].setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					Bundle map =  (Bundle) v.getTag() ;
+					ItemDetailPage detailPage = new ItemDetailPage(context, mParent) ;
+					detailPage.loadPage("", R.layout.page_teleplay) ;
+					//Intent intent = new Intent() ;
+					//Bundle bundle = new Bundle() ;
+					//bundle.putAll(map) ;
+					//detailPage.doLoadPage(map);
 				}
 			});
 			
 			filmItems[i].setVisibility(View.INVISIBLE) ;
 			
 			filmItems[i].setOnFocusChangeListener(new View.OnFocusChangeListener() {
-				
 				@Override
 				public void onFocusChange(View v, boolean hasFocus) {
 					if(hasFocus){
-						//updateData() ;
+						Map<String,String> map = (Map<String, String>) v.getTag() ;
+						updateData(map) ;
 					}
 				}
 			});
 		}
 	}
 	
-	private void updateData() {
+	private void updateData(Map<String,String> map) {
+		//Map<String, String> map = nodeList.get(index) ;
 		TextView filmName = (TextView)contentView.findViewById(R.id.field_filmname) ;
+		filmName.setText(map.get("name")) ;
 		TextView director = (TextView)contentView.findViewById(R.id.field_director) ;
+		director.setText(mContext.getString(R.string.director) + ":" +map.get("directors")) ;
 		TextView actor = (TextView)contentView.findViewById(R.id.field_actor) ;
+		actor.setText(mContext.getString(R.string.actor) + ":" +map.get("artists")) ;
 		TextView area = (TextView)contentView.findViewById(R.id.field_area) ;
+		area.setText(mContext.getString(R.string.area) + ":" +map.get("area")) ;
 		TextView introduction = (TextView)contentView.findViewById(R.id.field_introduction) ;
+		introduction.setText(mContext.getString(R.string.introduction) + ":" +map.get("description")) ;
 	}
 	
 	private void fillData(List<Map<String,String>> params) {
@@ -117,6 +133,7 @@ public class FilmClassPage extends BasePage {
 			ImageLoadTask.imageLoad(itemIcon, nodeMap.get("thumb")) ;
 			TextView itemTitle = (TextView)filmItems[i].findViewById(R.id.ItemTitle) ;
 			itemTitle.setText(nodeMap.get("name")) ;
+			filmItems[i].setTag(params.get(i)) ;
 			filmItems[i].setVisibility(View.VISIBLE) ;
 		}
 	}

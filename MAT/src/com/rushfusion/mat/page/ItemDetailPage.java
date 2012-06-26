@@ -54,7 +54,7 @@ public class ItemDetailPage extends BasePage {
 
 			@Override
 			public boolean onExcute(String url) {
-				image = (ImageView) contentView.findViewById(R.id.page_item_detail_image);
+				/*image = (ImageView) contentView.findViewById(R.id.page_item_detail_image);
 				name = (TextView) contentView.findViewById(R.id.page_item_detail_name);
 				description = (TextView) contentView.findViewById(R.id.page_item_detail_description);
 				socres = (TextView) contentView.findViewById(R.id.page_item_detail_socres);
@@ -98,7 +98,7 @@ public class ItemDetailPage extends BasePage {
 
 					}
 
-				});
+				});*/
 
 
 				return false;
@@ -111,6 +111,7 @@ public class ItemDetailPage extends BasePage {
 			}
 		});
 	}
+	
 
 
 }
