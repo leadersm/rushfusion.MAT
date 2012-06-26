@@ -48,7 +48,7 @@ public class VideoPlayer extends Activity implements SurfaceHolder.Callback,OnCo
 	Handler handler_sent,handler_recive;
 	Runnable run_sent,run_recive;
 	ContentResolver resolver;
-	Cursor cursor;
+//	Cursor cursor;
 	HandlerThread ht;
 	
 	@Override
@@ -112,22 +112,22 @@ public class VideoPlayer extends Activity implements SurfaceHolder.Callback,OnCo
 				}
 			} 
 		});
-		btn_back_video.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				if(!cursor.moveToPrevious()){
-					cursor.moveToLast();
-				}
-				playVideo();
-			}
-		});
-		btn_next_video.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				if(!cursor.moveToNext()){
-					cursor.moveToFirst();
-				}
-				playVideo();
-			}
-		});
+//		btn_back_video.setOnClickListener(new OnClickListener() {
+//			public void onClick(View v) {
+//				if(!cursor.moveToPrevious()){
+//					cursor.moveToLast();
+//				}
+//				playVideo();
+//			}
+//		});
+//		btn_next_video.setOnClickListener(new OnClickListener() {
+//			public void onClick(View v) {
+//				if(!cursor.moveToNext()){
+//					cursor.moveToFirst();
+//				}
+//				playVideo();
+//			}
+//		});
 		btn_play_video.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				if(player!=null&&player.isPlaying()){
@@ -163,17 +163,17 @@ public class VideoPlayer extends Activity implements SurfaceHolder.Callback,OnCo
 	}
 
 	public void onCompletion(MediaPlayer mp) {
-		if(!cursor.moveToPrevious()){
-			
-			cursor.moveToLast();
-			playVideo();
-			play_video_seekbar.setProgress(0);
-			
-		}else{
-			handler_sent.removeCallbacks(run_sent);
-			play_video_seekbar.setProgress(0);
-			Toast.makeText(this, "影片播放结束,谢谢观赏", Toast.LENGTH_LONG).show();
-		}
+//		if(!cursor.moveToPrevious()){
+//			
+//			cursor.moveToLast();
+//			playVideo();
+//			play_video_seekbar.setProgress(0);
+//			
+//		}else{
+//			handler_sent.removeCallbacks(run_sent);
+//			play_video_seekbar.setProgress(0);
+//			Toast.makeText(this, "影片播放结束,谢谢观赏", Toast.LENGTH_LONG).show();
+//		}
 	}
 
 	public void onPrepared(MediaPlayer mp) {

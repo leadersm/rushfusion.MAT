@@ -107,12 +107,17 @@ public class ItemDetailPage extends BasePage {
 					@Override
 					public void onItemClick(AdapterView<?> arg0, View arg1,
 							int arg2, long arg3) {
-						// ²¥·Å
-						Intent it =  new Intent(context, MediaPlayerShow.class);
-						Bundle bd = new Bundle();
-						bd.putString("url", list.get(arg2));
-						it.putExtras(bd);
-						context.startActivity(it);
+						// ²¥·Å  163:http://163.letv.com/dianying/E7JRABGJ9/M7KS70Q27_mini.html
+//						Intent it =  new Intent(context, MediaPlayerShow.class);
+//						Bundle bd = new Bundle();
+//						bd.putString("url", list.get(arg2));
+//						it.putExtras(bd);
+//						context.startActivity(it);
+						String path = list.get(arg2);
+						if(path.indexOf("html")==(path.length()-4)){
+							
+						}
+						
 					}
 					
 				});
