@@ -62,6 +62,7 @@ public abstract class BasePage {
 				super.onPreExecute();
 				isLoading = true;
 				progress.setVisibility(View.VISIBLE);
+				progress.bringToFront();
 				callback.onPrepare();
 			}
 
@@ -69,7 +70,7 @@ public abstract class BasePage {
 			protected void onPostExecute(List<Map<String, String>> result) {
 				// TODO Auto-generated method stub
 				super.onPostExecute(result);
-				callback.onFinshed(result);
+				callback.onFinished(result);
 				progress.setVisibility(View.INVISIBLE);
 				isLoading = false;
 			}
@@ -101,7 +102,7 @@ public abstract class BasePage {
 		 * @param result 
 		 * @param progress
 		 */
-		public void onFinshed(List<Map<String,String>> result);
+		public void onFinished(List<Map<String,String>> result);
 	}
 	
 	

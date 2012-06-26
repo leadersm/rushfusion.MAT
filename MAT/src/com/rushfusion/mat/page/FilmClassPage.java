@@ -52,7 +52,7 @@ public class FilmClassPage extends BasePage {
 			}
 
 			@Override
-			public void onFinshed(List<Map<String, String>> result) {
+			public void onFinished(List<Map<String, String>> result) {
 				fillData(result) ;
 			}
 		});

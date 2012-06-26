@@ -374,15 +374,13 @@ public class MATActivity extends Activity implements OnClickListener{
 		RecommendPage recommendPage = new RecommendPage(this,parent);
 		recommendPage.loadPage(url,R.layout.page_recommend);
 		recommendPage.setPageCache(recommendPage, R.layout.page_recommend);
-//		ItemDetailPage page = new ItemDetailPage(this, parent);
-//		page.loadPage("", R.layout.page_item_detail);
 		
 	}
 
 	private void initFilmClassPage(String url) {
 		FilmClassPage page = new FilmClassPage(this, parent);
 		page.loadPage(url, R.layout.page_film_class);
-//		page.setPageCache(page, R.layout.page_film_class);
+		page.setPageCache(page, R.layout.page_film_class);
 	}	
 	
 	@Override
