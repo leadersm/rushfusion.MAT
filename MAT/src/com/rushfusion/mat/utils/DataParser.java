@@ -91,6 +91,15 @@ public class DataParser {
 		return null;
 	}
 	
+	public List<Map<String,String>> get(String url) {
+		HttpUtil httpUtil = HttpUtil.getInstance(mContext) ;
+		String strUrl = url ;
+		if(httpUtil.connectServerByURL(strUrl)) {
+			return loadFileData(httpUtil.getInputStreamFromUrl(strUrl)) ;
+		}
+		return null;
+	}
+	
 	public List<String> loadData(InputStream inputSteam) {
 		List<String> dataList = null ;
 		try {
@@ -117,5 +126,40 @@ public class DataParser {
 		}
 		return dataList;
 	}
+	
+	
+	public List<Map<String,String>> loadFileData(InputStream inputSteam) {
+		String[] PROPERTIES = {"total","score","comment","artists","name","area","play","count","length","recent","year","directors","thumb","url","type","id","description","category"} ;
+		Map<String, String> nodeMap = null ;
+		List<Map<String,String>> dataList = new ArrayList<Map<String,String>>() ;
+		try {
+			StringBuilder builder = new StringBuilder() ;
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputSteam)) ;
+			for(String s = bufferedReader.readLine(); s != null; s = bufferedReader.readLine()) {
+				builder.append(s) ;
+			}
+			Log.d("JSON", builder.toString()) ;
+			JSONObject jsonObject = new JSONObject(builder.toString()) ;
+			String total = jsonObject.getString("total") ;
+			JSONArray itemsArray = jsonObject.getJSONArray("items") ;
+			for(int i=0; i<itemsArray.length(); i++) {
+				nodeMap = new HashMap<String, String>() ;
+				JSONObject object = itemsArray.getJSONObject(i) ;
+				for(int j=0; j<PROPERTIES.length; j++) {
+					String str = object.getString(PROPERTIES[j]) ;
+					nodeMap.put(PROPERTIES[j], str) ;
+				}
+				dataList.add(nodeMap) ;
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return dataList;
+	}
+	
 	
 }

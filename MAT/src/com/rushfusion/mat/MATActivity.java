@@ -15,12 +15,13 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.rushfusion.mat.page.FilmClassPage;
 import com.rushfusion.mat.page.ItemDetailPage;
 import com.rushfusion.mat.page.PageCache;
-import com.rushfusion.mat.page.RecommendPage;
 import com.rushfusion.mat.utils.DataParser;
 
 public class MATActivity extends Activity implements OnClickListener{
@@ -45,6 +46,7 @@ public class MATActivity extends Activity implements OnClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.main);
         
         sp = getSharedPreferences("MatHistory",Context.MODE_WORLD_READABLE);
@@ -264,8 +266,10 @@ public class MATActivity extends Activity implements OnClickListener{
 //		RecommendPage recommendPage = new RecommendPage(this,parent);
 //		recommendPage.loadPage("url?data?……TBD",R.layout.page_recommend);
 //		recommendPage.setPageCache(recommendPage, R.layout.page_recommend);
-		ItemDetailPage page = new ItemDetailPage(this, parent);
-		page.loadPage("", R.layout.page_item_detail);
+		//ItemDetailPage page = new ItemDetailPage(this, parent);
+		FilmClassPage page = new FilmClassPage(this, parent);
+		page.initView() ;
+		//page.loadPage("", R.layout.page_item_detail);
 		
 	}
 
