@@ -22,7 +22,6 @@ public class FilmClassPage extends BasePage {
 	private Context mContext ;
 	private ViewGroup mParent ;
 	private List<Map<String, String>> nodeList;
-	//private View mContentView ;
 	protected ViewGroup filmItems[];
 	protected int filmItemResIds[] = { R.id.item1, R.id.item2, R.id.item3, R.id.item4,
 			R.id.item5, R.id.item6, R.id.item7, R.id.item8 };
@@ -31,7 +30,6 @@ public class FilmClassPage extends BasePage {
 		super(context, parent);
 		mContext = context ;
 		mParent = parent ;
-		//mContentView = getContentView() ;
 	}
 	
 	@Override
@@ -39,39 +37,23 @@ public class FilmClassPage extends BasePage {
 		loadPage(url, layoutId,new BasePage.onLoadingDataCallBack(){
 
 			@Override
-			public void onPrepare(ProgressBar progress) {
+			public void onPrepare() {
 				// TODO Auto-generated method stub
-				Log.d("progress", progress.getVisibility()+"") ;
-				progress.setVisibility(View.VISIBLE);
 				initPage() ;
 			}
 			
 			@Override
-			public boolean onExcute(String url) {
+			public List<Map<String, String>> onExcute(String url) {
 				// TODO Auto-generated method stub
 				//contentView.findViewById(R.id.image) ;
-				new AsyncTask<String, Void, List<Map<String,String>>>(){
-
-					@Override
-					protected List<Map<String, String>> doInBackground(
-							String... params) {
-						String strUrl = params[0] ;
-						nodeList = DataParser.getInstance(context, "").get(strUrl);
-						return nodeList ;
-					}
-					
-					protected void onPostExecute(List<Map<String,String>> params) {
-						fillData(params) ;
-					};
-					
-				}.execute(url) ;
-				return false;
+				String strUrl = url ;
+				nodeList = DataParser.getInstance(context, "").get(strUrl);
+				return nodeList ;
 			}
 
 			@Override
-			public void onFinshed(ProgressBar progress) {
-				// TODO Auto-generated method stub
-				progress.setVisibility(View.INVISIBLE);
+			public void onFinshed(List<Map<String, String>> result) {
+				fillData(result) ;
 			}
 		});
 	}

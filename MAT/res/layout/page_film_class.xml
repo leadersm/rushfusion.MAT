@@ -11,16 +11,15 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="48dip"
-        android:layout_marginTop="80dip"
-        />
+        android:layout_marginTop="80dip" />
 
     <RelativeLayout
         android:id="@+id/items"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="18dip"
         android:layout_marginTop="-10dip"
-        android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/arrow_left_film_class" >
 
         <include
@@ -87,7 +86,6 @@
             android:layout_alignTop="@+id/item5"
             android:layout_toRightOf="@+id/item7"
             layout="@layout/page_film_class_item" />
-
     </RelativeLayout>
 
     <View
@@ -97,8 +95,7 @@
         android:layout_alignBottom="@+id/items"
         android:layout_marginBottom="100dip"
         android:layout_marginLeft="18dip"
-        android:layout_toRightOf="@+id/items"
-        />
+        android:layout_toRightOf="@+id/items" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -173,5 +170,12 @@
             android:text="15/60 pages" >
         </TextView>
     </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/content_progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="invisible" />
 
 </RelativeLayout>

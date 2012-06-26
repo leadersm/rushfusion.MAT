@@ -2,6 +2,7 @@ package com.rushfusion.mat.page;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import android.app.Activity;
 import android.net.Uri;
@@ -47,13 +48,12 @@ public class ItemDetailPage extends BasePage {
 		loadPage(url, layoutId,new BasePage.onLoadingDataCallBack(){
 
 			@Override
-			public void onPrepare(ProgressBar progress) {
+			public void onPrepare() {
 				// TODO Auto-generated method stub
-				progress.setVisibility(View.VISIBLE);
 			}
 
 			@Override
-			public boolean onExcute(String url) {
+			public List<Map<String, String>> onExcute(String url) {
 				image = (ImageView) contentView.findViewById(R.id.page_item_detail_image);
 				name = (TextView) contentView.findViewById(R.id.page_item_detail_name);
 				description = (TextView) contentView.findViewById(R.id.page_item_detail_description);
@@ -99,15 +99,13 @@ public class ItemDetailPage extends BasePage {
 					}
 
 				});
-
-
-				return false;
+				return null;
 			}
 
 			@Override
-			public void onFinshed(ProgressBar progress) {
+			public void onFinshed(List<Map<String, String>> result) {
 				// TODO Auto-generated method stub
-				progress.setVisibility(View.INVISIBLE);
+				
 			}
 		});
 	}

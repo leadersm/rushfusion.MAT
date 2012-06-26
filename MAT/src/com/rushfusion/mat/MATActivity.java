@@ -57,9 +57,8 @@ public class MATActivity extends Activity implements OnClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.main);
-        
         sp = getSharedPreferences("MatHistory",Context.MODE_WORLD_READABLE);
         editor = sp.edit();
         init();
@@ -69,6 +68,7 @@ public class MATActivity extends Activity implements OnClickListener{
 	private void init() {
 		currentOrigin = "sina";//getLastWatchRecord().equals("")?"sina":getLastWatchRecord();
     	initMenu();
+    	showMenu();
     	initCategory(currentOrigin);
     	currentCategory = "首页";//??
     	initChooseBar();

@@ -53,12 +53,11 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/level_2"
         layout="@layout/conditionbar" />
-
     <ProgressBar
         android:id="@+id/content_progressbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="invisible" />
-
+        android:visibility="invisible"
+         />
 </RelativeLayout>
