@@ -51,8 +51,10 @@ public abstract class BasePage {
 	public void loadPage(String url,int layoutId,onLoadingDataCallBack callback){
 		isLoading = true;
 		setContentView(layoutId);
+		context.showDialog(1);
 		callback.onPrepare(progress);
 		callback.onExcute(url);
+		context.dismissDialog(1);
 		callback.onFinshed(progress);
 		isLoading = false;
 	}
