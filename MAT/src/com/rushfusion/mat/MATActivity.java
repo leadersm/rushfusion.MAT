@@ -85,11 +85,13 @@ public class MATActivity extends Activity implements OnClickListener{
 			chooseBar.setVisibility(View.GONE);
 		else
 			chooseBar.setVisibility(View.VISIBLE);
+		Button byPlay = (Button) findViewById(R.id.byPlay);
 		Button byRecent = (Button) findViewById(R.id.byRecent);
 		Button byScore = (Button) findViewById(R.id.byScore);
 		Button byComment = (Button) findViewById(R.id.byComment);
 		Button byCondition = (Button) findViewById(R.id.byCondition);
 		
+		byPlay.setOnClickListener(this);
 		byRecent.setOnClickListener(this);
 		byScore.setOnClickListener(this);
 		byComment.setOnClickListener(this);
@@ -407,8 +409,8 @@ public class MATActivity extends Activity implements OnClickListener{
 			changeDataByOriginName("sina");
 			break;
 		//==================================
-		case R.id.byRecent:
-			currentSort = "recent";
+		case R.id.byPlay:
+			currentSort = "play";
 			updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			break;
 		case R.id.byComment:
@@ -417,6 +419,10 @@ public class MATActivity extends Activity implements OnClickListener{
 			break;
 		case R.id.byScore:
 			currentSort = "score";
+			updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
+			break;
+		case R.id.byRecent:
+			currentSort = "recent";
 			updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			break;
 		case R.id.byCondition:
