@@ -1,6 +1,8 @@
 package com.rushfusion.mat.page;
 
 import java.io.IOException;
+import java.text.AttributedCharacterIterator.Attribute;
+import java.util.jar.Attributes;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -10,6 +12,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.inputmethodservice.Keyboard;
+import android.inputmethodservice.Keyboard.Key;
+import android.inputmethodservice.KeyboardView.OnKeyboardActionListener;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnBufferingUpdateListener;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -19,12 +24,15 @@ import android.media.MediaPlayer.OnPreparedListener;
 import android.media.MediaPlayer.OnSeekCompleteListener;
 import android.media.MediaPlayer.OnVideoSizeChangedListener;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
@@ -33,7 +41,8 @@ import android.widget.Toast;
 
 import com.rushfusion.mat.R;
 
-public class MediaPlayerShow extends Activity implements OnBufferingUpdateListener,OnVideoSizeChangedListener,OnCompletionListener,OnErrorListener,OnInfoListener,OnPreparedListener,OnSeekCompleteListener,Callback,MediaPlayerControl{
+public class MediaPlayerShow extends Activity implements OnBufferingUpdateListener,OnVideoSizeChangedListener,OnCompletionListener,OnErrorListener,
+														OnInfoListener,OnPreparedListener,OnSeekCompleteListener,Callback,MediaPlayerControl{
 	String filePath;
 	SurfaceView surfaceView;
 	SurfaceHolder surfaceHolder;
@@ -69,19 +78,13 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 		SharedPreferences prefs = getSharedPreferences("myDataStorage", MODE_PRIVATE);
 		String testStr = prefs.getString("url", "123");
 		int testPosition = prefs.getInt("position", 0);
-		System.out.println(testStr + "::::" + testPosition);
 		if(bd==null){
-			System.out.println("into bg==null");
 			filePath = "http://v.iask.com/v_play_ipad.php?vid=33184708";
-			System.out.println(filePath);
-			System.out.println(prefs.getString("url", " "));
-			System.out.println(filePath.equals(prefs.getString("url", " ")));
 			if(filePath.equals(prefs.getString("url", " "))){
 				isContinue = true;
 				contiuePosition = prefs.getInt("position", 0);
 			}
 		}else{
-			System.out.println("into bg!=null");
 			filePath = bd.getString("url") ;
 			if(filePath.equals(prefs.getString("url", " "))){
 				isContinue = true;
@@ -99,7 +102,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 			System.out.println("mediaplayer 设置数据中出错，错误信息："+e.toString());
 		}
 		currentDisplay = getWindowManager().getDefaultDisplay(); 
-		controller = new MediaController(this);
+		controller = new MediaController(this , false);
 		surfaceView.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -222,13 +225,9 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 		Toast.makeText(this, "进入准备", 500).show();
 		videoWidth = mp.getVideoWidth();
 		videoHeight = mp.getVideoHeight();
-		System.out.println(videoWidth+" * "+videoHeight +"比例： "+ Math.ceil(videoWidth/videoHeight));
-		System.out.println(currentDisplay.getWidth()+" * "+currentDisplay.getHeight() +"比例： "+ Math.ceil(currentDisplay.getWidth()/currentDisplay.getHeight()));
-		
 		if(videoWidth > currentDisplay.getWidth() || videoHeight > currentDisplay.getHeight()){
 			float heightRatio = (float) videoHeight / (float) currentDisplay.getHeight();
 			float widthRatio = (float) videoWidth / (float) currentDisplay.getWidth();
-			System.out.println(heightRatio +":::"+widthRatio);
 			if(heightRatio > 1 || widthRatio > 1){
 				if(heightRatio > widthRatio){
 					videoHeight = (int) Math.ceil((float)videoHeight / (float)heightRatio);
@@ -239,12 +238,9 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 				}
 			}
 			surfaceView.setLayoutParams(new LinearLayout.LayoutParams(videoWidth, videoHeight));
-			System.out.println(videoWidth+" * "+videoHeight +"比例： "+ Math.ceil(videoWidth/videoHeight));
 		}else{
 			surfaceHolder.setFixedSize(videoWidth, videoHeight); 
 		}
-//		surfaceHolder.setFixedSize(videoWidth, videoHeight); 
-//		System.out.println(surfaceView.getWidth()+" * "+surfaceView.getHeight() +"比例： "+ (int)Math.ceil(surfaceView.getWidth()/surfaceView.getHeight()));
 		pDialog.cancel();
 		controller.setMediaPlayer(this);
 		controller.setAnchorView(this.findViewById(R.id.page_playershow_mainview));
@@ -273,6 +269,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 //			Toast.makeText(this, "从头开始播放",500).show();
 		}
 		mp.start();
+		surfaceView.requestFocus();
 	}
 
 
@@ -283,14 +280,12 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 		editor.putString("url", filePath);
 		editor.putInt("position",mediaPlayer.getCurrentPosition() );
 		editor.commit();
-		System.out.println(filePath+":"+mediaPlayer.getCurrentPosition());
 		super.onPause();
 	}
 
 
 	@Override
 	public void onBufferingUpdate(MediaPlayer mp, int percent) {
-//		System.out.println("已经缓冲了："+percent+"%");
 	}
 
 	@Override
@@ -315,6 +310,46 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	public int getBufferPercentage() {
 		return 0;
 	}
+
+	
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		switch(keyCode){
+		case KeyEvent.KEYCODE_DPAD_UP:
+			if(!controller.isShowing()){
+				controller.show();
+				return true;
+			}
+			break;
+		case KeyEvent.KEYCODE_DPAD_DOWN:
+			if(!controller.isShowing()){
+				controller.show();
+				return true;
+			}
+			break;
+		case KeyEvent.KEYCODE_DPAD_CENTER:
+			if(!controller.isShowing()){
+				controller.show();
+				return true;
+			}
+			break;
+		case KeyEvent.KEYCODE_DPAD_LEFT:
+			if(!controller.isShowing()){
+				controller.show();
+				return true;
+			}
+			break;
+		case KeyEvent.KEYCODE_DPAD_RIGHT:
+			if(!controller.isShowing()){
+				controller.show();
+				return true;
+			}
+			break;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
 
 
 }

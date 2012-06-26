@@ -9,6 +9,7 @@
     <SurfaceView android:id="@+id/page_playershow_surfaceview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:background="#55555555"
         android:layout_gravity="center"/>
 
 
