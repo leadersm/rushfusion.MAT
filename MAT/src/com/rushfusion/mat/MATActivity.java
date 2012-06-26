@@ -6,6 +6,7 @@ import java.util.List;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -98,7 +99,7 @@ public class MATActivity extends Activity implements OnClickListener{
 
 	private void initCategory(String origin) {
 		// TODO Auto-generated method stub
-		ViewGroup level1 = (ViewGroup) findViewById(R.id.level1);
+		final ViewGroup level1 = (ViewGroup) findViewById(R.id.level1);
 		level1.removeAllViews();
 		Button shouye = new Button(this);
 		shouye.setText("首页");
@@ -122,31 +123,48 @@ public class MATActivity extends Activity implements OnClickListener{
 		});
 		level1.addView(shouye);
 
-		categories = DataParser.getInstance(this,currentOrigin).getCategory();
-		for(int i = 0;i<categories.size();i++){
-			Button btn = new Button(this);
-			final String name = categories.get(i);
-			btn.setText(name);
-			btn.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					currentCategory = name;
-					initConditionBar();
-					while(types==null){
-						try {
-							Thread.sleep(10);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
+		new AsyncTask<String, Void, List<String>>(){
+
+			@Override
+			protected List<String> doInBackground(String... params) {
+				// TODO Auto-generated method stub
+				categories = DataParser.getInstance(MATActivity.this,params[0]).getCategory();
+				return categories;
+			}
+
+			@Override
+			protected void onPostExecute(List<String> result) {
+				// TODO Auto-generated method stub
+				super.onPostExecute(result);
+				if(result!=null)
+				for(int i = 0;i<categories.size();i++){
+					Button btn = new Button(MATActivity.this);
+					final String name = categories.get(i);
+					btn.setText(name);
+					btn.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+							currentCategory = name;
+							initConditionBar();
+							while(types==null){
+								try {
+									Thread.sleep(10);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
+							}
+							currentType = types.contains(currentType)?currentType:"";
+							updatePage(currentCategory,currentType, currentArea, currentYear, currentSort);
 						}
-					}
-					currentType = types.contains(currentType)?currentType:"";
-					updatePage(currentCategory,currentType, currentArea, currentYear, currentSort);
+					});
+					level1.addView(btn);
 				}
-			});
-			level1.addView(btn);
-		}
+				
+			}
+			
+		}.execute(currentOrigin);
 	}
 
 
@@ -446,24 +464,32 @@ public class MATActivity extends Activity implements OnClickListener{
 	
 	@Override
 	protected Dialog onCreateDialog(int id) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle("提示");
-		builder.setMessage("确定退出吗？");
-		builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				finish();
-			}
-		});
-		builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				dismissDialog(0);
-			}
-		});
-		return builder.create();
+		if(id==0){
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle("提示");
+			builder.setMessage("确定退出吗？");
+			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					finish();
+				}
+			});
+			builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dismissDialog(0);
+				}
+			});
+			return builder.create();
+		}else if(id==1){
+			ProgressDialog dialog = new ProgressDialog(this);
+			dialog.setTitle("提示:");
+			dialog.setMessage("正在加载中，请稍后");
+			return dialog;
+		}
+		return null;
 	}
 
 	private void showMenu() {
