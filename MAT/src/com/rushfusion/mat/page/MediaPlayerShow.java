@@ -157,6 +157,9 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 
 	@Override
 	public void seekTo(int pos) {
+		
+		mediaPlayer.pause();
+		pDialog.show();
 		mediaPlayer.seekTo(pos);
 	}
 
@@ -197,32 +200,32 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	public void onVideoSizeChanged(MediaPlayer mp, int arg1, int arg2) {
 		videoWidth = mp.getVideoWidth();
 		videoHeight = mp.getVideoHeight();
-//		if(videoWidth > currentDisplay.getWidth() || videoHeight > currentDisplay.getHeight()){
-//			float heightRatio = (float) videoHeight / (float) currentDisplay.getHeight();
-//			float widthRatio = (float) videoWidth / (float) currentDisplay.getWidth();
-//			if(heightRatio > 1 || widthRatio > 1){
-//				if(heightRatio > widthRatio){
-//					videoHeight = (int) Math.ceil((float)videoHeight / (float)heightRatio);
-//					videoWidth = (int) Math.ceil((float)videoWidth / (float)heightRatio);
-//				}else{
-//					videoHeight = (int) Math.ceil((float)videoHeight / (float)widthRatio);
-//					videoWidth = (int) Math.ceil((float)videoWidth / (float)widthRatio);
-//				}
-//			} 
-//			surfaceView.setLayoutParams(new LinearLayout.LayoutParams(videoWidth, videoHeight));
-//		}else{
-//			surfaceHolder.setFixedSize(videoWidth, videoHeight);
-//		}
-		surfaceHolder.setFixedSize(videoWidth, videoHeight);
+		if(videoWidth > currentDisplay.getWidth() || videoHeight > currentDisplay.getHeight()){
+			float heightRatio = (float) videoHeight / (float) currentDisplay.getHeight();
+			float widthRatio = (float) videoWidth / (float) currentDisplay.getWidth();
+			if(heightRatio > 1 || widthRatio > 1){
+				if(heightRatio > widthRatio){
+					videoHeight = (int) Math.ceil((float)videoHeight / (float)heightRatio);
+					videoWidth = (int) Math.ceil((float)videoWidth / (float)heightRatio);
+				}else{
+					videoHeight = (int) Math.ceil((float)videoHeight / (float)widthRatio);
+					videoWidth = (int) Math.ceil((float)videoWidth / (float)widthRatio);
+				}
+			} 
+			surfaceView.setLayoutParams(new LinearLayout.LayoutParams(videoWidth, videoHeight));
+		}else{
+			surfaceHolder.setFixedSize(videoWidth, videoHeight);
+		}
 	}
 
 	@Override
 	public void onSeekComplete(MediaPlayer mp) {
+		pDialog.cancel();
+		mediaPlayer.start();
 	}
 
 	@Override
 	public void onPrepared(MediaPlayer mp) {
-		Toast.makeText(this, "进入准备", 500).show();
 		videoWidth = mp.getVideoWidth();
 		videoHeight = mp.getVideoHeight();
 		if(videoWidth > currentDisplay.getWidth() || videoHeight > currentDisplay.getHeight()){
@@ -269,7 +272,6 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 //			Toast.makeText(this, "从头开始播放",500).show();
 		}
 		mp.start();
-		surfaceView.requestFocus();
 	}
 
 

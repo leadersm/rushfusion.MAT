@@ -46,7 +46,7 @@ public class ItemDetailGridViewAdapter extends BaseAdapter{
 		ViewHolder viewHolder = new ViewHolder();
 		viewHolder.count = (TextView)view.findViewById(R.id.page_item_detail_adapter_item_count);
 		viewHolder.count.setText((position+1)+"");
-		return null;
+		return view;
 	}
 	
 	public class ViewHolder{
