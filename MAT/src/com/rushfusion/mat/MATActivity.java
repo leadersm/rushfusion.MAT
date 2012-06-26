@@ -21,7 +21,6 @@ import android.widget.TextView;
 import com.rushfusion.mat.page.ItemDetailPage;
 //import com.rushfusion.mat.page.PageCache;
 import com.rushfusion.mat.page.RecommendPage;
-import com.rushfusion.mat.utils.DataParser;
 
 public class MATActivity extends Activity implements OnClickListener{
     /** Called when the activity is first created. */
@@ -50,8 +49,9 @@ public class MATActivity extends Activity implements OnClickListener{
     }
 
 	@Override
-	public void onClick(View arg0) {
+	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		
 	}
+
 }
