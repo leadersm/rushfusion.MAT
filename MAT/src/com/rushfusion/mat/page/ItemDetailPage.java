@@ -94,7 +94,7 @@ public class ItemDetailPage extends Activity{
 					Intent it =  new Intent(ItemDetailPage.this, MediaPlayerShow.class);
 					Bundle bd = new Bundle();
 					bd.putString("url", list.get(arg2));
-					bd.putInt("id", movie.getId());
+					bd.putString("id", movie.getId()+""+arg2);
 					it.putExtras(bd);
 					startActivity(it);
 				}

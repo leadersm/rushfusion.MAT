@@ -52,7 +52,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	int videoWidth = 0 ;
 	int videoHeight = 0 ;
 	int contiuePosition = 0;
-	int movieId;
+	String movieId;
 	boolean isContinue = false ;
 	ProgressDialog pDialog ;
 	@Override
@@ -81,8 +81,8 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 			Toast.makeText(this, "连接错误", 1000).show();
 		}else{
 			filePath = bd.getString("url") ;
-			movieId = bd.getInt("id");
-			int testPosition = prefs.getInt(movieId+"", -1);
+			movieId = bd.getString("id");
+			int testPosition = prefs.getInt(movieId, -1);
 			if(testPosition != -1){
 				isContinue = true;
 				contiuePosition = testPosition;
@@ -276,7 +276,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	protected void onPause() {
 		SharedPreferences prefs = getSharedPreferences("myDataStorage", MODE_PRIVATE);
 		Editor editor = prefs.edit();
-		editor.putInt(movieId+"",mediaPlayer.getCurrentPosition() );
+		editor.putInt(movieId,mediaPlayer.getCurrentPosition() );
 		editor.commit();
 		super.onPause();
 	}
