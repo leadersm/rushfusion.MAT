@@ -2,8 +2,6 @@ package com.rushfusion.mat.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.http.HttpEntity;
@@ -34,7 +32,7 @@ public class HttpUtil {
 	}
 	
 	/**
-	 * 鑾峰彇缃戠粶杩炴帴 200
+	 * 获取网络连接 200
 	 * @param url
 	 * @return
 	 */
