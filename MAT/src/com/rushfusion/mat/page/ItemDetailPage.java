@@ -66,10 +66,9 @@ public class ItemDetailPage extends Activity{
 		}else{
 			String[] str = movie.getUrl().split("\\^");
 			for(String urlstr : str){
-				System.out.println("===>"+urlstr);
 				System.out.println(urlstr);
 				String[] str2 = urlstr.split("\\|");
-				System.out.println(str2[1]);
+//				System.out.println(str2[1]);
 				list.add(str2[1]);
 			}
 			System.out.println(list.size());

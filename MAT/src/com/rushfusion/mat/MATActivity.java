@@ -10,6 +10,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,7 +18,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -37,12 +37,12 @@ public class MATActivity extends Activity implements OnClickListener{
 	private View conditionBar;
 	private View chooseBar;
 	
-	private String currentOrigin="";
-	private String currentCategory="";
+	private String currentOrigin="sina";
+	private String currentCategory="首页";
 	private String currentType="";
 	private String currentYear="";
 	private String currentArea="";
-	private String currentSort="";
+	private String currentSort="play";
 	
 	
 	private List<String> categories;
@@ -53,7 +53,7 @@ public class MATActivity extends Activity implements OnClickListener{
 	
 	private SharedPreferences sp;
 	private SharedPreferences.Editor editor;
-	
+	private Resources res;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +61,7 @@ public class MATActivity extends Activity implements OnClickListener{
         setContentView(R.layout.main);
         sp = getSharedPreferences("MatHistory",Context.MODE_WORLD_READABLE);
         editor = sp.edit();
+        res = getResources();
         init();
     }
     
@@ -79,7 +80,6 @@ public class MATActivity extends Activity implements OnClickListener{
 	}
 
 	private void initChooseBar() {
-		// TODO Auto-generated method stub
 		chooseBar = findViewById(R.id.level_2);
 		if(currentCategory.equals("首页"))
 			chooseBar.setVisibility(View.GONE);
@@ -96,20 +96,19 @@ public class MATActivity extends Activity implements OnClickListener{
 		byScore.setOnClickListener(this);
 		byComment.setOnClickListener(this);
 		byCondition.setOnClickListener(this);
+		updateChooseBar(currentSort, chooseBar.findViewById(R.id.indicator_play));
 	}
 
 
 	private void initCategory(String origin) {
-		// TODO Auto-generated method stub
 		final ViewGroup level1 = (ViewGroup) findViewById(R.id.level1);
 		level1.removeAllViews();
 		Button shouye = new Button(this);
-		shouye.setText("首页");
+		setCategoryBtnStyle(shouye,"首页");
 		shouye.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				currentCategory = "首页";
 				initConditionBar();
 				while(types==null){
@@ -128,25 +127,23 @@ public class MATActivity extends Activity implements OnClickListener{
 
 			@Override
 			protected List<String> doInBackground(String... params) {
-				// TODO Auto-generated method stub
 				categories = DataParser.getInstance(MATActivity.this,params[0]).getCategory();
 				return categories;
 			}
 
 			@Override
 			protected void onPostExecute(List<String> result) {
-				// TODO Auto-generated method stub
 				super.onPostExecute(result);
 				if(result!=null)
 				for(int i = 0;i<categories.size();i++){
 					Button btn = new Button(MATActivity.this);
 					final String name = categories.get(i);
 					btn.setText(name);
+					setCategoryBtnStyle(btn, name);
 					btn.setOnClickListener(new OnClickListener() {
 						
 						@Override
 						public void onClick(View v) {
-							// TODO Auto-generated method stub
 							currentCategory = name;
 							initConditionBar();
 							while(types==null||areas==null||years==null){
@@ -156,10 +153,10 @@ public class MATActivity extends Activity implements OnClickListener{
 									e.printStackTrace();
 								}
 							}
-							currentType = types.contains(currentType)?currentType:"";
-							currentArea = areas.contains(currentArea)?currentArea:"";
-							currentYear = years.contains(currentYear)?currentYear:"";
-							currentSort = "";
+							currentType = "";
+							currentArea = "";
+							currentYear = "";
+							currentSort = "play";
 							updatePage(currentCategory,currentType, currentArea, currentYear, currentSort);
 						}
 					});
@@ -173,7 +170,6 @@ public class MATActivity extends Activity implements OnClickListener{
 
 
 	private void initConditionBar() {
-		// TODO Auto-generated method stub
 		conditionBar = findViewById(R.id.conditionBar);
 		if(currentCategory.equals("首页")){
 			conditionBar.setVisibility(View.GONE);
@@ -188,7 +184,6 @@ public class MATActivity extends Activity implements OnClickListener{
 			
 			@Override
 			protected void onPreExecute() {
-				// TODO Auto-generated method stub
 				super.onPreExecute();
 				if(types!=null)
 				types.clear();
@@ -200,7 +195,6 @@ public class MATActivity extends Activity implements OnClickListener{
 
 			@Override
 			protected HashMap<String,List<String>> doInBackground(String... params) {
-				// TODO Auto-generated method stub
 				
 				types = DataParser.getInstance(MATActivity.this,currentOrigin).getTypes(params[0]);
 				years = DataParser.getInstance(MATActivity.this,currentOrigin).getYears(params[0]);
@@ -213,7 +207,6 @@ public class MATActivity extends Activity implements OnClickListener{
 			
 			@Override
 			protected void onPostExecute(HashMap<String,List<String>> result) {
-				// TODO Auto-generated method stub
 				super.onPostExecute(result);
 				if(result!=null){
 					List<String> types = result.get("type");
@@ -248,19 +241,19 @@ public class MATActivity extends Activity implements OnClickListener{
 		areaView.removeAllViews();
 		yearView.removeAllViews();
 		
-		Button allType = new Button(this);
-		Button allYear = new Button(this);
-		Button allArea = new Button(this);
+		final Button allType = new Button(this);
+		final Button allYear = new Button(this);
+		final Button allArea = new Button(this);
 		
-		allType.setText("全部");
-		allYear.setText("全部");
-		allArea.setText("全部");
+		setConditionBtnStyle(allType, "全部");
+		setConditionBtnStyle(allYear, "全部");
+		setConditionBtnStyle(allArea, "全部");
 		
 		allType.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				updateBackground(typeView,allType,currentType);
 				currentType = "";
 				updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			}
@@ -269,7 +262,7 @@ public class MATActivity extends Activity implements OnClickListener{
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				updateBackground(areaView,allArea,currentArea);
 				currentArea = "";
 				updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			}
@@ -278,67 +271,103 @@ public class MATActivity extends Activity implements OnClickListener{
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				updateBackground(yearView,allYear,currentYear);
 				currentYear = "";
 				updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			}
 		});
 		
 		typeView.addView(allType);
-		areaView.addView(allYear);
-		yearView.addView(allArea);
+		areaView.addView(allArea);
+		yearView.addView(allYear);
 		
-		
+		//=====================types====================
 		for(int i = 0;i<types.size();i++){
-			Button cdtBtn = new Button(MATActivity.this);
+			final Button typeBtn = new Button(MATActivity.this);
 			final String type = types.get(i);
-			cdtBtn.setText(type);
-			cdtBtn.setOnClickListener(new OnClickListener() {
+			setConditionBtnStyle(typeBtn, type);
+			typeBtn.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
+					updateBackground(typeView,typeBtn,currentType);
 					currentType = type;
 					updatePage(currentCategory,currentType, currentArea, currentYear, currentSort);
 				}
 			});
-			typeView.addView(cdtBtn);
+			typeView.addView(typeBtn);
 		}
 		
+		//=====================areas====================
 		for(int i = 0;i<areas.size();i++){
-			Button cdtBtn = new Button(MATActivity.this);
+			final Button areaBtn = new Button(MATActivity.this);
 			final String area = areas.get(i);
-			cdtBtn.setText(area);
-			cdtBtn.setOnClickListener(new OnClickListener() {
+			setConditionBtnStyle(areaBtn, area);
+			areaBtn.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
+					updateBackground(areaView,areaBtn,currentArea);
 					currentArea = area;
 					updatePage(currentCategory,currentType, currentArea, currentYear, currentSort);
 				}
 			});
-			areaView.addView(cdtBtn);
+			areaView.addView(areaBtn);
 		}
 		
+		//=====================years====================
 		for(int i = 0;i<years.size();i++){
-			Button cdtBtn = new Button(MATActivity.this);
+			final Button yearBtn = new Button(MATActivity.this);
 			final String year = years.get(i);
-			cdtBtn.setText(year);
-			cdtBtn.setOnClickListener(new OnClickListener() {
+			setConditionBtnStyle(yearBtn, year);
+			yearBtn.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
+					updateBackground(yearView,yearBtn,currentYear);
 					currentYear = year;
 					updatePage(currentCategory,currentType, currentArea, currentYear, currentSort);
 				}
 			});
-			yearView.addView(cdtBtn);
+			yearView.addView(yearBtn);
 		}
+		typeView.getChildAt(0).setBackgroundResource(R.drawable.filter_selected);
+		areaView.getChildAt(0).setBackgroundResource(R.drawable.filter_selected);
+		yearView.getChildAt(0).setBackgroundResource(R.drawable.filter_selected);
 	}
 	
 
+
+
+	private void updateBackground(ViewGroup cdsView,Button destBtn, String currentCondition) {
+		if(currentCondition.equals("")){
+			cdsView.getChildAt(0).setBackgroundResource(R.drawable.filter_normal);
+			destBtn.setBackgroundResource(R.drawable.filter_selected);
+			return;
+		}
+		for(int i =0;i<cdsView.getChildCount();i++){
+			Button v = (Button) cdsView.getChildAt(i);
+			if(v.getText().equals(currentCondition)){
+				v.setBackgroundResource(R.drawable.filter_normal);
+				break;
+			}
+		}
+		destBtn.setBackgroundResource(R.drawable.filter_selected);
+	}
+
+	private void setCategoryBtnStyle(Button btn,String text) {
+		btn.setText(text);
+		btn.setTextSize(20);
+		btn.setTextColor(res.getColor(R.color.white));
+		btn.setBackgroundDrawable(res.getDrawable(R.drawable.btn_level1_selector));
+	}
+	
+	private void setConditionBtnStyle(Button btn, String text) {
+		btn.setText(text);
+		btn.setTextSize(20);
+		btn.setTextColor(res.getColor(R.color.white));
+		btn.setBackgroundDrawable(res.getDrawable(R.drawable.btn_condition));
+	}
 	private void updateHeaderInfo() {
 		TextView headerInfo = (TextView) findViewById(R.id.headerInfo);
 		headerInfo.setText(currentOrigin+">"+currentCategory+">"+currentType);
@@ -354,7 +383,6 @@ public class MATActivity extends Activity implements OnClickListener{
 	 * @param sort
 	 */
 	private void updatePage(String category,String type,String area,String year,String sort) {
-		// TODO Auto-generated method stub
 		StringBuffer baseUrl = new StringBuffer("http://tvsrv.webhop.net:9061/query?source="+currentOrigin);
 		if(!category.equals(""))baseUrl.append("&category="+category);
 		if(!type.equals(""))baseUrl.append("&type="+type);
@@ -412,18 +440,22 @@ public class MATActivity extends Activity implements OnClickListener{
 			break;
 		//==================================
 		case R.id.byPlay:
+			updateChooseBar(currentSort,chooseBar.findViewById(R.id.indicator_play));
 			currentSort = "play";
 			updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			break;
 		case R.id.byComment:
+			updateChooseBar(currentSort,chooseBar.findViewById(R.id.indicator_comment));
 			currentSort = "comment";
 			updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);			
 			break;
 		case R.id.byScore:
+			updateChooseBar(currentSort,chooseBar.findViewById(R.id.indicator_score));
 			currentSort = "score";
 			updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			break;
 		case R.id.byRecent:
+			updateChooseBar(currentSort,chooseBar.findViewById(R.id.indicator_recent));
 			currentSort = "recent";
 			updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			break;
@@ -438,8 +470,23 @@ public class MATActivity extends Activity implements OnClickListener{
 	}
 	
 	
+	private void updateChooseBar(String crtsort, View v) {
+		View indecator = null ;
+		if(crtsort.equals("play")){
+			indecator = chooseBar.findViewById(R.id.indicator_play);
+		}else if(crtsort.endsWith("score")){
+			indecator = chooseBar.findViewById(R.id.indicator_score);
+		}else if(crtsort.endsWith("comment")){
+			indecator = chooseBar.findViewById(R.id.indicator_comment);
+		}else if(crtsort.endsWith("recent")){
+			indecator =  chooseBar.findViewById(R.id.indicator_recent);
+		}
+		indecator.setBackgroundResource(R.drawable.red_normal);
+		v.setBackgroundResource(R.drawable.red_active);
+	}
+
+
 	private void showConditionBar() {
-		// TODO Auto-generated method stub
 		if(conditionBar.getVisibility()==View.VISIBLE){
 			conditionBar.setVisibility(View.INVISIBLE);
 		}else
@@ -448,7 +495,6 @@ public class MATActivity extends Activity implements OnClickListener{
 
 
 	private void changeDataByOriginName(String origin) {
-		// TODO Auto-generated method stub
 		initCategory(origin);
 	}
 
