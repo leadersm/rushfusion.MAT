@@ -490,10 +490,23 @@ public class MATActivity extends Activity implements OnClickListener{
 			});
 			return builder.create();
 		}else if(id==1){
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle("提示");
+			builder.setMessage("服务器无响应，请联系客服010-xxxxxxx");
+			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					finish();
+				}
+			});
+			return builder.create();
+		}else if(id == 2){
 			ProgressDialog dialog = new ProgressDialog(this);
 			dialog.setTitle("提示:");
 			dialog.setMessage("正在加载中，请稍后");
 			return dialog;
+			
 		}
 		return null;
 	}

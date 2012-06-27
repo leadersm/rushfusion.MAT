@@ -32,7 +32,7 @@ public class ItemDetailPage extends Activity{
 
 	ItemDetailGridViewAdapter gda;
 
-	List<String> list;
+	List<String> list = new ArrayList<String>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +63,7 @@ public class ItemDetailPage extends Activity{
 		if(movie.getUrl().indexOf("^")==-1){
 			list.add(movie.getUrl());
 		}else{
-			String[] str = movie.getUrl().split("^");
+			String[] str = movie.getUrl().split("\\^");
 			list = new ArrayList<String>();
 			for(String urlstr : str){
 				System.out.println(urlstr);
