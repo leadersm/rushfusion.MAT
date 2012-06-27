@@ -305,6 +305,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	@Override
 	public void onCompletion(MediaPlayer arg0) {
 		Toast.makeText(this, "播放完毕", 500).show();
+		finish();
 	}
 
 
