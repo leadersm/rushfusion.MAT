@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.rushfusion.mat.R;
+import com.rushfusion.mat.utils.ImageLoadTask;
 import com.rushfusion.mat.utils.ItemDetailGridViewAdapter;
 import com.rushfusion.mat.video.entity.Movie;
 
@@ -51,7 +52,8 @@ public class ItemDetailPage extends Activity{
 		directors = (TextView) findViewById(R.id.page_item_detail_directors);
 		artists = (TextView) findViewById(R.id.page_item_detail_artists);
 		episode = (GridView) findViewById(R.id.page_item_detail_episode);
-		image.setImageURI(Uri.parse(movie.getThumb()));
+//		image.setImageURI(Uri.parse(movie.getThumb()));
+		ImageLoadTask.imageLoad(image, movie.getThumb());
 		image.setScaleType(ScaleType.FIT_XY);
 		name.setText(movie.getName());
 		description.setText(movie.getDescription());
