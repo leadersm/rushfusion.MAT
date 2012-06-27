@@ -14,17 +14,17 @@
         <activity
             android:name=".MATActivity"
             android:label="@string/app_name" >
-            
-        </activity>
-        <activity android:name=".page.MediaPlayerShow">
-            
-        </activity>
-        <activity android:name=".page.ItemDetailPage">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".page.MediaPlayerShow">
+            
+        </activity>
+        <activity android:name=".page.ItemDetailPage">
+            
         </activity>
     </application>
 
