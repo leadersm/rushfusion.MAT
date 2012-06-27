@@ -60,11 +60,11 @@ public class ItemDetailPage extends Activity{
 		year.setText(movie.getYear()+"");
 		directors.setText(movie.getDirectors());
 		artists.setText(movie.getArtists());
+		list = new ArrayList<String>();
 		if(movie.getUrl().indexOf("^")==-1){
 			list.add(movie.getUrl());
 		}else{
 			String[] str = movie.getUrl().split("\\^");
-			list = new ArrayList<String>();
 			for(String urlstr : str){
 				System.out.println("===>"+urlstr);
 				System.out.println(urlstr);
