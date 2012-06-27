@@ -1,7 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="hello">Hello World, MATActivity!</string>
     <string name="app_name">MAT</string>
-
+        
+    <string name="director">"导演"</string>
+    <string name="actor">"主演"</string>
+    <string name="area">"地区"</string>
+    <string name="year">"年代"</string>
+    <string name="longtime">"时长"</string>
+    <string name="minute">"分钟"</string>
+    <string name="introduction">"介绍"</string>
+    <string name="page">"页"</string>
+    <string name="prev_page">"上一页"</string>
+    <string name="next_page">"下一页"</string>
+    
+    <string name="pause">暂停</string>
+    <string name="play">播放</string>
+    <string name="fastforward">快进</string>
+    <string name="fastbackward">快退</string>
+    <string name="next">下一节</string>
+    <string name="previous">上一节</string>
+    <string name="_3D">3D</string>
+    <string name="share">分享</string>
+    <string name="settings">设置</string>
+    
+    
+    <string name="byType">按类型:</string>
+    <string name="byArea">按地区:</string>
+    <string name="byYear">按年份:</string>
+    <string name="all">全部</string>
+    
+    
+    
+    
+        
+        
+    
 </resources>
