@@ -2,8 +2,6 @@ package com.rushfusion.mat.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.http.HttpEntity;
@@ -13,19 +11,22 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 
-import android.content.Context;
+import android.app.Activity;
 
 
 public class HttpUtil {
 	private HttpResponse mHttpResponse ;
 	private static HttpUtil httpClient = null ;
 	static Map<String,String> urlMap = null ;
-	private static Context mContext ;
+	private static Activity mContext ;
 	private HttpUtil() {
 	}
 	
-	public static HttpUtil getInstance(Context context) {
+	public static HttpUtil getInstance(Activity context) {
 		mContext = context ;
 		if(httpClient==null) {
 			httpClient = new HttpUtil() ;
@@ -33,21 +34,29 @@ public class HttpUtil {
 		return httpClient ;
 	}
 	
+	private static int NETWORK_CONNECT_TIMEOUT = 10000;
+	private static int NETWORK_SO_TIMEOUT = 10000;
 	/**
-	 * 鑾峰彇缃戠粶杩炴帴 200
+	 * 获取网络连接 200
 	 * @param url
 	 * @return
 	 */
 	public boolean connectServerByURL(String url) {
 		HttpGet httpRequest = new HttpGet(url) ;
 		try {
-			HttpClient httpClient = new DefaultHttpClient() ;
+			HttpParams p = new BasicHttpParams();
+			HttpConnectionParams.setConnectionTimeout(p, NETWORK_CONNECT_TIMEOUT);
+			HttpConnectionParams.setSoTimeout(p, NETWORK_SO_TIMEOUT);
+			HttpClient httpClient = new DefaultHttpClient(p) ;
+			
 			HttpResponse httpResponse= httpClient.execute(httpRequest) ;
 			if(httpResponse.getStatusLine().getStatusCode()==HttpStatus.SC_OK) {
 				mHttpResponse = httpResponse ;
 				return true ;
 			}
 		} catch (ClientProtocolException e) {
+			if(e.getMessage().contains("Connection refused"))
+				mContext.showDialog(1);
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();

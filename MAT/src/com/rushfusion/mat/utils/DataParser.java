@@ -14,23 +14,21 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Context;
-import android.graphics.Bitmap;
+import android.app.Activity;
 import android.util.Log;
-import android.widget.ImageView;
 
 public class DataParser {
 	
 	private static String mSource ;
 	private static DataParser parser;
-	private static Context mContext;
+	private static Activity mContext;
 	private Map<String, String> url = null ;
 	private DataParser() {
 		if(url==null)
 			initUrl() ;
 	}
 	
-	public static DataParser getInstance(Context context, String source){
+	public static DataParser getInstance(Activity context, String source){
 		mSource = source ;
 		if(parser==null){
 			mContext = context;
