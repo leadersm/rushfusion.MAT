@@ -18,7 +18,7 @@
          
          <LinearLayout android:layout_width="fill_parent"
              android:layout_height="fill_parent"
-             android:layout_weight="1">
+             android:layout_weight="2">
              
          </LinearLayout>
          <LinearLayout android:layout_width="fill_parent"
@@ -47,7 +47,7 @@
          </LinearLayout>
          <LinearLayout android:layout_width="fill_parent"
              android:layout_height="fill_parent"
-             android:layout_weight="1">
+             android:layout_weight="2">
              
          </LinearLayout>
          
@@ -64,11 +64,17 @@
          <TextView android:id="@+id/page_item_detail_name"
              android:layout_width="fill_parent"
              android:layout_height="wrap_content"
-             android:layout_gravity="center_horizontal"
+             android:layout_gravity="center|top"
+             android:gravity="center"
+             android:textSize="30dip"
+             android:textStyle="bold"
+             android:textColor="#ffffffff"
              />
          <TextView android:id="@+id/page_item_detail_description"
              android:layout_width="fill_parent"
-             android:layout_height="fill_parent"/>
+             android:layout_height="fill_parent"
+             android:textSize="20dip"
+             android:textColor="#80888888"/>
          
      </LinearLayout>
      
@@ -94,14 +100,20 @@
                   android:layout_width="fill_parent"
                   android:layout_height="fill_parent"
                   android:layout_weight="1"
-                  android:orientation="horizontal">
-                  <TextView android:layout_width="fill_parent"
+                  android:orientation="horizontal"
+                  >
+                  <TextView android:layout_width="wrap_content"
                       android:layout_height="fill_parent"
-                      android:layout_weight="2"
+                      android:gravity="bottom"
+                      android:textColor="#80cccccc"
+                      android:textSize="20dip"
                       android:text="评分 ："/>
                   <TextView android:id="@+id/page_item_detail_socres"
                       android:layout_width="fill_parent"
                       android:layout_height="fill_parent"
+                      android:gravity="bottom|left"
+                      android:textColor="#ffffffff"
+                      android:textSize="25dip"
                       android:layout_weight="1"/>
               </LinearLayout>
               <LinearLayout android:id="@+id/page_item_detail_main_right_top_ue_length"
@@ -109,13 +121,18 @@
                   android:layout_height="fill_parent"
                   android:layout_weight="1"
                   android:orientation="horizontal">
-                  <TextView android:layout_width="fill_parent"
+                  <TextView android:layout_width="wrap_content"
                       android:layout_height="fill_parent"
-                      android:layout_weight="2"
+                      android:gravity="bottom"
+                      android:textColor="#80cccccc"
+                      android:textSize="20dip"
                       android:text="时长 ："/>
                   <TextView android:id="@+id/page_item_detail_length"
                       android:layout_width="fill_parent"
                       android:layout_height="fill_parent"
+                      android:gravity="bottom|left"
+                      android:textColor="#ffffffff"
+                      android:textSize="25dip"
                       android:layout_weight="1"/>
               </LinearLayout>
               <LinearLayout android:id="@+id/page_item_detail_main_right_top_ue_year"
@@ -123,13 +140,18 @@
                   android:layout_height="fill_parent"
                   android:layout_weight="1"
                   android:orientation="horizontal">
-                  <TextView android:layout_width="fill_parent"
+                  <TextView android:layout_width="wrap_content"
                       android:layout_height="fill_parent"
-                      android:layout_weight="2"
+                      android:gravity="bottom"
+                      android:textColor="#80cccccc"
+                      android:textSize="20dip"
                       android:text="年代 ："/>
                   <TextView android:id="@+id/page_item_detail_year"
                       android:layout_width="fill_parent"
                       android:layout_height="fill_parent"
+                      android:gravity="bottom|left"
+                      android:textColor="#ffffffff"
+                      android:textSize="25dip"
                       android:layout_weight="1"/>
               </LinearLayout>
              
@@ -137,19 +159,25 @@
          <LinearLayout android:id="@+id/page_item_detail_main_right_top_sita"
              android:layout_width="fill_parent"
              android:layout_height="wrap_content"
-             android:orientation="horizontal">
+             android:orientation="horizontal"
+             android:gravity="center_vertical">
                <LinearLayout android:id="@+id/page_item_detail_main_right_top_sita_directors"
                   android:layout_width="fill_parent"
                   android:layout_height="fill_parent"
                   android:layout_weight="2"
                   android:orientation="horizontal">
-                  <TextView android:layout_width="fill_parent"
+                  <TextView android:layout_width="wrap_content"
                       android:layout_height="fill_parent"
-                      android:layout_weight="2"
+                      android:textColor="#80cccccc"
+                      android:textSize="20dip"
+                      android:gravity="bottom"
                       android:text="导演 ："/>
                   <TextView android:id="@+id/page_item_detail_directors"
                       android:layout_width="fill_parent"
                       android:layout_height="fill_parent"
+                      android:gravity="left"
+                      android:textColor="#ffffffff"
+                      android:textSize="25dip"
                       android:layout_weight="1"/>
               </LinearLayout>
               <LinearLayout android:id="@+id/page_item_detail_main_right_top_ue_artists"
@@ -157,13 +185,18 @@
                   android:layout_height="fill_parent"
                   android:layout_weight="1"
                   android:orientation="horizontal">
-                  <TextView android:layout_width="fill_parent"
+                  <TextView android:layout_width="wrap_content"
                       android:layout_height="fill_parent"
-                      android:layout_weight="4"
+                      android:textColor="#80cccccc"
+                      android:textSize="20dip"
+                      android:gravity="bottom"
                       android:text="演员 ："/>
                   <TextView android:id="@+id/page_item_detail_artists"
                       android:layout_width="fill_parent"
                       android:layout_height="fill_parent"
+                      android:gravity="left"
+                      android:textColor="#ffffffff"
+                      android:textSize="25dip"
                       android:layout_weight="1"/>
               </LinearLayout>
              
@@ -174,19 +207,22 @@
          android:layout_width="fill_parent"
          android:layout_height="fill_parent"
          android:layout_weight="1">
-         <GridView android:id="@+id/page_item_detail_episode"
+             <GridView android:id="@+id/page_item_detail_episode"
              android:layout_width="fill_parent"
              android:layout_height="fill_parent"
-             android:numColumns="8"
-       android:background="#00000000"
-       android:gravity="center">
-       <!--  android:padding="25dip"
-       android:verticalSpacing="35dip"
-       android:horizontalSpacing="30dip"
-       android:listSelector=""
-    			android:drawSelectorOnTop="false" 
-    			选中 状态 的图片 以及 是否 覆盖该item绘画该图形 -->
+             android:layout_gravity="center"
+             android:numColumns="6"
+             android:padding="10dip"
+             android:verticalSpacing="15dip"
+	         android:gravity="center">
+		       <!--  android:padding="25dip"
+		       android:verticalSpacing="35dip"
+		       android:horizontalSpacing="30dip"
+		       android:listSelector=""
+    		   android:drawSelectorOnTop="false" 
+    		        选中 状态 的图片 以及 是否 覆盖该item绘画该图形 -->
        			</GridView>
+         
         </LinearLayout>
         
     </LinearLayout>
