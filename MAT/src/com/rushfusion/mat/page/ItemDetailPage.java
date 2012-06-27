@@ -64,7 +64,7 @@ public class ItemDetailPage extends Activity{
 		artists.setText(movie.getArtists());
 		list = new ArrayList<String>();
 		if(movie.getUrl().indexOf("^")==-1){
-			list.add(movie.getUrl());
+			list.add(movie.getUrl()); 
 		}else{
 			String[] str = movie.getUrl().split("\\^");
 			for(String urlstr : str){
