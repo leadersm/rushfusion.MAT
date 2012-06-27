@@ -60,11 +60,12 @@ public class ItemDetailPage extends Activity{
 		year.setText(movie.getYear()+"");
 		directors.setText(movie.getDirectors());
 		artists.setText(movie.getArtists());
-		String[] str = movie.getUrl().split(";");
+		String[] str = movie.getUrl().split("^");
 		list = new ArrayList<String>();
 		for(String urlstr : str){
 			System.out.println(urlstr);
-			list.add(urlstr);
+			String[] str2 = urlstr.split("|");
+			list.add(str2[1]);
 		}
 		System.out.println(list.size());
 		gda = new ItemDetailGridViewAdapter(this, list);
