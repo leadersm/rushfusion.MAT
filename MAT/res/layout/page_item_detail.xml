@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"  
     android:orientation="horizontal"
  android:layout_width="fill_parent"
- android:layout_height="fill_parent">
+ android:layout_height="fill_parent"
+ android:background="#80cccccc">
  
  <LinearLayout android:id="@+id/page_item_detail_main_left"
      android:orientation="vertical"
@@ -32,8 +33,7 @@
              
              <LinearLayout android:layout_width="fill_parent"
                  android:layout_height="fill_parent"
-                 android:layout_weight="2"
-                 android:background="#ffffff">
+                 android:layout_weight="2">
                   <ImageView android:id="@+id/page_item_detail_image"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
@@ -74,7 +74,7 @@
              android:layout_width="fill_parent"
              android:layout_height="fill_parent"
              android:textSize="20dip"
-             android:textColor="#80888888"/>
+             android:textColor="#80afffff"/>
          
      </LinearLayout>
      
@@ -105,7 +105,7 @@
                   <TextView android:layout_width="wrap_content"
                       android:layout_height="fill_parent"
                       android:gravity="bottom"
-                      android:textColor="#80cccccc"
+                      android:textColor="#80afffff"
                       android:textSize="20dip"
                       android:text="评分 ："/>
                   <TextView android:id="@+id/page_item_detail_socres"
@@ -114,6 +114,9 @@
                       android:gravity="bottom|left"
                       android:textColor="#ffffffff"
                       android:textSize="25dip"
+                      android:singleLine="true"
+                      android:maxLines="1"
+                      android:ellipsize="marquee"
                       android:layout_weight="1"/>
               </LinearLayout>
               <LinearLayout android:id="@+id/page_item_detail_main_right_top_ue_length"
@@ -124,12 +127,15 @@
                   <TextView android:layout_width="wrap_content"
                       android:layout_height="fill_parent"
                       android:gravity="bottom"
-                      android:textColor="#80cccccc"
+                      android:textColor="#80afffff"
                       android:textSize="20dip"
                       android:text="时长 ："/>
                   <TextView android:id="@+id/page_item_detail_length"
                       android:layout_width="fill_parent"
                       android:layout_height="fill_parent"
+                      android:singleLine="true"
+                      android:maxLines="1"
+                      android:ellipsize="marquee"
                       android:gravity="bottom|left"
                       android:textColor="#ffffffff"
                       android:textSize="25dip"
@@ -143,7 +149,7 @@
                   <TextView android:layout_width="wrap_content"
                       android:layout_height="fill_parent"
                       android:gravity="bottom"
-                      android:textColor="#80cccccc"
+                      android:textColor="#80afffff"
                       android:textSize="20dip"
                       android:text="年代 ："/>
                   <TextView android:id="@+id/page_item_detail_year"
@@ -152,6 +158,9 @@
                       android:gravity="bottom|left"
                       android:textColor="#ffffffff"
                       android:textSize="25dip"
+                      android:singleLine="true"
+                      android:maxLines="1"
+                      android:ellipsize="marquee"
                       android:layout_weight="1"/>
               </LinearLayout>
              
@@ -168,7 +177,7 @@
                   android:orientation="horizontal">
                   <TextView android:layout_width="wrap_content"
                       android:layout_height="fill_parent"
-                      android:textColor="#80cccccc"
+                      android:textColor="#80afffff"
                       android:textSize="20dip"
                       android:gravity="bottom"
                       android:text="导演 ："/>
@@ -176,6 +185,9 @@
                       android:layout_width="fill_parent"
                       android:layout_height="fill_parent"
                       android:gravity="left"
+                      android:singleLine="true"
+                      android:maxLines="1"
+                      android:ellipsize="marquee"
                       android:textColor="#ffffffff"
                       android:textSize="25dip"
                       android:layout_weight="1"/>
@@ -187,7 +199,7 @@
                   android:orientation="horizontal">
                   <TextView android:layout_width="wrap_content"
                       android:layout_height="fill_parent"
-                      android:textColor="#80cccccc"
+                      android:textColor="#80afffff"
                       android:textSize="20dip"
                       android:gravity="bottom"
                       android:text="演员 ："/>
@@ -195,6 +207,9 @@
                       android:layout_width="fill_parent"
                       android:layout_height="fill_parent"
                       android:gravity="left"
+                      android:singleLine="true"
+                      android:maxLines="1"
+                      android:ellipsize="marquee"
                       android:textColor="#ffffffff"
                       android:textSize="25dip"
                       android:layout_weight="1"/>
