@@ -119,7 +119,6 @@ public class MATActivity extends Activity implements OnClickListener{
 						e.printStackTrace();
 					}
 				}
-				currentType = types.contains(currentType)?currentType:"";
 				updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			}
 		});
@@ -150,7 +149,7 @@ public class MATActivity extends Activity implements OnClickListener{
 							// TODO Auto-generated method stub
 							currentCategory = name;
 							initConditionBar();
-							while(types==null){
+							while(types==null||areas==null||years==null){
 								try {
 									Thread.sleep(10);
 								} catch (InterruptedException e) {
@@ -158,6 +157,9 @@ public class MATActivity extends Activity implements OnClickListener{
 								}
 							}
 							currentType = types.contains(currentType)?currentType:"";
+							currentArea = areas.contains(currentArea)?currentArea:"";
+							currentYear = years.contains(currentYear)?currentYear:"";
+							currentSort = "";
 							updatePage(currentCategory,currentType, currentArea, currentYear, currentSort);
 						}
 					});

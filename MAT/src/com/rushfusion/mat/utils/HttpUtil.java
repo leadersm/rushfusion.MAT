@@ -34,7 +34,7 @@ public class HttpUtil {
 	}
 	
 	/**
-	 * 获取网络连接 200
+	 * 鑾峰彇缃戠粶杩炴帴 200
 	 * @param url
 	 * @return
 	 */
