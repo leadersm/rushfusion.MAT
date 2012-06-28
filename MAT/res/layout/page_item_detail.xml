@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"  
-    android:orientation="horizontal"
+ android:orientation="horizontal"
  android:layout_width="fill_parent"
  android:layout_height="fill_parent"
  android:background="#80cccccc">
@@ -9,6 +9,7 @@
      android:orientation="vertical"
      android:layout_width="fill_parent"
      android:layout_height="fill_parent"
+     android:background="@drawable/lightgray"
      android:layout_weight="7">
      
      <LinearLayout android:id="@+id/page_item_detail_main_left_top"
@@ -74,6 +75,7 @@
              android:layout_width="fill_parent"
              android:layout_height="fill_parent"
              android:textSize="20dip"
+             
              android:textColor="#80afffff"/>
          
      </LinearLayout>
@@ -90,6 +92,7 @@
          android:layout_width="fill_parent"
          android:layout_height="fill_parent"
          android:layout_weight="4"
+         android:background="@drawable/index_shadow"
          android:orientation="vertical">
          <LinearLayout android:id="@+id/page_item_detail_main_right_top_ue"
              android:layout_width="fill_parent"
@@ -103,11 +106,12 @@
                   android:orientation="horizontal"
                   >
                   <TextView android:layout_width="wrap_content"
-                      android:layout_height="fill_parent"
+                      android:layout_height="wrap_content"
                       android:gravity="bottom"
                       android:textColor="#80afffff"
                       android:textSize="20dip"
-                      android:text="评分 ："/>
+                      android:background="@drawable/bg_textview"
+                      android:text="  评分 ："/>
                   <TextView android:id="@+id/page_item_detail_socres"
                       android:layout_width="fill_parent"
                       android:layout_height="fill_parent"
@@ -125,11 +129,12 @@
                   android:layout_weight="1"
                   android:orientation="horizontal">
                   <TextView android:layout_width="wrap_content"
-                      android:layout_height="fill_parent"
+                      android:layout_height="wrap_content"
                       android:gravity="bottom"
                       android:textColor="#80afffff"
                       android:textSize="20dip"
-                      android:text="时长 ："/>
+                      android:background="@drawable/bg_textview"
+                      android:text="  时长 ："/>
                   <TextView android:id="@+id/page_item_detail_length"
                       android:layout_width="fill_parent"
                       android:layout_height="fill_parent"
@@ -147,11 +152,12 @@
                   android:layout_weight="1"
                   android:orientation="horizontal">
                   <TextView android:layout_width="wrap_content"
-                      android:layout_height="fill_parent"
+                      android:layout_height="wrap_content"
                       android:gravity="bottom"
                       android:textColor="#80afffff"
                       android:textSize="20dip"
-                      android:text="年代 ："/>
+                      android:background="@drawable/bg_textview"
+                      android:text="  年代 ："/>
                   <TextView android:id="@+id/page_item_detail_year"
                       android:layout_width="fill_parent"
                       android:layout_height="fill_parent"
@@ -180,7 +186,8 @@
                       android:textColor="#80afffff"
                       android:textSize="20dip"
                       android:gravity="bottom"
-                      android:text="导演 ："/>
+                      android:background="@drawable/bg_textview"
+                      android:text="  导演 ："/>
                   <TextView android:id="@+id/page_item_detail_directors"
                       android:layout_width="fill_parent"
                       android:layout_height="fill_parent"
@@ -202,7 +209,8 @@
                       android:textColor="#80afffff"
                       android:textSize="20dip"
                       android:gravity="bottom"
-                      android:text="演员 ："/>
+                      android:background="@drawable/bg_textview"
+                      android:text="  演员 ："/>
                   <TextView android:id="@+id/page_item_detail_artists"
                       android:layout_width="fill_parent"
                       android:layout_height="fill_parent"
@@ -227,6 +235,7 @@
              android:layout_height="fill_parent"
              android:layout_gravity="center"
              android:numColumns="6"
+             android:background="@drawable/order_dialogbox_bg"
              android:padding="10dip"
              android:verticalSpacing="15dip"
 	         android:gravity="center">
