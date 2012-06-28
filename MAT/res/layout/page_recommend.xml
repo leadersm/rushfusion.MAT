@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#AA5566"
     android:orientation="vertical" >
 
     <TextView
@@ -12,13 +11,9 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:gravity="center_vertical"
-        android:text="首页！！！！！！！！！！！！！"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:text="首页！！！！！"
+        android:textSize="50dip"
+        android:textColor="@color/level"
+        />
 
-   <!--  <ProgressBar
-        android:id="@+id/content_progressbar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="invisible" /> -->
 </RelativeLayout>
