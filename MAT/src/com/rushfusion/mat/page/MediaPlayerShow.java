@@ -52,6 +52,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	int videoWidth = 0 ;
 	int videoHeight = 0 ;
 	int contiuePosition = 0;
+	String movieId;
 	boolean isContinue = false ;
 	ProgressDialog pDialog ;
 	@Override
@@ -76,19 +77,15 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 		mediaPlayer.setOnVideoSizeChangedListener(this);
 		mediaPlayer.setOnBufferingUpdateListener(this);
 		SharedPreferences prefs = getSharedPreferences("myDataStorage", MODE_PRIVATE);
-		String testStr = prefs.getString("url", "123");
-		int testPosition = prefs.getInt("position", 0);
 		if(bd==null){
-			filePath = "http://v.iask.com/v_play_ipad.php?vid=33184708";
-			if(filePath.equals(prefs.getString("url", " "))){
-				isContinue = true;
-				contiuePosition = prefs.getInt("position", 0);
-			}
+			Toast.makeText(this, "连接错误", 1000).show();
 		}else{
 			filePath = bd.getString("url") ;
-			if(filePath.equals(prefs.getString("url", " "))){
+			movieId = bd.getString("id");
+			int testPosition = prefs.getInt(movieId, -1);
+			if(testPosition != -1){
 				isContinue = true;
-				contiuePosition = prefs.getInt("position", 0);
+				contiuePosition = testPosition;
 			}
 		}
 
@@ -131,7 +128,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	public boolean canSeekForward() {
 		return true;
 	}
-
+ 
 
 	@Override
 	public int getCurrentPosition() {
@@ -279,8 +276,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	protected void onPause() {
 		SharedPreferences prefs = getSharedPreferences("myDataStorage", MODE_PRIVATE);
 		Editor editor = prefs.edit();
-		editor.putString("url", filePath);
-		editor.putInt("position",mediaPlayer.getCurrentPosition() );
+		editor.putInt(movieId,mediaPlayer.getCurrentPosition() );
 		editor.commit();
 		super.onPause();
 	}
@@ -305,6 +301,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	@Override
 	public void onCompletion(MediaPlayer arg0) {
 		Toast.makeText(this, "播放完毕", 500).show();
+		finish();
 	}
 
 

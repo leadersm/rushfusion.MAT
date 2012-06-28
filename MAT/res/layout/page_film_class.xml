@@ -125,7 +125,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/field_filmname"
-            android:layout_marginTop="27dip"
+            android:layout_marginTop="40dip"
             android:singleLine="true"
             android:text="director :" >
         </TextView>
@@ -172,12 +172,5 @@
             android:text="15/60 pages" >
         </TextView>
     </RelativeLayout>
-
-    <ProgressBar
-        android:id="@+id/content_progressbar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="invisible" />
 
 </RelativeLayout>
