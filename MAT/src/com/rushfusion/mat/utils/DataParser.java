@@ -23,6 +23,7 @@ public class DataParser {
 	private static DataParser parser;
 	private static Activity mContext;
 	private Map<String, String> url = null ;
+	private int total;
 	private DataParser() {
 		if(url==null)
 			initUrl() ;
@@ -138,7 +139,7 @@ public class DataParser {
 			}
 			Log.d("JSON", builder.toString()) ;
 			JSONObject jsonObject = new JSONObject(builder.toString()) ;
-			String total = jsonObject.getString("total") ;
+			total = jsonObject.getInt("total");
 			JSONArray itemsArray = jsonObject.getJSONArray("items") ;
 			for(int i=0; i<itemsArray.length(); i++) {
 				nodeMap = new HashMap<String, String>() ;
@@ -157,6 +158,10 @@ public class DataParser {
 			e.printStackTrace();
 		}
 		return dataList;
+	}
+	
+	public int getTotal() {
+		return total;
 	}
 	
 	

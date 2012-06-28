@@ -112,27 +112,34 @@ public class MATActivity extends Activity implements OnClickListener{
 	private void initCategory(String origin) {
 		final ViewGroup level1 = (ViewGroup) findViewById(R.id.level1);
 		level1.removeAllViews();
-		Button shouye = new Button(this);
-		setCategoryBtnStyle(shouye,"首页");
-		shouye.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				currentCategory = "首页";
-				initConditionBar();
-				while(types==null){
-					try {
-						Thread.sleep(10);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-				updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
-			}
-		});
-		level1.addView(shouye);
 
 		new AsyncTask<String, Void, List<String>>(){
+
+			@Override
+			protected void onPreExecute() {
+				// TODO Auto-generated method stub
+				super.onPreExecute();
+				Button shouye = new Button(MATActivity.this);
+				setCategoryBtnStyle(shouye,"首页");
+				shouye.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						currentCategory = "首页";
+						initConditionBar();
+						while(types==null){
+							try {
+								Thread.sleep(10);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+						}
+						updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
+					}
+				});
+				level1.addView(shouye);
+				
+			}
 
 			@Override
 			protected List<String> doInBackground(String... params) {
@@ -469,19 +476,12 @@ public class MATActivity extends Activity implements OnClickListener{
 	}
 	
 	
-	private void updateChooseBar(String crtsort, View v) {
-		View indecator = null ;
-		if(crtsort.equals("play")){
-			indecator = chooseBar.findViewById(R.id.indicator_play);
-		}else if(crtsort.endsWith("score")){
-			indecator = chooseBar.findViewById(R.id.indicator_score);
-		}else if(crtsort.endsWith("comment")){
-			indecator = chooseBar.findViewById(R.id.indicator_comment);
-		}else if(crtsort.endsWith("recent")){
-			indecator =  chooseBar.findViewById(R.id.indicator_recent);
-		}
-		indecator.setBackgroundResource(R.drawable.red_normal);
-		v.setBackgroundResource(R.drawable.red_active);
+	private void updateChooseBar(String crtsort, View indicator) {
+		chooseBar.findViewById(R.id.indicator_play).setBackgroundResource(R.drawable.red_normal);
+		chooseBar.findViewById(R.id.indicator_score).setBackgroundResource(R.drawable.red_normal);
+		chooseBar.findViewById(R.id.indicator_comment).setBackgroundResource(R.drawable.red_normal);
+		chooseBar.findViewById(R.id.indicator_recent).setBackgroundResource(R.drawable.red_normal);
+		indicator.setBackgroundResource(R.drawable.red_active);
 	}
 
 
