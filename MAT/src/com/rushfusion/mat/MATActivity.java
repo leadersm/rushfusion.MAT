@@ -34,8 +34,8 @@ public class MATActivity extends Activity implements OnClickListener{
 	
 	private ViewGroup parent;
 	private View menu;
-	private View conditionBar;
-	private View chooseBar;
+	private ViewGroup conditionBar;
+	private ViewGroup chooseBar;
 	
 	private String currentOrigin="sina";
 	private String currentCategory="首页";
@@ -69,7 +69,6 @@ public class MATActivity extends Activity implements OnClickListener{
 	private void init() {
 		currentOrigin = "sina";//getLastWatchRecord().equals("")?"sina":getLastWatchRecord();
     	initMenu();
-    	showMenu();
     	initCategory(currentOrigin);
     	currentCategory = "首页";//??
     	initChooseBar();
@@ -77,10 +76,11 @@ public class MATActivity extends Activity implements OnClickListener{
     	String url = "shouye url ???";
     	initRecommendPage(url);
     	updateHeaderInfo();
+    	showMenu();
 	}
 
 	private void initChooseBar() {
-		chooseBar = findViewById(R.id.level_2);
+		chooseBar = (ViewGroup) findViewById(R.id.level_2);
 		if(currentCategory.equals("首页"))
 			chooseBar.setVisibility(View.GONE);
 		else
@@ -170,7 +170,7 @@ public class MATActivity extends Activity implements OnClickListener{
 
 
 	private void initConditionBar() {
-		conditionBar = findViewById(R.id.conditionBar);
+		conditionBar = (ViewGroup) findViewById(R.id.conditionBar);
 		if(currentCategory.equals("首页")){
 			conditionBar.setVisibility(View.GONE);
 			chooseBar.setVisibility(View.GONE);
@@ -364,7 +364,7 @@ public class MATActivity extends Activity implements OnClickListener{
 	
 	private void setConditionBtnStyle(Button btn, String text) {
 		btn.setText(text);
-		btn.setTextSize(20);
+		btn.setTextSize(16);
 		btn.setTextColor(res.getColor(R.color.white));
 		btn.setBackgroundDrawable(res.getDrawable(R.drawable.btn_condition));
 	}
@@ -558,12 +558,14 @@ public class MATActivity extends Activity implements OnClickListener{
 	}
 
 	private void showMenu() {
-		if(menu.getVisibility()==View.VISIBLE)
+		if(menu.getVisibility()==View.VISIBLE){
 			menu.setVisibility(View.GONE);
-		else
+		}else{
 			menu.setVisibility(View.VISIBLE);
+		}
 	}
 
+	
 	
 	@Override
 	protected void onPause() {

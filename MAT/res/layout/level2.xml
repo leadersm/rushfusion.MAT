@@ -57,7 +57,8 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/byComment"
         android:layout_alignLeft="@+id/byComment"
-        android:layout_alignRight="@+id/byComment" />
+        android:layout_alignRight="@+id/byComment" 
+        />
 
     <Button
         android:id="@+id/byRecent"
@@ -67,6 +68,7 @@
         android:layout_alignBaseline="@+id/byPlay"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/byComment"
+        android:nextFocusRight="@+id/byCondition"
         android:text="最新" />
 
     <View
