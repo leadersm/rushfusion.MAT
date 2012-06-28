@@ -52,41 +52,42 @@ public abstract class BasePage {
 		PageCache.getInstance().set(layoutId, page);
 	}
 	
-	private onLoadingDataCallBack callback;
 	
-	public AsyncTask<String, Void, List<Map<String, String>>> task = new AsyncTask<String, Void, List<Map<String, String>>>(){
-		
-		@Override
-		protected void onPreExecute() {
-			// TODO Auto-generated method stub
-			super.onPreExecute();
-			isLoading = true;
-			progress.setVisibility(View.VISIBLE);
-			progress.bringToFront();
-			callback.onPrepare();
-		}
-
-		@Override
-		protected void onPostExecute(List<Map<String, String>> result) {
-			// TODO Auto-generated method stub
-			super.onPostExecute(result);
-			isLoading = false;
-			callback.onFinished(result);
-			progress.setVisibility(View.INVISIBLE);
-		}
-
-		@Override
-		protected List<Map<String, String>> doInBackground(String... params) {
-			// TODO Auto-generated method stub
-			return callback.onExcute(params[0]);
-		}};
+	public AsyncTask<String, Void, List<Map<String, String>>> task ;
 	
 	public void loadPage(String url,int layoutId,final onLoadingDataCallBack callback){
 		setContentView(layoutId);
-		this.callback = callback;
-		if(isLoading){
+		if(isLoading&&task!=null){
 			task.cancel(true);
+			task=null;
+			isLoading = false;
 		}else{
+			task = new AsyncTask<String, Void, List<Map<String, String>>>(){
+				
+				@Override
+				protected void onPreExecute() {
+					// TODO Auto-generated method stub
+					super.onPreExecute();
+					isLoading = true;
+					progress.setVisibility(View.VISIBLE);
+					progress.bringToFront();
+					callback.onPrepare();
+				}
+
+				@Override
+				protected void onPostExecute(List<Map<String, String>> result) {
+					// TODO Auto-generated method stub
+					super.onPostExecute(result);
+					isLoading = false;
+					callback.onFinished(result);
+					progress.setVisibility(View.INVISIBLE);
+				}
+
+				@Override
+				protected List<Map<String, String>> doInBackground(String... params) {
+					// TODO Auto-generated method stub
+					return callback.onExcute(params[0]);
+				}};
 			task.execute(url);
 		}
 			
