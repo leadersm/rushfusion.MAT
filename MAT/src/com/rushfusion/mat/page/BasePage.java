@@ -38,14 +38,15 @@ public abstract class BasePage {
 	public abstract void loadPage(String url,int layoutId);
 	
 	private void setContentView(int layoutId) {
-		parent.removeAllViews();
 		View contentView ;
 		if(PageCache.getInstance().get(layoutId)!=null){
 			contentView = PageCache.getInstance().get(layoutId).getContentView();
-		}else
+		}else{
+			parent.removeAllViews();
 			contentView = LayoutInflater.from(context).inflate(layoutId, null);
+			parent.addView(contentView);
+		}
 		this.contentView = contentView;
-		parent.addView(contentView);
 	}
 
 	public void setPageCache(BasePage page,int layoutId){
