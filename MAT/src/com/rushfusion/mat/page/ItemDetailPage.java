@@ -92,6 +92,7 @@ public class ItemDetailPage extends Activity{
 					
 				}else{
 					Intent it =  new Intent(ItemDetailPage.this, MediaPlayerShow.class);
+//					Intent it =  new Intent(ItemDetailPage.this, VideoPlayer.class);
 					Bundle bd = new Bundle();
 					bd.putString("url", list.get(arg2));
 					bd.putString("id", movie.getId()+""+arg2);

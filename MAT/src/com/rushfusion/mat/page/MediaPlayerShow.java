@@ -55,6 +55,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	String movieId;
 	boolean isContinue = false ;
 	ProgressDialog pDialog ;
+	int saveTime=0;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -84,6 +85,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 			movieId = bd.getString("id");
 			int testPosition = prefs.getInt(movieId, -1);
 			if(testPosition != -1){
+				System.out.println("进入为已播放的判断");
 				isContinue = true;
 				contiuePosition = testPosition;
 			}
@@ -132,11 +134,29 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 
 	@Override
 	public int getCurrentPosition() {
+		try {
+			mediaPlayer.prepare();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return mediaPlayer.getCurrentPosition();
 	}
 
 	@Override
 	public int getDuration() {
+		try {
+			mediaPlayer.prepare();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return mediaPlayer.getDuration();
 	}
 
@@ -188,6 +208,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		if(mediaPlayer!=null){
+			saveTime = mediaPlayer.getCurrentPosition();
 			mediaPlayer.stop();
 			mediaPlayer.release();
 		}
@@ -255,6 +276,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 				public void onClick(DialogInterface dialog, int which) {
 					mediaPlayer.seekTo(contiuePosition);
 //					Toast.makeText(MediaPlayerShow.this, "开始继续播放",500).show();
+					System.out.println("开始继续播放");
 				}
 			});
 			dialog.setButton(Dialog.BUTTON_NEGATIVE, "从头播放", new DialogInterface.OnClickListener() {
@@ -262,6 +284,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 //					Toast.makeText(MediaPlayerShow.this, "从头开始播放",500).show();
+					System.out.println("从头开始播放");
 				}
 			});
 			dialog.show();
@@ -276,8 +299,9 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	protected void onPause() {
 		SharedPreferences prefs = getSharedPreferences("myDataStorage", MODE_PRIVATE);
 		Editor editor = prefs.edit();
-		editor.putInt(movieId,mediaPlayer.getCurrentPosition() );
+		editor.putInt(movieId,saveTime);
 		editor.commit();
+		System.out.println("已保存数据： "+movieId +":"+saveTime);
 		super.onPause();
 	}
 
@@ -301,6 +325,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	@Override
 	public void onCompletion(MediaPlayer arg0) {
 		Toast.makeText(this, "播放完毕", 500).show();
+		mediaPlayer.release();
 		finish();
 	}
 
