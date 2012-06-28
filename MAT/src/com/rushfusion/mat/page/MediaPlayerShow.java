@@ -136,31 +136,24 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	@Override
 	public int getCurrentPosition() {
 		System.out.println(stateOf+"=========================");
-		try {
-			mediaPlayer.prepare();
-		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(mediaPlayer!=null){
+			if(mediaPlayer.isPlaying()){
+				saveTime = mediaPlayer.getCurrentPosition();
+				return saveTime;
+			}
 		}
-		return mediaPlayer.getCurrentPosition();
+		return 0;
 	}
 
 	@Override
 	public int getDuration() {
 		System.out.println(stateOf+"--------------------------");
-		try {
-			mediaPlayer.prepare();
-		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(mediaPlayer!=null){
+			if(mediaPlayer.isPlaying()){
+				return mediaPlayer.getDuration();
+			}
 		}
-		return mediaPlayer.getDuration();
+		return 0;
 	}
 
 	@Override
@@ -178,7 +171,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	@Override
 	public void seekTo(int pos) {
 		
-		mediaPlayer.pause();
+//		mediaPlayer.pause();
 		pDialog.show();
 		mediaPlayer.seekTo(pos);
 	}
@@ -214,8 +207,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		stateOf = "into surfacedestroyed";
 		if(mediaPlayer!=null){
-			saveTime = mediaPlayer.getCurrentPosition();
-			mediaPlayer.stop();
+//			saveTime = mediaPlayer.getCurrentPosition();
 			mediaPlayer.release();
 		}
 	}
@@ -299,6 +291,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 			dialog.show();
 		}else{
 //			Toast.makeText(this, "从头开始播放",500).show();
+			System.out.println("从头开始播放");
 		}
 		mp.start();
 	}
@@ -336,8 +329,9 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	@Override
 	public void onCompletion(MediaPlayer arg0) {
 		stateOf = "into completion";
+		
 		Toast.makeText(this, "播放完毕", 500).show();
-		mediaPlayer.release();
+//		mediaPlayer.release();
 		finish();
 	}
 
