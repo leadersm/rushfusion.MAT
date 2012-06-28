@@ -112,27 +112,34 @@ public class MATActivity extends Activity implements OnClickListener{
 	private void initCategory(String origin) {
 		final ViewGroup level1 = (ViewGroup) findViewById(R.id.level1);
 		level1.removeAllViews();
-		Button shouye = new Button(this);
-		setCategoryBtnStyle(shouye,"首页");
-		shouye.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				currentCategory = "首页";
-				initConditionBar();
-				while(types==null){
-					try {
-						Thread.sleep(10);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-				updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
-			}
-		});
-		level1.addView(shouye);
 
 		new AsyncTask<String, Void, List<String>>(){
+
+			@Override
+			protected void onPreExecute() {
+				// TODO Auto-generated method stub
+				super.onPreExecute();
+				Button shouye = new Button(MATActivity.this);
+				setCategoryBtnStyle(shouye,"首页");
+				shouye.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						currentCategory = "首页";
+						initConditionBar();
+						while(types==null){
+							try {
+								Thread.sleep(10);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+						}
+						updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
+					}
+				});
+				level1.addView(shouye);
+				
+			}
 
 			@Override
 			protected List<String> doInBackground(String... params) {
