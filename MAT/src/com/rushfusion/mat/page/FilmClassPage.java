@@ -6,6 +6,7 @@ import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -37,6 +38,7 @@ public class FilmClassPage extends BasePage {
 	public boolean updating = false;
 	
 	int LOADPAGEPOST_DELAY_TIME = 300;
+	int UPDATEPAGEPOST_DELAY = 300;
 
 	public FilmClassPage(Activity context, ViewGroup parent) {
 		super(context, parent);
@@ -48,6 +50,7 @@ public class FilmClassPage extends BasePage {
 	public void loadPage(String url, int layoutId) {
 		mUrl = url ;
 		Log.d("", mUrl) ;
+		Log.d("childCount", mParent.getChildCount()+"") ;
 		loadPage(url, layoutId,new BasePage.onLoadingDataCallBack(){
 
 			@Override
@@ -102,6 +105,8 @@ public class FilmClassPage extends BasePage {
 			filmItems[i].setVisibility(View.INVISIBLE) ;
 			
 			ImageView imageView = (ImageView)filmItems[i].findViewById(R.id.ItemIcon) ;
+			imageView.setImageDrawable(null);
+			imageView.destroyDrawingCache() ;
 			imageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.film_bg_loading)) ;
 			
 			filmItems[i].setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -227,14 +232,16 @@ public class FilmClassPage extends BasePage {
 		page_indext.setText(currentPage+"/"+pageSize+mContext.getString(R.string.page)) ;
 	}
 	
-	
 	private void fillData(List<Map<String,String>> params) {
 		updating = true ;
 		int size = itemSize();
 		for(int i=0; i<size; i++) {
 			Map<String,String> nodeMap = params.get(i) ;
 			ImageView itemIcon = (ImageView)filmItems[i].findViewById(R.id.ItemIcon) ;
-			ImageLoadTask.imageLoad(itemIcon, nodeMap.get("thumb")) ;
+			//ImageLoadTask.imageLoad1(itemIcon, nodeMap.get("thumb")) ;
+			String imageUrl = nodeMap.get("thumb") ;
+			itemIcon.setTag(imageUrl) ;
+			ImageLoadTask.loadImageLimited(itemIcon, imageUrl) ;
 			TextView itemTitle = (TextView)filmItems[i].findViewById(R.id.ItemTitle) ;
 			itemTitle.setText(nodeMap.get("name")) ;
 			filmItems[i].setTag(params.get(i)) ;
@@ -244,6 +251,7 @@ public class FilmClassPage extends BasePage {
 			filmItems[0].requestFocus() ;
 		else 
 			filmItems[params.size()-1].requestFocus() ;
+		
 		updating = false ;
 	}
 	
