@@ -56,6 +56,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	boolean isContinue = false ;
 	ProgressDialog pDialog ;
 	int saveTime=0;
+	String stateOf;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -134,6 +135,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 
 	@Override
 	public int getCurrentPosition() {
+		System.out.println(stateOf+"=========================");
 		try {
 			mediaPlayer.prepare();
 		} catch (IllegalStateException e) {
@@ -148,6 +150,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 
 	@Override
 	public int getDuration() {
+		System.out.println(stateOf+"--------------------------");
 		try {
 			mediaPlayer.prepare();
 		} catch (IllegalStateException e) {
@@ -188,10 +191,12 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
+		stateOf = "into surfacechanged";
 	}
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
+		stateOf = "into surfacecreated";
 		mediaPlayer.setDisplay(holder);
 		try {
 			mediaPlayer.prepareAsync();
@@ -207,6 +212,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
+		stateOf = "into surfacedestroyed";
 		if(mediaPlayer!=null){
 			saveTime = mediaPlayer.getCurrentPosition();
 			mediaPlayer.stop();
@@ -216,6 +222,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 
 	@Override
 	public void onVideoSizeChanged(MediaPlayer mp, int arg1, int arg2) {
+		stateOf = "into onvideosizechanged";
 		videoWidth = mp.getVideoWidth();
 		videoHeight = mp.getVideoHeight();
 		if(videoWidth > currentDisplay.getWidth() || videoHeight > currentDisplay.getHeight()){
@@ -238,12 +245,14 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 
 	@Override
 	public void onSeekComplete(MediaPlayer mp) {
+		stateOf = "into seekcomplete";
 		pDialog.cancel();
 		mediaPlayer.start();
 	}
 
 	@Override
 	public void onPrepared(MediaPlayer mp) {
+		stateOf = "into prepared";
 		videoWidth = mp.getVideoWidth();
 		videoHeight = mp.getVideoHeight();
 		if(videoWidth > currentDisplay.getWidth() || videoHeight > currentDisplay.getHeight()){
@@ -297,6 +306,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 
 	@Override
 	protected void onPause() {
+		stateOf = "into activity onpause";
 		SharedPreferences prefs = getSharedPreferences("myDataStorage", MODE_PRIVATE);
 		Editor editor = prefs.edit();
 		editor.putInt(movieId,saveTime);
@@ -312,6 +322,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 
 	@Override
 	public boolean onInfo(MediaPlayer mp, int what, int extra) {
+		
 //		Toast.makeText(this, "信息读取状态代码："+what, 500).show();
 		return false;
 	}
@@ -324,6 +335,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 
 	@Override
 	public void onCompletion(MediaPlayer arg0) {
+		stateOf = "into completion";
 		Toast.makeText(this, "播放完毕", 500).show();
 		mediaPlayer.release();
 		finish();

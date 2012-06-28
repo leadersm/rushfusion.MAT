@@ -23,6 +23,9 @@
         <activity android:name=".page.MediaPlayerShow">
             
         </activity>
+        <activity android:name=".page.VideoPlayer">
+            
+        </activity>
         <activity android:name=".page.ItemDetailPage">
             
         </activity>
