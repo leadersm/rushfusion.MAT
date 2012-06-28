@@ -6,5 +6,4 @@
     <item android:drawable="@drawable/leshi_02" android:state_pressed="true"/>
     <item android:drawable="@drawable/leshi_02" android:state_enabled="false"/>
     <item android:drawable="@drawable/leshi_01"/>
-
 </selector>

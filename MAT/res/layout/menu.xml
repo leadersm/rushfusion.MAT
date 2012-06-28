@@ -3,7 +3,7 @@
     android:id="@+id/ScrollView1"
     android:layout_height="fill_parent" 
     android:layout_width="fill_parent"
-    android:background="@color/level"
+    android:background="@drawable/label_bg"
     >
 
     <LinearLayout
@@ -15,14 +15,14 @@
             android:id="@+id/leshi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/font.button"
+            style="@style/font.button_category"
             android:background="@drawable/leshi"
              />
         <Button
             android:id="@+id/qiyi"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            style="@style/font.button"
+            style="@style/font.button_category"
             android:background="@drawable/qiyi"
              />
 
@@ -31,7 +31,7 @@
             android:id="@+id/souhu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/font.button"
+            style="@style/font.button_category"
             android:background="@drawable/souhu"
              />
 
@@ -39,7 +39,7 @@
             android:id="@+id/tudou"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/font.button"
+            style="@style/font.button_category"
             android:background="@drawable/tudou"
              />
 
@@ -47,7 +47,7 @@
             android:id="@+id/sina"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/font.button"
+            style="@style/font.button_category"
             android:background="@drawable/sina"
              />
 

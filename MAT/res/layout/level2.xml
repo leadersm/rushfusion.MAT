@@ -3,19 +3,29 @@
     android:id="@+id/ScrollView1"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@color/level"
+    android:background="@drawable/bg_middle"
     android:orientation="horizontal" >
 
     <Button
         android:id="@+id/byPlay"
+        style="@style/font.button_choosebar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:text="热播" />
 
+    <View
+        android:id="@+id/indicator_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/byPlay"
+        android:layout_alignLeft="@+id/byPlay"
+        android:layout_alignRight="@+id/byPlay" />
+
     <Button
         android:id="@+id/byScore"
+        style="@style/font.button_choosebar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/byPlay"
@@ -23,8 +33,17 @@
         android:layout_toRightOf="@+id/byPlay"
         android:text="好评" />
 
+    <View
+        android:id="@+id/indicator_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/byScore"
+        android:layout_alignLeft="@+id/byScore"
+        android:layout_alignRight="@+id/byScore" />
+
     <Button
         android:id="@+id/byComment"
+        style="@style/font.button_choosebar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/byPlay"
@@ -32,18 +51,38 @@
         android:layout_toRightOf="@+id/byScore"
         android:text="热议" />
 
+    <View
+        android:id="@+id/indicator_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/byComment"
+        android:layout_alignLeft="@+id/byComment"
+        android:layout_alignRight="@+id/byComment" 
+        />
+
     <Button
         android:id="@+id/byRecent"
+        style="@style/font.button_choosebar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/byPlay"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/byComment"
-        android:text="最近" />
+        android:nextFocusRight="@+id/byCondition"
+        android:text="最新" />
+
+    <View
+        android:id="@+id/indicator_recent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/byRecent"
+        android:layout_alignLeft="@+id/byRecent"
+        android:layout_alignRight="@+id/byRecent" />
 
     <Button
         android:id="@+id/byCondition"
-        android:layout_width="wrap_content"
+        style="@style/font.button_choosebar"
+        android:layout_width="100dip"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
