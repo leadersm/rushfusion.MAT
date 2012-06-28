@@ -227,6 +227,9 @@
      <LinearLayout android:id="@+id/page_item_detail_main_right_bottom"
          android:layout_width="fill_parent"
          android:layout_height="fill_parent"
+         android:background="#ff105010"
+         android:paddingLeft="30dip"
+         android:paddingRight="30dip"
          android:layout_weight="1">
              <GridView android:id="@+id/page_item_detail_episode"
              android:layout_width="fill_parent"

@@ -69,12 +69,9 @@ public class ItemDetailPage extends Activity{
 		}else{
 			String[] str = movie.getUrl().split("\\^");
 			for(String urlstr : str){
-				System.out.println(urlstr);
 				String[] str2 = urlstr.split("\\|");
-//				System.out.println(str2[1]);
 				list.add(str2[1]);
 			}
-			System.out.println(list.size());
 		}
 		gda = new ItemDetailGridViewAdapter(this, list);
 		episode.setAdapter(gda);
@@ -92,6 +89,7 @@ public class ItemDetailPage extends Activity{
 					
 				}else{
 					Intent it =  new Intent(ItemDetailPage.this, MediaPlayerShow.class);
+//					Intent it =  new Intent(ItemDetailPage.this, VideoPlayer.class);
 					Bundle bd = new Bundle();
 					bd.putString("url", list.get(arg2));
 					bd.putString("id", movie.getId()+""+arg2);

@@ -11,7 +11,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="48dip"
-        android:layout_marginTop="80dip" />
+        android:layout_marginTop="100dip"
+        android:background="@drawable/arrow_left_film_class_disable" />
 
     <RelativeLayout
         android:id="@+id/items"
@@ -95,7 +96,8 @@
         android:layout_alignBottom="@+id/items"
         android:layout_marginBottom="100dip"
         android:layout_marginLeft="18dip"
-        android:layout_toRightOf="@+id/items" />
+        android:layout_toRightOf="@+id/items"
+        android:background="@drawable/arrow_right_film_class_enable" />
 
     <RelativeLayout
         android:layout_width="wrap_content"

@@ -13,6 +13,8 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -29,6 +31,7 @@ import com.rushfusion.mat.page.FilmClassPage;
 import com.rushfusion.mat.page.PageCache;
 import com.rushfusion.mat.page.RecommendPage;
 import com.rushfusion.mat.utils.DataParser;
+import com.rushfusion.mat.utils.HttpUtil;
 
 public class MATActivity extends Activity implements OnClickListener{
     /** Called when the activity is first created. */
@@ -40,6 +43,7 @@ public class MATActivity extends Activity implements OnClickListener{
 	public static final int Dialog_ConnectedRefused = 1;
 	public static final int Dialog_Loading = 2;
 	public static final int Dialog_ConditionBar = 3;
+	public static final int Dialog_WIRELESS_SETTING = 4;
 	
 	private ViewGroup parent;
 	private View menu;
@@ -67,21 +71,38 @@ public class MATActivity extends Activity implements OnClickListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        sp = getSharedPreferences("MatHistory",Context.MODE_WORLD_READABLE);
-        editor = sp.edit();
-        res = getResources();
-        init();
+        if(HttpUtil.checkNetworkEnabled(this)){
+        	sp = getSharedPreferences("MatHistory",Context.MODE_WORLD_READABLE);
+        	editor = sp.edit();
+        	res = getResources();
+        	init();
+        }else{
+        	showDialog(Dialog_WIRELESS_SETTING);
+        }
     }
+    
+    Handler handler = new Handler(){
+    	public void handleMessage(android.os.Message msg) {
+    		switch (msg.what) {
+			case Dialog_ConnectedRefused:
+				showDialog(Dialog_ConnectedRefused);
+				break;
+
+			default:
+				break;
+			}
+    	};
+    };
     
     
 	private void init() {
 		currentOrigin = "sina";//getLastWatchRecord().equals("")?"sina":getLastWatchRecord();
-    	initMenu();
-    	initCategory(currentOrigin);
     	currentCategory = "首页";//??
-    	initChooseBar();
     	parent = (ViewGroup) findViewById(R.id.parent);
     	conditionBar = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.conditionbar, null);
+    	initMenu();
+    	initCategory(currentOrigin);
+    	initChooseBar();
     	String url = "shouye url ???";
     	initRecommendPage(url);
     	updateHeaderInfo();
@@ -112,31 +133,39 @@ public class MATActivity extends Activity implements OnClickListener{
 	private void initCategory(String origin) {
 		final ViewGroup level1 = (ViewGroup) findViewById(R.id.level1);
 		level1.removeAllViews();
-		Button shouye = new Button(this);
-		setCategoryBtnStyle(shouye,"首页");
-		shouye.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				currentCategory = "首页";
-				initConditionBar();
-				while(types==null){
-					try {
-						Thread.sleep(10);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-				updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
-			}
-		});
-		level1.addView(shouye);
 
 		new AsyncTask<String, Void, List<String>>(){
 
 			@Override
+			protected void onPreExecute() {
+				// TODO Auto-generated method stub
+				super.onPreExecute();
+				Button shouye = new Button(MATActivity.this);
+				setCategoryBtnStyle(shouye,"首页");
+				shouye.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						currentCategory = "首页";
+						initConditionBar();
+						while(types==null){
+							try {
+								Thread.sleep(10);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+						}
+						updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
+					}
+				});
+				level1.addView(shouye);
+				
+			}
+
+			@Override
 			protected List<String> doInBackground(String... params) {
 				categories = DataParser.getInstance(MATActivity.this,params[0]).getCategory();
+				if(categories==null)handler.sendEmptyMessage(Dialog_ConnectedRefused);
 				return categories;
 			}
 
@@ -469,19 +498,12 @@ public class MATActivity extends Activity implements OnClickListener{
 	}
 	
 	
-	private void updateChooseBar(String crtsort, View v) {
-		View indecator = null ;
-		if(crtsort.equals("play")){
-			indecator = chooseBar.findViewById(R.id.indicator_play);
-		}else if(crtsort.endsWith("score")){
-			indecator = chooseBar.findViewById(R.id.indicator_score);
-		}else if(crtsort.endsWith("comment")){
-			indecator = chooseBar.findViewById(R.id.indicator_comment);
-		}else if(crtsort.endsWith("recent")){
-			indecator =  chooseBar.findViewById(R.id.indicator_recent);
-		}
-		indecator.setBackgroundResource(R.drawable.red_normal);
-		v.setBackgroundResource(R.drawable.red_active);
+	private void updateChooseBar(String crtsort, View indicator) {
+		chooseBar.findViewById(R.id.indicator_play).setBackgroundResource(R.drawable.red_normal);
+		chooseBar.findViewById(R.id.indicator_score).setBackgroundResource(R.drawable.red_normal);
+		chooseBar.findViewById(R.id.indicator_comment).setBackgroundResource(R.drawable.red_normal);
+		chooseBar.findViewById(R.id.indicator_recent).setBackgroundResource(R.drawable.red_normal);
+		indicator.setBackgroundResource(R.drawable.red_active);
 	}
 
 
@@ -530,6 +552,18 @@ public class MATActivity extends Activity implements OnClickListener{
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("提示");
 			builder.setMessage("服务器无响应，请联系客服010-xxxxxxx");
+			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					finish();
+				}
+			});
+			return builder.create();
+		}else if(id==Dialog_WIRELESS_SETTING){
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle("提示");
+			builder.setMessage("网络没有连接，请检查您的网络！");
 			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 				
 				@Override
