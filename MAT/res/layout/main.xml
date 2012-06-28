@@ -48,13 +48,13 @@
         android:orientation="vertical" >
     </LinearLayout>
 
-    <include
+<!--     <include
         android:id="@+id/conditionBar"
         android:layout_width="fill_parent"
         android:layout_height="250dip"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/level_2"
-        layout="@layout/conditionbar" />
+        layout="@layout/conditionbar" /> -->
 
     <ProgressBar
         android:id="@+id/content_progressbar"

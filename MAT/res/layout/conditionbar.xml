@@ -2,10 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="250dip"
-    android:background="@drawable/conditionbar_bg"
     android:gravity="center_vertical"
+    android:background="@drawable/conditionbar_bg"
     android:orientation="vertical"
-    android:visibility="gone" >
+    >
 
     <HorizontalScrollView
         android:layout_width="fill_parent"

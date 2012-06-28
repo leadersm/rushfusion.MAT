@@ -14,10 +14,14 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -31,6 +35,11 @@ public class MATActivity extends Activity implements OnClickListener{
 	
 	private static final int FilmClassPage = 1;
 	private static final int FilmClassPageSize = 8;
+	
+	public static final int Dialog_Exit = 0;
+	public static final int Dialog_ConnectedRefused = 1;
+	public static final int Dialog_Loading = 2;
+	public static final int Dialog_ConditionBar = 3;
 	
 	private ViewGroup parent;
 	private View menu;
@@ -57,7 +66,6 @@ public class MATActivity extends Activity implements OnClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.main);
         sp = getSharedPreferences("MatHistory",Context.MODE_WORLD_READABLE);
         editor = sp.edit();
@@ -73,6 +81,7 @@ public class MATActivity extends Activity implements OnClickListener{
     	currentCategory = "首页";//??
     	initChooseBar();
     	parent = (ViewGroup) findViewById(R.id.parent);
+    	conditionBar = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.conditionbar, null);
     	String url = "shouye url ???";
     	initRecommendPage(url);
     	updateHeaderInfo();
@@ -170,9 +179,7 @@ public class MATActivity extends Activity implements OnClickListener{
 
 
 	private void initConditionBar() {
-		conditionBar = (ViewGroup) findViewById(R.id.conditionBar);
 		if(currentCategory.equals("首页")){
-			conditionBar.setVisibility(View.GONE);
 			chooseBar.setVisibility(View.GONE);
 		}else
 			chooseBar.setVisibility(View.VISIBLE);
@@ -253,7 +260,7 @@ public class MATActivity extends Activity implements OnClickListener{
 			
 			@Override
 			public void onClick(View v) {
-				updateBackground(typeView,allType,currentType);
+				updateBackground(typeView,allType);
 				currentType = "";
 				updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			}
@@ -262,7 +269,7 @@ public class MATActivity extends Activity implements OnClickListener{
 			
 			@Override
 			public void onClick(View v) {
-				updateBackground(areaView,allArea,currentArea);
+				updateBackground(areaView,allArea);
 				currentArea = "";
 				updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			}
@@ -271,7 +278,7 @@ public class MATActivity extends Activity implements OnClickListener{
 			
 			@Override
 			public void onClick(View v) {
-				updateBackground(yearView,allYear,currentYear);
+				updateBackground(yearView,allYear);
 				currentYear = "";
 				updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			}
@@ -290,7 +297,7 @@ public class MATActivity extends Activity implements OnClickListener{
 				
 				@Override
 				public void onClick(View v) {
-					updateBackground(typeView,typeBtn,currentType);
+					updateBackground(typeView,typeBtn);
 					currentType = type;
 					updatePage(currentCategory,currentType, currentArea, currentYear, currentSort);
 				}
@@ -307,7 +314,7 @@ public class MATActivity extends Activity implements OnClickListener{
 				
 				@Override
 				public void onClick(View v) {
-					updateBackground(areaView,areaBtn,currentArea);
+					updateBackground(areaView,areaBtn);
 					currentArea = area;
 					updatePage(currentCategory,currentType, currentArea, currentYear, currentSort);
 				}
@@ -324,7 +331,7 @@ public class MATActivity extends Activity implements OnClickListener{
 				
 				@Override
 				public void onClick(View v) {
-					updateBackground(yearView,yearBtn,currentYear);
+					updateBackground(yearView,yearBtn);
 					currentYear = year;
 					updatePage(currentCategory,currentType, currentArea, currentYear, currentSort);
 				}
@@ -339,18 +346,10 @@ public class MATActivity extends Activity implements OnClickListener{
 
 
 
-	private void updateBackground(ViewGroup cdsView,Button destBtn, String currentCondition) {
-		if(currentCondition.equals("")){
-			cdsView.getChildAt(0).setBackgroundResource(R.drawable.filter_normal);
-			destBtn.setBackgroundResource(R.drawable.filter_selected);
-			return;
-		}
+	private void updateBackground(ViewGroup cdsView,Button destBtn) {
 		for(int i =0;i<cdsView.getChildCount();i++){
 			Button v = (Button) cdsView.getChildAt(i);
-			if(v.getText().equals(currentCondition)){
-				v.setBackgroundResource(R.drawable.filter_normal);
-				break;
-			}
+			v.setBackgroundResource(R.drawable.btn_condition);
 		}
 		destBtn.setBackgroundResource(R.drawable.filter_selected);
 	}
@@ -364,7 +363,7 @@ public class MATActivity extends Activity implements OnClickListener{
 	
 	private void setConditionBtnStyle(Button btn, String text) {
 		btn.setText(text);
-		btn.setTextSize(16);
+		btn.setTextSize(18);
 		btn.setTextColor(res.getColor(R.color.white));
 		btn.setBackgroundDrawable(res.getDrawable(R.drawable.btn_condition));
 	}
@@ -460,7 +459,7 @@ public class MATActivity extends Activity implements OnClickListener{
 			updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			break;
 		case R.id.byCondition:
-			showConditionBar();
+			showDialog(Dialog_ConditionBar);
 			break;
 		//==================================
 			
@@ -486,14 +485,6 @@ public class MATActivity extends Activity implements OnClickListener{
 	}
 
 
-	private void showConditionBar() {
-		if(conditionBar.getVisibility()==View.VISIBLE){
-			conditionBar.setVisibility(View.INVISIBLE);
-		}else
-			conditionBar.setVisibility(View.VISIBLE);
-	}
-
-
 	private void changeDataByOriginName(String origin) {
 		initCategory(origin);
 	}
@@ -506,7 +497,7 @@ public class MATActivity extends Activity implements OnClickListener{
 			showMenu();
 			break;
 		case KeyEvent.KEYCODE_BACK:
-			showDialog(0);
+			showDialog(Dialog_Exit);
 			break;
 		default:
 			break;
@@ -516,7 +507,7 @@ public class MATActivity extends Activity implements OnClickListener{
 	
 	@Override
 	protected Dialog onCreateDialog(int id) {
-		if(id==0){
+		if(id==Dialog_Exit){
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("提示");
 			builder.setMessage("确定退出吗？");
@@ -535,7 +526,7 @@ public class MATActivity extends Activity implements OnClickListener{
 				}
 			});
 			return builder.create();
-		}else if(id==1){
+		}else if(id==Dialog_ConnectedRefused){
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("提示");
 			builder.setMessage("服务器无响应，请联系客服010-xxxxxxx");
@@ -547,12 +538,25 @@ public class MATActivity extends Activity implements OnClickListener{
 				}
 			});
 			return builder.create();
-		}else if(id == 2){
+		}else if(id == Dialog_Loading){
 			ProgressDialog dialog = new ProgressDialog(this);
 			dialog.setTitle("提示:");
 			dialog.setMessage("正在加载中，请稍后");
 			return dialog;
 			
+		}else if(id==Dialog_ConditionBar){
+			Dialog dialog = new Dialog(this,R.style.dialog);
+			dialog.setContentView(conditionBar);
+	        Window dialogWindow = dialog.getWindow();
+	        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+	        dialogWindow.setGravity(Gravity.CENTER_VERTICAL);
+//	        lp.x = 100; // 新位置X坐标
+	        lp.y = -100; // 新位置Y坐标
+	        lp.width = -1;
+	        lp.height = 250;
+	        lp.alpha = 0.7f; 
+	        dialogWindow.setAttributes(lp);
+	        return dialog;
 		}
 		return null;
 	}
