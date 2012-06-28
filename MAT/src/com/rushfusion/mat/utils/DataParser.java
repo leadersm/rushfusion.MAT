@@ -14,6 +14,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.rushfusion.mat.MATActivity;
+
 import android.app.Activity;
 import android.util.Log;
 
