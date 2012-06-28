@@ -476,19 +476,12 @@ public class MATActivity extends Activity implements OnClickListener{
 	}
 	
 	
-	private void updateChooseBar(String crtsort, View v) {
-		View indecator = null ;
-		if(crtsort.equals("play")){
-			indecator = chooseBar.findViewById(R.id.indicator_play);
-		}else if(crtsort.endsWith("score")){
-			indecator = chooseBar.findViewById(R.id.indicator_score);
-		}else if(crtsort.endsWith("comment")){
-			indecator = chooseBar.findViewById(R.id.indicator_comment);
-		}else if(crtsort.endsWith("recent")){
-			indecator =  chooseBar.findViewById(R.id.indicator_recent);
-		}
-		indecator.setBackgroundResource(R.drawable.red_normal);
-		v.setBackgroundResource(R.drawable.red_active);
+	private void updateChooseBar(String crtsort, View indicator) {
+		chooseBar.findViewById(R.id.indicator_play).setBackgroundResource(R.drawable.red_normal);
+		chooseBar.findViewById(R.id.indicator_score).setBackgroundResource(R.drawable.red_normal);
+		chooseBar.findViewById(R.id.indicator_comment).setBackgroundResource(R.drawable.red_normal);
+		chooseBar.findViewById(R.id.indicator_recent).setBackgroundResource(R.drawable.red_normal);
+		indicator.setBackgroundResource(R.drawable.red_active);
 	}
 
 

@@ -205,7 +205,7 @@ public class FilmClassPage extends BasePage {
 	Runnable loadPagePostRunnable = new Runnable(){
 		@Override
 		public void run() {
-			mParent.removeAllViews() ;
+//			mParent.removeAllViews() ;
 			loadPage(mUrl,R.layout.page_film_class) ;
 		}};
 	
