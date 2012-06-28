@@ -3,13 +3,12 @@
  android:orientation="horizontal"
  android:layout_width="fill_parent"
  android:layout_height="fill_parent"
- android:background="#80cccccc">
+ android:background="@drawable/main">
  
  <LinearLayout android:id="@+id/page_item_detail_main_left"
      android:orientation="vertical"
      android:layout_width="fill_parent"
      android:layout_height="fill_parent"
-     android:background="@drawable/lightgray"
      android:layout_weight="7">
      
      <LinearLayout android:id="@+id/page_item_detail_main_left_top"
@@ -75,7 +74,7 @@
              android:layout_width="fill_parent"
              android:layout_height="fill_parent"
              android:textSize="20dip"
-             
+             android:background="@drawable/describle"
              android:textColor="#80afffff"/>
          
      </LinearLayout>
@@ -92,7 +91,6 @@
          android:layout_width="fill_parent"
          android:layout_height="fill_parent"
          android:layout_weight="4"
-         android:background="@drawable/index_shadow"
          android:orientation="vertical">
          <LinearLayout android:id="@+id/page_item_detail_main_right_top_ue"
              android:layout_width="fill_parent"
@@ -235,7 +233,7 @@
              android:layout_height="fill_parent"
              android:layout_gravity="center"
              android:numColumns="6"
-             android:background="@drawable/order_dialogbox_bg"
+             android:background="@drawable/epg_dian_shi_ju_film_page_content_bg"
              android:padding="10dip"
              android:verticalSpacing="15dip"
 	         android:gravity="center">
