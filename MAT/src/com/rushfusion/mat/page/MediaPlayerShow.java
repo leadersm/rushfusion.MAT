@@ -138,6 +138,8 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 			if(mediaPlayer.isPlaying()){
 				saveTime = mediaPlayer.getCurrentPosition();
 				return saveTime;
+			}else{
+				return 0;
 			}
 		}
 		return 0;
@@ -148,6 +150,8 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 		if(mediaPlayer!=null){
 			if(mediaPlayer.isPlaying()){
 				return mediaPlayer.getDuration();
+			}else{
+				return 0;
 			}
 		}
 		return 0;
@@ -300,7 +304,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 		}else{
 //			Toast.makeText(this, "从头开始播放",500).show();
 		}
-		mp.start();
+		mediaPlayer.start();
 	}
 
 
@@ -335,8 +339,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	public void onCompletion(MediaPlayer arg0) {
 		
 		Toast.makeText(this, "播放完毕", 500).show();
-//		mediaPlayer.release();
-		finish();
+//		finish();
 	}
 
 
