@@ -128,9 +128,6 @@ public class MATActivity extends Activity implements OnClickListener{
 
 		new AsyncTask<String, Void, List<String>>(){
 
-			
-			
-			
 			@Override
 			protected void onPreExecute() {
 				super.onPreExecute();
@@ -594,6 +591,7 @@ public class MATActivity extends Activity implements OnClickListener{
 			ProgressDialog dialog = new ProgressDialog(this);
 			dialog.setTitle("提示:");
 			dialog.setMessage("数据正在加载中，请稍后");
+			dialog.setCancelable(false);
 			return dialog;
 			
 		}else if(id==DIALOG_CONDITIONBAR){
