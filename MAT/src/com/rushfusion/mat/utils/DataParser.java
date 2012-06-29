@@ -41,29 +41,29 @@ public class DataParser {
 		HttpUtil httpUtil = HttpUtil.getInstance(mContext) ;
 		String strUrl = CATEGORY_URL+"category?source=" + mSource ;
 		Log.d(TAG, "category url:"+strUrl) ;
-		//if(httpUtil.connectServerByURL(strUrl)) {
-			return loadData(httpUtil.getInputStreamFromUrl1(strUrl)) ;
-		//}
-		//return null;
+		if(httpUtil.connectServerByURL(strUrl)) {
+			return loadData(httpUtil.getInputStreamFromUrl(strUrl)) ;
+		}
+		return null;
 	}
 
 	public List<String> getTypes(String category) {
 		HttpUtil httpUtil = HttpUtil.getInstance(mContext) ;
 		String strUrl = CATEGORY_URL+ "type?source=" + mSource + "&category=" + category ;
 		Log.d(TAG, "type url:"+strUrl) ;
-		//if(httpUtil.connectServerByURL(strUrl)) {
+		if(httpUtil.connectServerByURL(strUrl)) {
 			return loadData(httpUtil.getInputStreamFromUrl(strUrl)) ;
-		//}
-//		return null;
+		}
+		return null;
 	}
 
 	public List<String> getYears(String category) {
 		HttpUtil httpUtil = HttpUtil.getInstance(mContext) ;
 		String strUrl = CATEGORY_URL+ "year?source="  + mSource + "&category=" + category ;
 		Log.d(TAG, "year url:"+strUrl) ;
-//		if(httpUtil.connectServerByURL(strUrl)) {
+		if(httpUtil.connectServerByURL(strUrl)) {
 			List<String> list = new LinkedList<String>() ;
-			List<String> listStr = loadData(httpUtil.getInputStreamFromUrl1(strUrl)) ;
+			List<String> listStr = loadData(httpUtil.getInputStreamFromUrl(strUrl)) ;
 			if(listStr!=null) {
 				Object[] str = listStr.toArray() ;
 				for(int i=str.length-1; i>=0; i--) {
@@ -71,7 +71,7 @@ public class DataParser {
 				}
 				return list ;
 			}
-//		}
+		}
 		return null;
 	}
 
@@ -79,19 +79,19 @@ public class DataParser {
 		HttpUtil httpUtil = HttpUtil.getInstance(mContext) ;
 		String strUrl = CATEGORY_URL+ "area?source="  + mSource + "&category=" + category ;
 		Log.d(TAG, "area url:"+strUrl) ;
-		//if(httpUtil.connectServerByURL(strUrl)) {
-			return loadData(httpUtil.getInputStreamFromUrl1(strUrl)) ;
-		//}
-		//return null;
+		if(httpUtil.connectServerByURL(strUrl)) {
+			return loadData(httpUtil.getInputStreamFromUrl(strUrl)) ;
+		}
+		return null;
 	}
 	
 	public List<Map<String,String>> get(String url) {
 		HttpUtil httpUtil = HttpUtil.getInstance(mContext) ;
 		String strUrl = url ;
-		//if(httpUtil.connectServerByURL(strUrl)) {
-			return loadFileData(httpUtil.getInputStreamFromUrl1(strUrl)) ;
-		//}
-		//return null;
+		if(httpUtil.connectServerByURL(strUrl)) {
+			return loadFileData(httpUtil.getInputStreamFromUrl(strUrl)) ;
+		}
+		return null;
 	}
 	
 	public List<String> loadData(InputStream inputSteam) {
