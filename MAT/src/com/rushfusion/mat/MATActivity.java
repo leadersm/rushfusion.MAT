@@ -13,7 +13,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Looper;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -31,6 +31,7 @@ import com.rushfusion.mat.page.FilmClassPage;
 import com.rushfusion.mat.page.PageCache;
 import com.rushfusion.mat.page.RecommendPage;
 import com.rushfusion.mat.utils.DataParser;
+import com.rushfusion.mat.utils.HttpUtil;
 
 public class MATActivity extends Activity implements OnClickListener{
     /** Called when the activity is first created. */
@@ -38,16 +39,16 @@ public class MATActivity extends Activity implements OnClickListener{
 	private static final int FilmClassPage = 1;
 	private static final int FilmClassPageSize = 8;
 	
-	public static final int Dialog_Exit = 0;
-	public static final int Dialog_ConnectedRefused = 1;
-	public static final int Dialog_Loading = 2;
-	public static final int Dialog_ConditionBar = 3;
-	
+	public static final int DIALOG_EXIT = 0;
+	public static final int DIALOG_CONNECTEDREFUSED = 1;
+	public static final int DIALOG_LOADING = 2;
+	public static final int DIALOG_CONDITIONBAR = 3;
+	public static final int DIALOG_WIRELESS_SETTING = 4;
+	public static final int DIALOG_ORIGIN_MENU = 5;
 	private ViewGroup parent;
-	private View menu;
+	private ViewGroup menu;
 	private ViewGroup conditionBar;
 	private ViewGroup chooseBar;
-	
 	private String currentOrigin="sina";
 	private String currentCategory="首页";
 	private String currentType="";
@@ -69,27 +70,36 @@ public class MATActivity extends Activity implements OnClickListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        sp = getSharedPreferences("MatHistory",Context.MODE_WORLD_READABLE);
-        editor = sp.edit();
-        res = getResources();
-        init();
+        if(HttpUtil.checkNetworkEnabled(this)){
+        	init();
+        	showDialog(DIALOG_ORIGIN_MENU);
+        }else{
+        	showDialog(DIALOG_WIRELESS_SETTING);
+        }
     }
-    
-    
-	private void init() {
-		currentOrigin = "sina";//getLastWatchRecord().equals("")?"sina":getLastWatchRecord();
-    	initMenu();
-    	initCategory(currentOrigin);
-    	currentCategory = "首页";//??
-    	initChooseBar();
-    	parent = (ViewGroup) findViewById(R.id.parent);
-    	conditionBar = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.conditionbar, null);
-    	String url = "shouye url ???";
-    	initRecommendPage(url);
-    	updateHeaderInfo();
-    	showMenu();
-	}
 
+
+	private void init() {
+		parent = (ViewGroup) findViewById(R.id.parent);
+		conditionBar = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.conditionbar, null);
+		sp = getSharedPreferences("MatHistory",Context.MODE_WORLD_READABLE);
+		editor = sp.edit();
+		res = getResources();
+	}
+    
+    Handler handler = new Handler(){
+    	public void handleMessage(android.os.Message msg) {
+    		switch (msg.what) {
+			case DIALOG_CONNECTEDREFUSED:
+				showDialog(DIALOG_CONNECTEDREFUSED);
+				break;
+
+			default:
+				break;
+			}
+    	};
+    };
+    
 	private void initChooseBar() {
 		chooseBar = (ViewGroup) findViewById(R.id.level_2);
 		if(currentCategory.equals("首页"))
@@ -137,6 +147,12 @@ public class MATActivity extends Activity implements OnClickListener{
 		new AsyncTask<String, Void, List<String>>(){
 
 			@Override
+			protected void onPreExecute() {
+				super.onPreExecute();
+				showDialog(DIALOG_LOADING);
+			}
+
+			@Override
 			protected List<String> doInBackground(String... params) {
 				categories = DataParser.getInstance(MATActivity.this,params[0]).getCategory();
 				return categories;
@@ -145,8 +161,33 @@ public class MATActivity extends Activity implements OnClickListener{
 			@Override
 			protected void onPostExecute(List<String> result) {
 				super.onPostExecute(result);
-				if(categories==null)
-					return ;
+				dismissDialog(DIALOG_LOADING);
+				if(result==null){
+					handler.sendEmptyMessage(DIALOG_CONNECTEDREFUSED);
+					return;
+				}
+				
+				Button shouye = new Button(MATActivity.this);
+				setCategoryBtnStyle(shouye,"首页");
+				shouye.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						currentCategory = "首页";
+						initConditionBar();
+						while(types==null){
+							try {
+								Thread.sleep(10);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+						}
+						updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
+					}
+				});
+				level1.addView(shouye);
+				
+				
 				for(int i = 0;i<categories.size();i++){
 					Button btn = new Button(MATActivity.this);
 					final String name = categories.get(i);
@@ -174,6 +215,10 @@ public class MATActivity extends Activity implements OnClickListener{
 					});
 					level1.addView(btn);
 				}
+		    	String url = "shouye url ???";
+		    	initRecommendPage(url);
+		    	initChooseBar();
+		    	updateHeaderInfo();
 				
 			}
 			
@@ -235,12 +280,12 @@ public class MATActivity extends Activity implements OnClickListener{
 
 
 	private void initMenu() {
-		menu = findViewById(R.id.menu);
-		Button leshi = (Button) findViewById(R.id.leshi);
-		Button qiyi = (Button) findViewById(R.id.qiyi);
-		Button souhu = (Button) findViewById(R.id.souhu);
-		Button tudou = (Button) findViewById(R.id.tudou);
-		Button sina = (Button) findViewById(R.id.sina);
+		menu = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.menu, null);//findViewById(R.id.menu);
+		Button leshi = (Button) menu.findViewById(R.id.leshi);
+		Button qiyi = (Button) menu.findViewById(R.id.qiyi);
+		Button souhu = (Button) menu.findViewById(R.id.souhu);
+		Button tudou = (Button) menu.findViewById(R.id.tudou);
+		Button sina = (Button) menu.findViewById(R.id.sina);
 		leshi.setOnClickListener(this);
 		qiyi.setOnClickListener(this);
 		souhu.setOnClickListener(this);
@@ -427,23 +472,28 @@ public class MATActivity extends Activity implements OnClickListener{
 		switch (v.getId()) {
 		case R.id.leshi:
 //			updateLastWatchRecord("乐视");
-			changeDataByOriginName("leshi");
+			changeDataByOriginName("163");
+			dismissDialog(DIALOG_ORIGIN_MENU);
 			break;
 		case R.id.qiyi:
 //			updateLastWatchRecord("奇艺");
-			changeDataByOriginName("qiyi");
+			changeDataByOriginName("sina");
+			dismissDialog(DIALOG_ORIGIN_MENU);
 			break;
 		case R.id.souhu:
 //			updateLastWatchRecord("搜狐");
-			changeDataByOriginName("souhu");
+			changeDataByOriginName("sina");
+			dismissDialog(DIALOG_ORIGIN_MENU);
 			break;
 		case R.id.tudou:
 //			updateLastWatchRecord("土豆");
-			changeDataByOriginName("tudou");
+			changeDataByOriginName("sina");
+			dismissDialog(DIALOG_ORIGIN_MENU);
 			break;
 		case R.id.sina:
 //			updateLastWatchRecord("新浪");
 			changeDataByOriginName("sina");
+			dismissDialog(DIALOG_ORIGIN_MENU);
 			break;
 		//==================================
 		case R.id.byPlay:
@@ -467,7 +517,7 @@ public class MATActivity extends Activity implements OnClickListener{
 			updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			break;
 		case R.id.byCondition:
-			showDialog(Dialog_ConditionBar);
+			showDialog(DIALOG_CONDITIONBAR);
 			break;
 		//==================================
 			
@@ -494,7 +544,8 @@ public class MATActivity extends Activity implements OnClickListener{
 
 
 	private void changeDataByOriginName(String origin) {
-		initCategory(origin);
+		currentOrigin = origin;
+		initCategory(currentOrigin);
 	}
 
 
@@ -502,10 +553,10 @@ public class MATActivity extends Activity implements OnClickListener{
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_MENU:
-			showMenu();
+			showDialog(DIALOG_ORIGIN_MENU);
 			break;
 		case KeyEvent.KEYCODE_BACK:
-			showDialog(Dialog_Exit);
+			showDialog(DIALOG_EXIT);
 			break;
 		default:
 			break;
@@ -515,7 +566,7 @@ public class MATActivity extends Activity implements OnClickListener{
 	
 	@Override
 	protected Dialog onCreateDialog(int id) {
-		if(id==Dialog_Exit){
+		if(id==DIALOG_EXIT){
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("提示");
 			builder.setMessage("确定退出吗？");
@@ -534,10 +585,30 @@ public class MATActivity extends Activity implements OnClickListener{
 				}
 			});
 			return builder.create();
-		}else if(id==Dialog_ConnectedRefused){
+		}else if(id==DIALOG_CONNECTEDREFUSED){
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("提示");
-			builder.setMessage("服务器无响应，请联系客服010-xxxxxxx");
+			builder.setMessage(currentOrigin+"服务器无响应，请联系客服010-xxxxxxx");
+			builder.setNegativeButton("退出程序", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+					finish();
+				}
+			});
+			builder.setPositiveButton("重选视频源", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					showDialog(DIALOG_ORIGIN_MENU);
+				}
+			});
+			return builder.create();
+		}else if(id==DIALOG_WIRELESS_SETTING){
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle("提示");
+			builder.setMessage("网络没有连接，请检查您的网络！");
 			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 				
 				@Override
@@ -546,13 +617,14 @@ public class MATActivity extends Activity implements OnClickListener{
 				}
 			});
 			return builder.create();
-		}else if(id == Dialog_Loading){
+		}else if(id == DIALOG_LOADING){
 			ProgressDialog dialog = new ProgressDialog(this);
 			dialog.setTitle("提示:");
-			dialog.setMessage("正在加载中，请稍后");
+			dialog.setMessage("数据正在加载中，请稍后");
+			dialog.setCancelable(false);
 			return dialog;
 			
-		}else if(id==Dialog_ConditionBar){
+		}else if(id==DIALOG_CONDITIONBAR){
 			Dialog dialog = new Dialog(this,R.style.dialog);
 			dialog.setContentView(conditionBar);
 	        Window dialogWindow = dialog.getWindow();
@@ -565,20 +637,15 @@ public class MATActivity extends Activity implements OnClickListener{
 	        lp.alpha = 0.7f; 
 	        dialogWindow.setAttributes(lp);
 	        return dialog;
+		}else if(id==DIALOG_ORIGIN_MENU){
+			initMenu();
+			Dialog dialog = new Dialog(this,R.style.dialog);
+			dialog.setContentView(menu);
+			return dialog;
 		}
 		return null;
 	}
 
-	private void showMenu() {
-		if(menu.getVisibility()==View.VISIBLE){
-			menu.setVisibility(View.GONE);
-		}else{
-			menu.setVisibility(View.VISIBLE);
-		}
-	}
-
-	
-	
 	@Override
 	protected void onPause() {
 		super.onStop();
@@ -586,7 +653,7 @@ public class MATActivity extends Activity implements OnClickListener{
 	}
 	
     private String getLastWatchRecord() {
-		return sp.getString("origin", "qiyi");
+		return sp.getString("origin", "sina");
 	}
     
     
