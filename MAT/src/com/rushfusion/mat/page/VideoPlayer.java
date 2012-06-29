@@ -48,6 +48,7 @@ public class VideoPlayer extends Activity implements SurfaceHolder.Callback,OnCo
 	Handler handler_sent,handler_recive;
 	Runnable run_sent,run_recive;
 	ContentResolver resolver;
+	private String filePath;
 //	Cursor cursor;
 	HandlerThread ht;
 	
@@ -74,6 +75,8 @@ public class VideoPlayer extends Activity implements SurfaceHolder.Callback,OnCo
 		play_video_seekbar.setOnSeekBarChangeListener(this);
 		resolver=getContentResolver();
 		Intent i=getIntent();
+		Bundle bd = i.getExtras();
+		filePath = bd.getString("url") ;
 		ht.start();
 		handler_sent = new Handler(ht.getLooper());
 		run_sent=new Runnable() {
@@ -205,7 +208,8 @@ public class VideoPlayer extends Activity implements SurfaceHolder.Callback,OnCo
 	}
 	
 	private void playVideo() {
-		String path="http://v.iask.com/v_play_ipad.php?vid=33184708";
+//		String path="http://v.iask.com/v_play_ipad.php?vid=33184708";
+		
 		if(player==null){
 			player=new MediaPlayer();
 			player.setOnPreparedListener(this);
@@ -214,7 +218,7 @@ public class VideoPlayer extends Activity implements SurfaceHolder.Callback,OnCo
 			player.reset();
 		}
 		try {
-			player.setDataSource(path);
+			player.setDataSource(filePath);
 			player.setDisplay(holder);
 			player.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			player.prepare();

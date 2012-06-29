@@ -15,7 +15,12 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
+import com.rushfusion.mat.MATActivity;
+
 import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 
 public class HttpUtil {
@@ -55,8 +60,6 @@ public class HttpUtil {
 				return true ;
 			}
 		} catch (ClientProtocolException e) {
-			if(e.getMessage().contains("Connection refused"))
-				mContext.showDialog(1);
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -75,6 +78,8 @@ public class HttpUtil {
 			if(connectServerByURL(url)) {
 				HttpEntity entity = mHttpResponse.getEntity() ;
 				inputStream = entity.getContent() ;
+			}else{
+				mContext.showDialog(MATActivity.Dialog_ConnectedRefused);
 			}
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
@@ -82,6 +87,21 @@ public class HttpUtil {
 			e.printStackTrace();
 		}
 		return inputStream;
+	}
+	
+	/**
+	 * 检查网络连接是否可用
+	 * @param context
+	 * @return
+	 */
+	public static boolean checkNetworkEnabled(Context context) {
+		ConnectivityManager cm = (ConnectivityManager) context
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo nwi = cm.getActiveNetworkInfo();
+		if(nwi!=null){
+			return nwi.isAvailable();
+		}
+		return false;
 	}
 	
 }

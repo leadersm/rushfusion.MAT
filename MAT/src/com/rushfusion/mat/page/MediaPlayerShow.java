@@ -55,6 +55,8 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	String movieId;
 	boolean isContinue = false ;
 	ProgressDialog pDialog ;
+	int saveTime=0;
+	String stateOf;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -84,6 +86,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 			movieId = bd.getString("id");
 			int testPosition = prefs.getInt(movieId, -1);
 			if(testPosition != -1){
+				System.out.println("进入为已播放的判断");
 				isContinue = true;
 				contiuePosition = testPosition;
 			}
@@ -132,11 +135,31 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 
 	@Override
 	public int getCurrentPosition() {
+		System.out.println(stateOf+"=========================");
+		try {
+			mediaPlayer.prepare();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return mediaPlayer.getCurrentPosition();
 	}
 
 	@Override
 	public int getDuration() {
+		System.out.println(stateOf+"--------------------------");
+		try {
+			mediaPlayer.prepare();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return mediaPlayer.getDuration();
 	}
 
@@ -168,10 +191,12 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
+		stateOf = "into surfacechanged";
 	}
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
+		stateOf = "into surfacecreated";
 		mediaPlayer.setDisplay(holder);
 		try {
 			mediaPlayer.prepareAsync();
@@ -187,7 +212,9 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
+		stateOf = "into surfacedestroyed";
 		if(mediaPlayer!=null){
+			saveTime = mediaPlayer.getCurrentPosition();
 			mediaPlayer.stop();
 			mediaPlayer.release();
 		}
@@ -195,6 +222,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 
 	@Override
 	public void onVideoSizeChanged(MediaPlayer mp, int arg1, int arg2) {
+		stateOf = "into onvideosizechanged";
 		videoWidth = mp.getVideoWidth();
 		videoHeight = mp.getVideoHeight();
 		if(videoWidth > currentDisplay.getWidth() || videoHeight > currentDisplay.getHeight()){
@@ -217,12 +245,14 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 
 	@Override
 	public void onSeekComplete(MediaPlayer mp) {
+		stateOf = "into seekcomplete";
 		pDialog.cancel();
 		mediaPlayer.start();
 	}
 
 	@Override
 	public void onPrepared(MediaPlayer mp) {
+		stateOf = "into prepared";
 		videoWidth = mp.getVideoWidth();
 		videoHeight = mp.getVideoHeight();
 		if(videoWidth > currentDisplay.getWidth() || videoHeight > currentDisplay.getHeight()){
@@ -255,6 +285,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 				public void onClick(DialogInterface dialog, int which) {
 					mediaPlayer.seekTo(contiuePosition);
 //					Toast.makeText(MediaPlayerShow.this, "开始继续播放",500).show();
+					System.out.println("开始继续播放");
 				}
 			});
 			dialog.setButton(Dialog.BUTTON_NEGATIVE, "从头播放", new DialogInterface.OnClickListener() {
@@ -262,6 +293,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 //					Toast.makeText(MediaPlayerShow.this, "从头开始播放",500).show();
+					System.out.println("从头开始播放");
 				}
 			});
 			dialog.show();
@@ -274,10 +306,12 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 
 	@Override
 	protected void onPause() {
+		stateOf = "into activity onpause";
 		SharedPreferences prefs = getSharedPreferences("myDataStorage", MODE_PRIVATE);
 		Editor editor = prefs.edit();
-		editor.putInt(movieId,mediaPlayer.getCurrentPosition() );
+		editor.putInt(movieId,saveTime);
 		editor.commit();
+		System.out.println("已保存数据： "+movieId +":"+saveTime);
 		super.onPause();
 	}
 
@@ -288,6 +322,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 
 	@Override
 	public boolean onInfo(MediaPlayer mp, int what, int extra) {
+		
 //		Toast.makeText(this, "信息读取状态代码："+what, 500).show();
 		return false;
 	}
@@ -300,7 +335,9 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 
 	@Override
 	public void onCompletion(MediaPlayer arg0) {
+		stateOf = "into completion";
 		Toast.makeText(this, "播放完毕", 500).show();
+		mediaPlayer.release();
 		finish();
 	}
 
