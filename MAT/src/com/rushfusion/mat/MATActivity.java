@@ -136,6 +136,9 @@ public class MATActivity extends Activity implements OnClickListener{
 			protected void onPreExecute() {
 				super.onPreExecute();
 				showDialog(DIALOG_LOADING);
+				if(categories!=null){
+					categories.clear();
+				}
 			}
 
 			@Override
@@ -162,13 +165,13 @@ public class MATActivity extends Activity implements OnClickListener{
 					public void onClick(View v) {
 						currentCategory = "首页";
 						initConditionBar();
-						while(types==null){
-							try {
-								Thread.sleep(10);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-						}
+//						while(types==null){
+//							try {
+//								Thread.sleep(10);
+//							} catch (InterruptedException e) {
+//								e.printStackTrace();
+//							}
+//						}
 						updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 					}
 				});
@@ -185,13 +188,13 @@ public class MATActivity extends Activity implements OnClickListener{
 						public void onClick(View v) {
 							currentCategory = name;
 							initConditionBar();
-							while(types==null||areas==null||years==null){
-								try {
-									Thread.sleep(10);
-								} catch (InterruptedException e) {
-									e.printStackTrace();
-								}
-							}
+//							while(types==null||areas==null||years==null){
+//								try {
+//									Thread.sleep(10);
+//								} catch (InterruptedException e) {
+//									e.printStackTrace();
+//								}
+//							}
 							currentType = "";
 							currentArea = "";
 							currentYear = "";
@@ -451,18 +454,18 @@ public class MATActivity extends Activity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.leshi:
-//			updateLastWatchRecord("乐视");
-			changeDataByOriginName("163");
+		case R.id.souhu:
+//			updateLastWatchRecord("搜狐");
+			changeDataByOriginName("sina");
+			dismissDialog(DIALOG_ORIGIN_MENU);
+			break;
+		case R.id.sina:
+//			updateLastWatchRecord("新浪");
+			changeDataByOriginName("sina");
 			dismissDialog(DIALOG_ORIGIN_MENU);
 			break;
 		case R.id.qiyi:
 //			updateLastWatchRecord("奇艺");
-			changeDataByOriginName("sina");
-			dismissDialog(DIALOG_ORIGIN_MENU);
-			break;
-		case R.id.souhu:
-//			updateLastWatchRecord("搜狐");
 			changeDataByOriginName("sina");
 			dismissDialog(DIALOG_ORIGIN_MENU);
 			break;
@@ -471,9 +474,9 @@ public class MATActivity extends Activity implements OnClickListener{
 			changeDataByOriginName("sina");
 			dismissDialog(DIALOG_ORIGIN_MENU);
 			break;
-		case R.id.sina:
-//			updateLastWatchRecord("新浪");
-			changeDataByOriginName("sina");
+		case R.id.leshi:
+//			updateLastWatchRecord("乐视");
+			changeDataByOriginName("163");
 			dismissDialog(DIALOG_ORIGIN_MENU);
 			break;
 		//==================================
@@ -595,7 +598,7 @@ public class MATActivity extends Activity implements OnClickListener{
 			ProgressDialog dialog = new ProgressDialog(this);
 			dialog.setTitle("提示:");
 			dialog.setMessage("数据正在加载中，请稍后...");
-			dialog.setCancelable(false);
+//			dialog.setCancelable(false);
 			return dialog;
 			
 		}else if(id==DIALOG_CONDITIONBAR){
