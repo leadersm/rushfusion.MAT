@@ -126,7 +126,6 @@ public class MATActivity extends Activity implements OnClickListener{
 
 
 	private void initCategory(String origin) {
-		parent.removeAllViews();
 		final ViewGroup level1 = (ViewGroup) findViewById(R.id.level1);
 		level1.removeAllViews();
 
@@ -229,6 +228,9 @@ public class MATActivity extends Activity implements OnClickListener{
 			@Override
 			protected void onPreExecute() {
 				super.onPreExecute();
+				typeView.removeAllViews();
+				yearView.removeAllViews();
+				areaView.removeAllViews();
 				if(types!=null)
 				types.clear();
 				if(years!=null)
@@ -243,6 +245,13 @@ public class MATActivity extends Activity implements OnClickListener{
 				types = DataParser.getInstance(MATActivity.this,currentOrigin).getTypes(params[0]);
 				years = DataParser.getInstance(MATActivity.this,currentOrigin).getYears(params[0]);
 				areas = DataParser.getInstance(MATActivity.this,currentOrigin).getAreas(params[0]);
+				while(types==null||years==null||areas==null){
+					try {
+						Thread.sleep(10);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
 				conditions.put("type", types);
 				conditions.put("year", years);
 				conditions.put("area", areas);
@@ -280,10 +289,6 @@ public class MATActivity extends Activity implements OnClickListener{
 	private void addConditionButtons(final ViewGroup typeView,
 			final ViewGroup areaView, final ViewGroup yearView,
 			List<String> types, List<String> years, List<String> areas) {
-		
-		typeView.removeAllViews();
-		areaView.removeAllViews();
-		yearView.removeAllViews();
 		
 		final Button allType = new Button(this);
 		final Button allYear = new Button(this);
@@ -522,6 +527,10 @@ public class MATActivity extends Activity implements OnClickListener{
 
 	private void changeDataByOriginName(String origin) {
 		currentOrigin = origin;
+		currentCategory = "";
+		currentType = "";
+		currentArea = "";
+		currentYear = "";
 		initCategory(currentOrigin);
 	}
 
