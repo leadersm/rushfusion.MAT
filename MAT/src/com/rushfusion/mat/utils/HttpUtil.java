@@ -2,6 +2,9 @@ package com.rushfusion.mat.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Map;
 
 import org.apache.http.HttpEntity;
@@ -14,9 +17,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
-
-import com.rushfusion.mat.MATActivity;
-
 import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -85,6 +85,27 @@ public class HttpUtil {
 			e.printStackTrace();
 		}
 		return inputStream;
+	}
+	
+	
+	public InputStream getInputStreamFromUrl1(String strUrl) {
+		try {
+			URL url=new URL(strUrl);
+			HttpURLConnection http=(HttpURLConnection)url.openConnection();
+			int nRC=http.getResponseCode();
+			InputStream is ;
+			if(nRC==HttpURLConnection.HTTP_OK){
+			    is = http.getInputStream();
+			    return is ;
+			}
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null ;
 	}
 	
 	/**

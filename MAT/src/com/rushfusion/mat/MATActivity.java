@@ -25,7 +25,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.rushfusion.mat.page.FilmClassPage;
 import com.rushfusion.mat.page.PageCache;
@@ -45,10 +44,13 @@ public class MATActivity extends Activity implements OnClickListener{
 	public static final int DIALOG_CONDITIONBAR = 3;
 	public static final int DIALOG_WIRELESS_SETTING = 4;
 	public static final int DIALOG_ORIGIN_MENU = 5;
+	
 	private ViewGroup parent;
+	private View level2;
 	private ViewGroup menu;
 	private ViewGroup conditionBar;
 	private ViewGroup chooseBar;
+	
 	private String currentOrigin="sina";
 	private String currentCategory="首页";
 	private String currentType="";
@@ -85,6 +87,8 @@ public class MATActivity extends Activity implements OnClickListener{
 		sp = getSharedPreferences("MatHistory",Context.MODE_WORLD_READABLE);
 		editor = sp.edit();
 		res = getResources();
+		level2 = findViewById(R.id.level_2);
+		level2.setVisibility(View.INVISIBLE);
 	}
     
     Handler handler = new Handler(){
@@ -117,32 +121,14 @@ public class MATActivity extends Activity implements OnClickListener{
 		byScore.setOnClickListener(this);
 		byComment.setOnClickListener(this);
 		byCondition.setOnClickListener(this);
-		updateChooseBar(currentSort, chooseBar.findViewById(R.id.indicator_play));
+		updateChooseBar(chooseBar.findViewById(R.id.indicator_play));
 	}
 
 
 	private void initCategory(String origin) {
+		parent.removeAllViews();
 		final ViewGroup level1 = (ViewGroup) findViewById(R.id.level1);
 		level1.removeAllViews();
-		Button shouye = new Button(this);
-		setCategoryBtnStyle(shouye,"首页");
-		shouye.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				currentCategory = "首页";
-				initConditionBar();
-				while(types==null){
-					try {
-						Thread.sleep(10);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-				updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
-			}
-		});
-		level1.addView(shouye);
 
 		new AsyncTask<String, Void, List<String>>(){
 
@@ -162,6 +148,7 @@ public class MATActivity extends Activity implements OnClickListener{
 			protected void onPostExecute(List<String> result) {
 				super.onPostExecute(result);
 				dismissDialog(DIALOG_LOADING);
+				level2.setVisibility(View.VISIBLE);
 				if(result==null){
 					handler.sendEmptyMessage(DIALOG_CONNECTEDREFUSED);
 					return;
@@ -186,7 +173,6 @@ public class MATActivity extends Activity implements OnClickListener{
 					}
 				});
 				level1.addView(shouye);
-				
 				
 				for(int i = 0;i<categories.size();i++){
 					Button btn = new Button(MATActivity.this);
@@ -226,11 +212,6 @@ public class MATActivity extends Activity implements OnClickListener{
 	}
 	
 	
-	public void showDialog1() {
-		Dialog dialog = ProgressDialog.show(this, "网络连接异常", "请您稍候");
-	}
-
-
 	private void initConditionBar() {
 		if(currentCategory.equals("首页")){
 			chooseBar.setVisibility(View.GONE);
@@ -262,12 +243,16 @@ public class MATActivity extends Activity implements OnClickListener{
 				conditions.put("type", types);
 				conditions.put("year", years);
 				conditions.put("area", areas);
+				Log.d("MATActivity", "doInBackground:"+types) ;
+				Log.d("MATActivity", "doInBackground:"+years) ;
+				Log.d("MATActivity", "doInBackground:"+areas) ;
 				return conditions;
 			}
 			
 			@Override
 			protected void onPostExecute(HashMap<String,List<String>> result) {
 				super.onPostExecute(result);
+				Log.d("MATActivity", "onPostExecute:"+result) ;
 				if(result!=null){
 					List<String> types = result.get("type");
 					List<String> years = result.get("year");
@@ -497,22 +482,22 @@ public class MATActivity extends Activity implements OnClickListener{
 			break;
 		//==================================
 		case R.id.byPlay:
-			updateChooseBar(currentSort,chooseBar.findViewById(R.id.indicator_play));
+			updateChooseBar(chooseBar.findViewById(R.id.indicator_play));
 			currentSort = "play";
 			updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			break;
 		case R.id.byComment:
-			updateChooseBar(currentSort,chooseBar.findViewById(R.id.indicator_comment));
+			updateChooseBar(chooseBar.findViewById(R.id.indicator_comment));
 			currentSort = "comment";
 			updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);			
 			break;
 		case R.id.byScore:
-			updateChooseBar(currentSort,chooseBar.findViewById(R.id.indicator_score));
+			updateChooseBar(chooseBar.findViewById(R.id.indicator_score));
 			currentSort = "score";
 			updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			break;
 		case R.id.byRecent:
-			updateChooseBar(currentSort,chooseBar.findViewById(R.id.indicator_recent));
+			updateChooseBar(chooseBar.findViewById(R.id.indicator_recent));
 			currentSort = "recent";
 			updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			break;
@@ -527,19 +512,12 @@ public class MATActivity extends Activity implements OnClickListener{
 	}
 	
 	
-	private void updateChooseBar(String crtsort, View v) {
-		View indecator = null ;
-		if(crtsort.equals("play")){
-			indecator = chooseBar.findViewById(R.id.indicator_play);
-		}else if(crtsort.endsWith("score")){
-			indecator = chooseBar.findViewById(R.id.indicator_score);
-		}else if(crtsort.endsWith("comment")){
-			indecator = chooseBar.findViewById(R.id.indicator_comment);
-		}else if(crtsort.endsWith("recent")){
-			indecator =  chooseBar.findViewById(R.id.indicator_recent);
-		}
-		indecator.setBackgroundResource(R.drawable.red_normal);
-		v.setBackgroundResource(R.drawable.red_active);
+	private void updateChooseBar(View indicator) {
+		chooseBar.findViewById(R.id.indicator_play).setBackgroundResource(R.drawable.red_normal);
+		chooseBar.findViewById(R.id.indicator_score).setBackgroundResource(R.drawable.red_normal);
+		chooseBar.findViewById(R.id.indicator_comment).setBackgroundResource(R.drawable.red_normal);
+		chooseBar.findViewById(R.id.indicator_recent).setBackgroundResource(R.drawable.red_normal);
+		indicator.setBackgroundResource(R.drawable.red_active);
 	}
 
 
@@ -620,7 +598,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		}else if(id == DIALOG_LOADING){
 			ProgressDialog dialog = new ProgressDialog(this);
 			dialog.setTitle("提示:");
-			dialog.setMessage("数据正在加载中，请稍后");
+			dialog.setMessage("数据正在加载中，请稍后...");
 			dialog.setCancelable(false);
 			return dialog;
 			
