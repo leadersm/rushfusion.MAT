@@ -132,6 +132,7 @@ public class DataParser {
 		String[] PROPERTIES = {"total","score","comment","artists","name","area","play","count","length","recent","year","directors","thumb","url","type","id","description","category"} ;
 		Map<String, String> nodeMap = null ;
 		List<Map<String,String>> dataList = new ArrayList<Map<String,String>>() ;
+		if(inputSteam==null)return dataList;
 		try {
 			StringBuilder builder = new StringBuilder() ;
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputSteam)) ;
