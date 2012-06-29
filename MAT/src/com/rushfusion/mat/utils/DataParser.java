@@ -13,25 +13,21 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import android.app.Activity;
 import android.util.Log;
 
 public class DataParser {
-	
+	private String CATEGORY_URL = "http://tvsrv.webhop.net:9061/" ;
 	private static final String TAG = "DataParser" ;
-	private static String mSource;
+	private static String mSource ;
 	private static DataParser parser;
 	private static Activity mContext;
-	private Map<String, String> url = null ;
 	private int total;
 	private DataParser() {
-		if(url==null)
-			initUrl() ;
 	}
 	
-	public static DataParser getInstance(Activity context,String source){
-		mSource = source;
+	public static DataParser getInstance(Activity context, String source){
+		mSource = source ;
 		if(parser==null){
 			mContext = context;
 			parser = new DataParser();
@@ -39,76 +35,69 @@ public class DataParser {
 		return parser;
 	}
 	
-	private void initUrl() {
-		if(url==null) {
-			url = new HashMap<String, String>() ;
-		}
-		url.put("category", "http://tvsrv.webhop.net:9061/category?source=") ;
-		url.put("type", "http://tvsrv.webhop.net:9061/type?source=") ;
-		url.put("year", "http://tvsrv.webhop.net:9061/year?source=") ;
-		url.put("area", "http://tvsrv.webhop.net:9061/area?source=") ;
-	}
-	
 	public List<String> getCategory() {
 		HttpUtil httpUtil = HttpUtil.getInstance(mContext) ;
-		String strUrl = url.get("category")+mSource ;
-		Log.d("MAT", "getCategory-->"+strUrl);
-		if(httpUtil.connectServerByURL(strUrl)) {
-			return loadData(httpUtil.getInputStreamFromUrl(strUrl)) ;
-		}
-		return null;
+		String strUrl = CATEGORY_URL+"category?source=" + mSource ;
+		Log.d(TAG, "category url:"+strUrl) ;
+		//if(httpUtil.connectServerByURL(strUrl)) {
+			return loadData(httpUtil.getInputStreamFromUrl1(strUrl)) ;
+		//}
+		//return null;
 	}
 
 	public List<String> getTypes(String category) {
 		HttpUtil httpUtil = HttpUtil.getInstance(mContext) ;
-		String strUrl = url.get("type")+mSource+"&category="+category ;
-		Log.d("MAT", "getTypes-->"+strUrl);
-		if(httpUtil.connectServerByURL(strUrl)) {
+		String strUrl = CATEGORY_URL+ "type?source=" + mSource + "&category=" + category ;
+		Log.d(TAG, "type url:"+strUrl) ;
+		//if(httpUtil.connectServerByURL(strUrl)) {
 			return loadData(httpUtil.getInputStreamFromUrl(strUrl)) ;
-		}
-		return null;
+		//}
+//		return null;
 	}
 
 	public List<String> getYears(String category) {
 		HttpUtil httpUtil = HttpUtil.getInstance(mContext) ;
-		String strUrl = url.get("year")+mSource+"&category="+category ;
-		Log.d("MAT", "getYears-->"+strUrl);
-		if(httpUtil.connectServerByURL(strUrl)) {
+		String strUrl = CATEGORY_URL+ "year?source="  + mSource + "&category=" + category ;
+		Log.d(TAG, "year url:"+strUrl) ;
+//		if(httpUtil.connectServerByURL(strUrl)) {
 			List<String> list = new LinkedList<String>() ;
-			List<String> listStr = loadData(httpUtil.getInputStreamFromUrl(strUrl)) ;
-			Object[] str = listStr.toArray() ;
-			if(str.length>0)
-			for(int i=str.length-1; i>=0; i--) {
-				list.add(str[i].toString()) ;
+			List<String> listStr = loadData(httpUtil.getInputStreamFromUrl1(strUrl)) ;
+			if(listStr!=null) {
+				Object[] str = listStr.toArray() ;
+				for(int i=str.length-1; i>=0; i--) {
+					list.add(str[i].toString()) ;
+				}
+				return list ;
 			}
-			return list ;
-		}
+//		}
 		return null;
 	}
 
 	public List<String> getAreas(String category) {
 		HttpUtil httpUtil = HttpUtil.getInstance(mContext) ;
-		String strUrl = url.get("area")+mSource+"&category="+category ;
-		Log.d("MAT", "getAreas-->"+strUrl);
-		if(httpUtil.connectServerByURL(strUrl)) {
-			return loadData(httpUtil.getInputStreamFromUrl(strUrl)) ;
-		}
-		return null;
+		String strUrl = CATEGORY_URL+ "area?source="  + mSource + "&category=" + category ;
+		Log.d(TAG, "area url:"+strUrl) ;
+		//if(httpUtil.connectServerByURL(strUrl)) {
+			return loadData(httpUtil.getInputStreamFromUrl1(strUrl)) ;
+		//}
+		//return null;
 	}
 	
 	public List<Map<String,String>> get(String url) {
 		HttpUtil httpUtil = HttpUtil.getInstance(mContext) ;
 		String strUrl = url ;
-		if(httpUtil.connectServerByURL(strUrl)) {
-			return loadFileData(httpUtil.getInputStreamFromUrl(strUrl)) ;
-		}
-		return null;
+		//if(httpUtil.connectServerByURL(strUrl)) {
+			return loadFileData(httpUtil.getInputStreamFromUrl1(strUrl)) ;
+		//}
+		//return null;
 	}
 	
 	public List<String> loadData(InputStream inputSteam) {
 		List<String> dataList = null ;
-		if(inputSteam==null)return dataList;
 		try {
+			Log.d("InputSteam", "inputSteam:"+inputSteam) ;
+			if(inputSteam==null)
+				return null ;
 			StringBuilder builder = new StringBuilder() ;
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputSteam)) ;
 			for(String s = bufferedReader.readLine(); s != null; s = bufferedReader.readLine()) {
@@ -119,7 +108,6 @@ public class DataParser {
 			String total = jsonObject.getString("total") ;
 			JSONArray itemsArray = jsonObject.getJSONArray("items") ;
 			dataList = new ArrayList<String>() ;
-			//dataList.add(total) ;
 			for(int i=0; i<itemsArray.length(); i++) {
 				dataList.add(itemsArray.getString(i)) ;
 			}
