@@ -92,6 +92,7 @@ public class HttpUtil {
 		try {
 			URL url=new URL(strUrl);
 			HttpURLConnection http=(HttpURLConnection)url.openConnection();
+			http.setConnectTimeout(NETWORK_CONNECT_TIMEOUT) ;
 			int nRC=http.getResponseCode();
 			InputStream is ;
 			if(nRC==HttpURLConnection.HTTP_OK){
