@@ -78,8 +78,6 @@ public class HttpUtil {
 			if(connectServerByURL(url)) {
 				HttpEntity entity = mHttpResponse.getEntity() ;
 				inputStream = entity.getContent() ;
-			}else{
-				mContext.showDialog(MATActivity.Dialog_ConnectedRefused);
 			}
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
