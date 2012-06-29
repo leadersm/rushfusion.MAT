@@ -21,6 +21,7 @@ import android.util.Log;
 
 public class DataParser {
 	
+	private static final String TAG = "DataParser" ;
 	private static String mSource ;
 	private static DataParser parser;
 	private static Activity mContext;
@@ -121,9 +122,11 @@ public class DataParser {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			Log.d(TAG, "IOException:"+e.getStackTrace()+"") ;
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			Log.d(TAG, "JSONException"+e.getStackTrace()+"") ;
 		}
 		return dataList;
 	}
