@@ -93,6 +93,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 
 		try {
 			mediaPlayer.setDataSource(filePath);
+//			mediaPlayer.setDataSource("/mnt/sdcard/video/f_001126.mp4");
 		} catch (IllegalArgumentException e) {
 			System.out.println("mediaplayer 设置数据中出错，错误信息："+e.toString());
 		} catch (IllegalStateException e) {
