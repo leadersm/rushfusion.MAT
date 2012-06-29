@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="乐视>首页>" />
+        android:text="" />
 
     <include
         android:id="@+id/level_1"
