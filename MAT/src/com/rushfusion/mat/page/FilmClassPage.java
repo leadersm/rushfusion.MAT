@@ -25,7 +25,7 @@ public class FilmClassPage extends BasePage {
 	private ViewGroup mParent ;
 	private String mUrl ;
 	private int currentPage = 1 ;
-	private int pageSize = 0 ;
+	private int pageSize = 0 ; 
 	private int total ;
 	private List<Map<String, String>> nodeList;
 	protected ViewGroup filmItems[];
