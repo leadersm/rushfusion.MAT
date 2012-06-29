@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -24,6 +25,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rushfusion.mat.page.FilmClassPage;
 import com.rushfusion.mat.page.PageCache;
@@ -143,7 +145,8 @@ public class MATActivity extends Activity implements OnClickListener{
 			@Override
 			protected void onPostExecute(List<String> result) {
 				super.onPostExecute(result);
-				if(result!=null)
+				if(categories==null)
+					return ;
 				for(int i = 0;i<categories.size();i++){
 					Button btn = new Button(MATActivity.this);
 					final String name = categories.get(i);
@@ -175,6 +178,11 @@ public class MATActivity extends Activity implements OnClickListener{
 			}
 			
 		}.execute(currentOrigin);
+	}
+	
+	
+	public void showDialog1() {
+		Dialog dialog = ProgressDialog.show(this, "网络连接异常", "请您稍候");
 	}
 
 
