@@ -13,62 +13,6 @@
         android:layout_height="wrap_content" 
         android:gravity="center_vertical"
         >
-
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="100dip"
-            android:layout_height="wrap_content"
-            style="@style/font.button_category"
-            android:text="首页" />
-
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="100dip"
-            style="@style/font.button_category"
-            android:layout_height="wrap_content"
-            android:text="电影" />
-
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="100dip"
-            style="@style/font.button_category"
-            android:layout_height="wrap_content"
-            android:text="电视剧" />
-
-        <Button
-            android:id="@+id/button3"
-            android:layout_width="100dip"
-            style="@style/font.button_category"
-            android:layout_height="wrap_content"
-            android:text="综艺" />
-
-        <Button
-            android:id="@+id/button4"
-            android:layout_width="100dip"
-            style="@style/font.button_category"
-            android:layout_height="wrap_content"
-            android:text="动漫" />
-
-        <Button
-            android:id="@+id/button5"
-            android:layout_width="100dip"
-            style="@style/font.button_category"
-            android:layout_height="wrap_content"
-            android:text="纪录片" />
-
-        <Button
-            android:id="@+id/button6"
-            android:layout_width="100dip"
-            style="@style/font.button_category"
-            android:layout_height="wrap_content"
-            android:text="娱乐" />
-
-        <Button
-            android:id="@+id/button7"
-            android:layout_width="100dip"
-            style="@style/font.button_category"
-            android:layout_height="wrap_content"
-            android:text="音乐" />
     </LinearLayout>
 
 </HorizontalScrollView>

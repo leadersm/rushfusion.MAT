@@ -15,19 +15,11 @@
         android:text="乐视>首页>" />
 
     <include
-        android:id="@+id/menu"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/headerInfo"
-        layout="@layout/menu" />
-
-    <include
         android:id="@+id/level_1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/menu"
+        android:layout_below="@+id/headerInfo"
         layout="@layout/level1" />
 
     <include
@@ -47,14 +39,6 @@
         android:layout_below="@+id/level_2"
         android:orientation="vertical" >
     </LinearLayout>
-
-<!--     <include
-        android:id="@+id/conditionBar"
-        android:layout_width="fill_parent"
-        android:layout_height="250dip"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/level_2"
-        layout="@layout/conditionbar" /> -->
 
     <ProgressBar
         android:id="@+id/content_progressbar"

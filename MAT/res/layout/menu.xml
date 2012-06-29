@@ -1,56 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ScrollView1"
-    android:layout_height="fill_parent" 
-    android:layout_width="fill_parent"
-    android:background="@drawable/label_bg"
-    >
-
-    <LinearLayout
-        android:layout_width="fill_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="800dip"
+    android:layout_height="400dip"
+    android:background="@drawable/bg_menu" >
+
+    <TextView
+        android:id="@+id/textView1"
+        style="@style/font.header"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:layout_above="@+id/linearLayout1"
+        android:layout_alignLeft="@+id/linearLayout1"
+        android:layout_marginBottom="40dip"
+        android:text="@string/tip_menu" />
 
-        <Button
-            android:id="@+id/leshi"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/font.button_category"
-            android:background="@drawable/leshi"
-             />
-        <Button
-            android:id="@+id/qiyi"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            style="@style/font.button_category"
-            android:background="@drawable/qiyi"
-             />
-
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" >
 
         <Button
             android:id="@+id/souhu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             style="@style/font.button_category"
-            android:background="@drawable/souhu"
-             />
-
-        <Button
-            android:id="@+id/tudou"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/font.button_category"
-            android:background="@drawable/tudou"
-             />
+            android:layout_width="120dip"
+            android:layout_height="80dip"
+            android:background="@drawable/souhu" />
 
         <Button
             android:id="@+id/sina"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             style="@style/font.button_category"
-            android:background="@drawable/sina"
-             />
+            android:layout_width="120dip"
+            android:layout_height="80dip"
+            android:background="@drawable/sina" />
 
+        <Button
+            android:id="@+id/qiyi"
+            style="@style/font.button_category"
+            android:layout_width="120dip"
+            android:layout_height="80dip"
+            android:background="@drawable/qiyi" />
+
+        <Button
+            android:id="@+id/tudou"
+            style="@style/font.button_category"
+            android:layout_width="120dip"
+            android:layout_height="80dip"
+            android:background="@drawable/tudou" />
+
+        <Button
+            android:id="@+id/leshi"
+            style="@style/font.button_category"
+            android:layout_width="120dip"
+            android:layout_height="80dip"
+            android:background="@drawable/leshi" />
     </LinearLayout>
 
-</HorizontalScrollView>
+</RelativeLayout>
