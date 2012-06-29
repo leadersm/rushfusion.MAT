@@ -25,7 +25,7 @@ public class FilmClassPage extends BasePage {
 	private ViewGroup mParent ;
 	private String mUrl ;
 	private int currentPage = 1 ;
-	private int pageSize = 0 ; 
+	private int pageSize = 0 ;
 	private int total ;
 	private List<Map<String, String>> nodeList;
 	protected ViewGroup filmItems[];
@@ -107,7 +107,7 @@ public class FilmClassPage extends BasePage {
 					Movie movie = new Movie(Integer.parseInt(map.get("count")),Integer.parseInt(map.get("total")),Integer.parseInt(map.get("score")),
 							Integer.parseInt(map.get("comment")),map.get("category"),map.get("name"),map.get("type"),Integer.parseInt(map.get("year")),
 							map.get("directors"),map.get("artists"),map.get("area"),map.get("description"),
-							map.get("thumb"),map.get("length"),map.get("url"),Integer.parseInt(map.get("play")),Integer.parseInt(map.get("id")),Integer.parseInt(map.get("recent"))) ;
+							map.get("thumb"),map.get("length"),map.get("url"),Integer.parseInt(map.get("play")),map.get("id"),Integer.parseInt(map.get("recent"))) ;
 					Intent intent = new Intent(mContext,ItemDetailPage.class) ;
 					Bundle bundle = new Bundle() ;
 					bundle.putSerializable("movieInfo", movie) ;
@@ -275,7 +275,7 @@ public class FilmClassPage extends BasePage {
 	
 	protected int itemSize(){
 		int size = FILM_NUM ;
-		if(nodeList.size()<=FILM_NUM) {
+		if(nodeList!=null && nodeList.size()<=FILM_NUM) {
 			size = nodeList.size() ;
 		}
 		return size ;

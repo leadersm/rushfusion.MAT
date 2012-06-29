@@ -25,7 +25,7 @@ public class Movie implements Serializable{
 	private String length ;	//时长
 	private String url ;	//播放地址
 	private int play ;
-	private int id ;
+	private String id ;
 	private int recent ;
 	
 	public Movie(){
@@ -127,22 +127,22 @@ public class Movie implements Serializable{
 	public void setPlay(int play) {
 		this.play = play;
 	}
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
 	public int getRecent() {
 		return recent;
 	}
 	public void setRecent(int recent) {
 		this.recent = recent;
 	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	public Movie(int count, int total, int score, int comment, String category,
 			String name, String type, int year, String directors,
 			String artists, String area, String description, String thumb,
-			String length, String url, int play, int id, int recent) {
+			String length, String url, int play, String id, int recent) {
 		super();
 		this.count = count;
 		this.total = total;
