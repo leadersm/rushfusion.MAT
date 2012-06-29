@@ -243,9 +243,6 @@ public class MATActivity extends Activity implements OnClickListener{
 				conditions.put("type", types);
 				conditions.put("year", years);
 				conditions.put("area", areas);
-				Log.d("MATActivity", "doInBackground:"+types) ;
-				Log.d("MATActivity", "doInBackground:"+years) ;
-				Log.d("MATActivity", "doInBackground:"+areas) ;
 				return conditions;
 			}
 			
@@ -281,6 +278,9 @@ public class MATActivity extends Activity implements OnClickListener{
 	private void addConditionButtons(final ViewGroup typeView,
 			final ViewGroup areaView, final ViewGroup yearView,
 			List<String> types, List<String> years, List<String> areas) {
+		
+		if(types==null || years==null || areas==null)
+			return ;
 		
 		typeView.removeAllViews();
 		areaView.removeAllViews();

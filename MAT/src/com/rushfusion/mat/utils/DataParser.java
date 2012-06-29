@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -15,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import android.app.Activity;
 import android.util.Log;
+import android.widget.Toast;
 
 public class DataParser {
 	private String CATEGORY_URL = "http://tvsrv.webhop.net:9061/" ;
@@ -96,8 +98,9 @@ public class DataParser {
 		List<String> dataList = null ;
 		try {
 			Log.d("InputSteam", "inputSteam:"+inputSteam) ;
-			if(inputSteam==null)
+			if(inputSteam==null) {
 				return null ;
+			}
 			StringBuilder builder = new StringBuilder() ;
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputSteam)) ;
 			for(String s = bufferedReader.readLine(); s != null; s = bufferedReader.readLine()) {
@@ -111,6 +114,8 @@ public class DataParser {
 			for(int i=0; i<itemsArray.length(); i++) {
 				dataList.add(itemsArray.getString(i)) ;
 			}
+		} catch (SocketTimeoutException ex) {
+			Log.d(TAG, "网络连接异常！") ;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -119,10 +124,9 @@ public class DataParser {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			Log.d(TAG, "JSONException"+e.getStackTrace()+"") ;
-		}
+		} 
 		return dataList;
 	}
-	
 	
 	public List<Map<String,String>> loadFileData(InputStream inputSteam) {
 		String[] PROPERTIES = {"total","score","comment","artists","name","area","play","count","length","recent","year","directors","thumb","url","type","id","description","category"} ;
