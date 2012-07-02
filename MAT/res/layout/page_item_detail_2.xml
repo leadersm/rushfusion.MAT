@@ -90,7 +90,7 @@
                       android:gravity="bottom"
                       android:textColor="#80afffff"
                       android:textSize="20dip"
-                      android:background="@drawable/bg_textview"
+                      android:background="@drawable/bg_text"
                       android:text="  评分 ："/>
                   <TextView android:id="@+id/page_item_detail_socres"
                       android:layout_width="fill_parent"
@@ -113,7 +113,7 @@
                       android:gravity="bottom"
                       android:textColor="#80afffff"
                       android:textSize="20dip"
-                      android:background="@drawable/bg_textview"
+                      android:background="@drawable/bg_text"
                       android:text="  时长 ："/>
                   <TextView android:id="@+id/page_item_detail_length"
                       android:layout_width="fill_parent"
@@ -136,7 +136,7 @@
                       android:gravity="bottom"
                       android:textColor="#80afffff"
                       android:textSize="20dip"
-                      android:background="@drawable/bg_textview"
+                      android:background="@drawable/bg_text"
                       android:text="  年代 ："/>
                   <TextView android:id="@+id/page_item_detail_year"
                       android:layout_width="fill_parent"
@@ -167,7 +167,7 @@
                       android:textColor="#80afffff"
                       android:textSize="20dip"
                       android:gravity="bottom"
-                      android:background="@drawable/bg_textview"
+                      android:background="@drawable/bg_text"
                       android:text="  导演 ："/>
                   <TextView android:id="@+id/page_item_detail_directors"
                       android:layout_width="fill_parent"
@@ -190,7 +190,7 @@
                       android:textColor="#80afffff"
                       android:textSize="20dip"
                       android:gravity="bottom"
-                      android:background="@drawable/bg_textview"
+                      android:background="@drawable/bg_text"
                       android:text="  演员 ："/>
                   <TextView android:id="@+id/page_item_detail_artists"
                       android:layout_width="fill_parent"
