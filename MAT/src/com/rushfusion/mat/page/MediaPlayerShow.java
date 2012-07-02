@@ -141,7 +141,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 				saveTime = mediaPlayer.getCurrentPosition();
 				return saveTime;
 			}else{
-				return 0;
+				return saveTime;
 			}
 		}
 		return 0;
@@ -328,13 +328,47 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	@Override
 	public boolean onInfo(MediaPlayer mp, int what, int extra) {
 //		Toast.makeText(this, "信息读取状态代码："+what, 500).show();
-		return false;
+		switch(what){
+		case MediaPlayer.MEDIA_INFO_BAD_INTERLEAVING:
+			System.out.println("音视频交叉错误");
+			break;
+		case MediaPlayer.MEDIA_INFO_BUFFERING_END:
+			System.out.println("缓冲结束");
+			break;
+		case MediaPlayer.MEDIA_INFO_BUFFERING_START:
+			System.out.println("缓冲开始");
+			break;
+		case MediaPlayer.MEDIA_INFO_METADATA_UPDATE:
+			System.out.println("原资料更新");
+			break;
+		case MediaPlayer.MEDIA_INFO_NOT_SEEKABLE:
+			System.out.println("该视频类型，无法定位");
+			break;
+		case MediaPlayer.MEDIA_INFO_VIDEO_TRACK_LAGGING:
+			System.out.println("音视频交叉错误");
+			break;
+		}
+		return true;
 	}
 
 	@Override
 	public boolean onError(MediaPlayer mp, int what, int extra) {
 //		Toast.makeText(this, "错误代码："+what , 500).show();
-		return false;
+		switch(what){
+		case MediaPlayer.MEDIA_ERROR_UNKNOWN:
+			Toast.makeText(this, "网络连接出现错误，请稍后再试！", 1000).show();
+			finish();
+			break;
+		case MediaPlayer.MEDIA_ERROR_SERVER_DIED:
+			Toast.makeText(this, "网络连接出现错误，请稍后再试！", 1000).show();
+			finish();
+			break;
+		case MediaPlayer.MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK:
+			Toast.makeText(this, "网络连接出现错误，请稍后再试！", 1000).show();
+			finish();
+			break;
+		}
+		return true;
 	}
 
 	@Override
