@@ -40,13 +40,26 @@ public class FilmClassPage extends BasePage {
 	int UPDATEPAGEPOST_DELAY = 300;
 
 	private static final int UPDATE_DATA = 10 ;
+	TextView filmName;
+	TextView director;
+	TextView actor;
+	TextView area;
+	TextView introduction;
+	
+	Map<String,String> map;
+	boolean isUpdating = false;
+	
 	Handler handler = new Handler(){
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
 			case UPDATE_DATA:
-				Map<String,String> map = (Map<String, String>) msg.obj ;
-				updateData(map) ;
-				
+				isUpdating = true;
+				map = (Map<String, String>) msg.obj ;
+				if(isUpdating){
+					contentView.removeCallbacks(updateRunnable);
+					contentView.post(updateRunnable);
+				}else
+					contentView.post(updateRunnable);
 				break;
 
 			default:
@@ -54,6 +67,17 @@ public class FilmClassPage extends BasePage {
 			}
 		};
 	} ;
+	
+	Runnable updateRunnable = new Runnable() {
+		
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			updateData(map) ;
+			isUpdating = false;
+		}
+	};
+	
 	public FilmClassPage(Activity context, ViewGroup parent) {
 		super(context, parent);
 		mContext = context ;
@@ -88,6 +112,11 @@ public class FilmClassPage extends BasePage {
 			@Override
 			public void onFinished(List<Map<String, String>> result) {
 				loading = false ;
+				filmName = (TextView)contentView.findViewById(R.id.field_filmname) ;
+				director = (TextView)contentView.findViewById(R.id.field_director) ;
+				actor = (TextView)contentView.findViewById(R.id.field_actor) ;
+				area = (TextView)contentView.findViewById(R.id.field_area) ;
+				introduction = (TextView)contentView.findViewById(R.id.field_introduction) ;
 				initPage() ;
 				fillData(result) ;
 				updateArrow() ;
@@ -234,15 +263,10 @@ public class FilmClassPage extends BasePage {
 	
 	private void updateData(Map<String,String> map) {
 		//Map<String, String> map = nodeList.get(index) ;
-		TextView filmName = (TextView)contentView.findViewById(R.id.field_filmname) ;
 		filmName.setText(map.get("name")) ;
-		TextView director = (TextView)contentView.findViewById(R.id.field_director) ;
 		director.setText(mContext.getString(R.string.director) + ":" +map.get("directors")) ;
-		TextView actor = (TextView)contentView.findViewById(R.id.field_actor) ;
 		actor.setText(mContext.getString(R.string.actor) + ":" +map.get("artists")) ;
-		TextView area = (TextView)contentView.findViewById(R.id.field_area) ;
 		area.setText(mContext.getString(R.string.area) + ":" +map.get("area")) ;
-		TextView introduction = (TextView)contentView.findViewById(R.id.field_introduction) ;
 		introduction.setText(mContext.getString(R.string.introduction) + ":" +map.get("description")) ;
 	}
 	
