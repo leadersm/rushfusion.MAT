@@ -177,6 +177,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	@Override
 	public void seekTo(int pos) {
 		if(mediaPlayer!=null){
+//			mediaPlayer.pause();
 			pDialog.show();
 			mediaPlayer.seekTo(pos);
 		}else{
@@ -299,6 +300,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
+					mediaPlayer.seekTo(0);
 //					Toast.makeText(MediaPlayerShow.this, "从头开始播放",500).show();
 				}
 			});
@@ -316,6 +318,9 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 		Editor editor = prefs.edit();
 		editor.putInt(movieId,saveTime);
 		editor.commit();
+		if(mediaPlayer!=null){
+			mediaPlayer.release();
+		}
 		System.out.println("已保存数据： "+movieId +":"+saveTime);
 		super.onPause();
 	}
