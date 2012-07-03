@@ -53,7 +53,7 @@ public class MATActivity extends Activity implements OnClickListener{
 	public static final int DIALOG_CONDITIONBAR = 3;
 	public static final int DIALOG_WIRELESS_SETTING = 4;
 	public static final int DIALOG_ORIGIN_MENU = 5;
-	private static final int DIALOG_SEARCH = 6;
+	public static final int DIALOG_SEARCH = 6;
 	
 	private ViewGroup parent;
 	private ViewGroup menu;
@@ -67,6 +67,7 @@ public class MATActivity extends Activity implements OnClickListener{
 	private String currentYear="";
 	private String currentArea="";
 	private String currentSort="play";
+	private String currentSortInfo="";
 	
 	
 	private List<String> categories;
@@ -99,6 +100,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		res = getResources();
 		level2 = (ViewGroup) findViewById(R.id.level_2);
 		initSearchBar();
+		updateHeaderInfo();
 	}
     
     Handler handler = new Handler(){
@@ -168,6 +170,7 @@ public class MATActivity extends Activity implements OnClickListener{
 					public void onClick(View v) {
 						currentCategory = "首页";
 						initConditionBar();
+						currentSortInfo = "";
 						updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 					}
 				});
@@ -188,6 +191,7 @@ public class MATActivity extends Activity implements OnClickListener{
 							currentArea = "";
 							currentYear = "";
 							currentSort = "play";
+							currentSortInfo = "热播";
 							updatePage(currentCategory,currentType, currentArea, currentYear, currentSort);
 						}
 					});
@@ -396,7 +400,7 @@ public class MATActivity extends Activity implements OnClickListener{
 	}
 	private void updateHeaderInfo() {
 		TextView headerInfo = (TextView) findViewById(R.id.headerInfo);
-		headerInfo.setText(currentOrigin+">"+currentCategory+">"+currentType);
+		headerInfo.setText(currentOrigin+">"+currentCategory+">"+currentSortInfo);
 	}
 
     
@@ -473,21 +477,25 @@ public class MATActivity extends Activity implements OnClickListener{
 		case R.id.byPlay:
 			updateChooseBar(level2.findViewById(R.id.indicator_play));
 			currentSort = "play";
+			currentSortInfo = "热播";
 			updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			break;
 		case R.id.byComment:
 			updateChooseBar(level2.findViewById(R.id.indicator_comment));
 			currentSort = "comment";
+			currentSortInfo = "热议";
 			updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);			
 			break;
 		case R.id.byScore:
 			updateChooseBar(level2.findViewById(R.id.indicator_score));
 			currentSort = "score";
+			currentSortInfo = "好评";
 			updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			break;
 		case R.id.byRecent:
 			updateChooseBar(level2.findViewById(R.id.indicator_recent));
 			currentSort = "recent";
+			currentSortInfo = "最新";
 			updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			break;
 		case R.id.byCondition:
@@ -495,6 +503,7 @@ public class MATActivity extends Activity implements OnClickListener{
 			break;
 		//==================================
 		case R.id.bySearch:
+			currentSortInfo = "搜索结果";
 			showDialog(DIALOG_SEARCH);
 			break;
 		//==================================
@@ -641,9 +650,10 @@ public class MATActivity extends Activity implements OnClickListener{
 			public void onClick(View v) {
 				String keywords =  keyEt.getText().toString(); 
 				if(!TextUtils.isEmpty(keywords)){
-					toSearchResultPage(getSearchUrl(bywhat,keywords));
+					toSearchResultPage(getSearchUrl(bywhat,keywords),keywords);
 					keyEt.getText().clear();
 					dismissDialog(DIALOG_SEARCH);
+					updateHeaderInfo();
 				}else{
 					Toast.makeText(MATActivity.this, MATActivity.this.getString(R.string.qingshuru), 1).show();
 				}
@@ -710,9 +720,10 @@ public class MATActivity extends Activity implements OnClickListener{
 	}
 
 
-	protected void toSearchResultPage(String searchUrl) {
+	protected void toSearchResultPage(String searchUrl,String searchKey) {
 		SearchResultPage page = new SearchResultPage(this, parent);
-		page.loadPage(searchUrl, R.layout.page_film_class);
+		page.setKey(searchKey);
+		page.loadPage(searchUrl, R.layout.page_search_result);
 	}
 
 

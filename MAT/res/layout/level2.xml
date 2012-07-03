@@ -68,7 +68,7 @@
         android:layout_alignBaseline="@+id/byPlay"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/byComment"
-        android:nextFocusRight="@+id/byCondition"
+        android:nextFocusRight="@+id/bySearch"
         android:text="最新" />
 
     <View
