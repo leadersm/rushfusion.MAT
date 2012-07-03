@@ -2,6 +2,8 @@ package com.rushfusion.mat;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -14,21 +16,28 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rushfusion.mat.page.FilmClassPage;
 import com.rushfusion.mat.page.PageCache;
 import com.rushfusion.mat.page.RecommendPage;
+import com.rushfusion.mat.page.SearchResultPage;
 import com.rushfusion.mat.utils.DataParser;
 import com.rushfusion.mat.utils.HttpUtil;
 
@@ -44,12 +53,13 @@ public class MATActivity extends Activity implements OnClickListener{
 	public static final int DIALOG_CONDITIONBAR = 3;
 	public static final int DIALOG_WIRELESS_SETTING = 4;
 	public static final int DIALOG_ORIGIN_MENU = 5;
+	private static final int DIALOG_SEARCH = 6;
 	
 	private ViewGroup parent;
-	private View level2;
 	private ViewGroup menu;
 	private ViewGroup conditionBar;
-	private ViewGroup chooseBar;
+	private ViewGroup level2;
+	private ViewGroup searchBar;
 	
 	private String currentOrigin="sina";
 	private String currentCategory="首页";
@@ -87,8 +97,8 @@ public class MATActivity extends Activity implements OnClickListener{
 		sp = getSharedPreferences("MatHistory",Context.MODE_WORLD_READABLE);
 		editor = sp.edit();
 		res = getResources();
-		level2 = findViewById(R.id.level_2);
-		level2.setVisibility(View.INVISIBLE);
+		level2 = (ViewGroup) findViewById(R.id.level_2);
+		initSearchBar();
 	}
     
     Handler handler = new Handler(){
@@ -105,15 +115,11 @@ public class MATActivity extends Activity implements OnClickListener{
     };
     
 	private void initChooseBar() {
-		chooseBar = (ViewGroup) findViewById(R.id.level_2);
-		if(currentCategory.equals("首页"))
-			chooseBar.setVisibility(View.GONE);
-		else
-			chooseBar.setVisibility(View.VISIBLE);
 		Button byPlay = (Button) findViewById(R.id.byPlay);
 		Button byRecent = (Button) findViewById(R.id.byRecent);
 		Button byScore = (Button) findViewById(R.id.byScore);
 		Button byComment = (Button) findViewById(R.id.byComment);
+		Button bySearch = (Button) findViewById(R.id.bySearch);
 		Button byCondition = (Button) findViewById(R.id.byCondition);
 		
 		byPlay.setOnClickListener(this);
@@ -121,7 +127,8 @@ public class MATActivity extends Activity implements OnClickListener{
 		byScore.setOnClickListener(this);
 		byComment.setOnClickListener(this);
 		byCondition.setOnClickListener(this);
-		updateChooseBar(chooseBar.findViewById(R.id.indicator_play));
+		bySearch.setOnClickListener(this);
+		updateChooseBar(level2.findViewById(R.id.indicator_play));
 	}
 
 
@@ -129,12 +136,12 @@ public class MATActivity extends Activity implements OnClickListener{
 		parent.removeAllViews();
 		final ViewGroup level1 = (ViewGroup) findViewById(R.id.level1);
 		level1.removeAllViews();
-
 		new AsyncTask<String, Void, List<String>>(){
 
 			@Override
 			protected void onPreExecute() {
 				super.onPreExecute();
+				level2.setVisibility(View.GONE);
 				showDialog(DIALOG_LOADING);
 			}
 
@@ -148,7 +155,6 @@ public class MATActivity extends Activity implements OnClickListener{
 			protected void onPostExecute(List<String> result) {
 				super.onPostExecute(result);
 				dismissDialog(DIALOG_LOADING);
-				level2.setVisibility(View.VISIBLE);
 				if(result==null){
 					handler.sendEmptyMessage(DIALOG_CONNECTEDREFUSED);
 					return;
@@ -162,13 +168,6 @@ public class MATActivity extends Activity implements OnClickListener{
 					public void onClick(View v) {
 						currentCategory = "首页";
 						initConditionBar();
-						while(types==null){
-							try {
-								Thread.sleep(10);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-						}
 						updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 					}
 				});
@@ -185,13 +184,6 @@ public class MATActivity extends Activity implements OnClickListener{
 						public void onClick(View v) {
 							currentCategory = name;
 							initConditionBar();
-							while(types==null||areas==null||years==null){
-								try {
-									Thread.sleep(10);
-								} catch (InterruptedException e) {
-									e.printStackTrace();
-								}
-							}
 							currentType = "";
 							currentArea = "";
 							currentYear = "";
@@ -214,9 +206,10 @@ public class MATActivity extends Activity implements OnClickListener{
 	
 	private void initConditionBar() {
 		if(currentCategory.equals("首页")){
-			chooseBar.setVisibility(View.GONE);
+			level2.setVisibility(View.GONE);
+			return;
 		}else
-			chooseBar.setVisibility(View.VISIBLE);
+			level2.setVisibility(View.VISIBLE);
 		final ViewGroup typeView = (ViewGroup) conditionBar.findViewById(R.id.byType);
 		final ViewGroup areaView = (ViewGroup) conditionBar.findViewById(R.id.byArea);
 		final ViewGroup yearView = (ViewGroup) conditionBar.findViewById(R.id.byYear);
@@ -478,27 +471,31 @@ public class MATActivity extends Activity implements OnClickListener{
 			break;
 		//==================================
 		case R.id.byPlay:
-			updateChooseBar(chooseBar.findViewById(R.id.indicator_play));
+			updateChooseBar(level2.findViewById(R.id.indicator_play));
 			currentSort = "play";
 			updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			break;
 		case R.id.byComment:
-			updateChooseBar(chooseBar.findViewById(R.id.indicator_comment));
+			updateChooseBar(level2.findViewById(R.id.indicator_comment));
 			currentSort = "comment";
 			updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);			
 			break;
 		case R.id.byScore:
-			updateChooseBar(chooseBar.findViewById(R.id.indicator_score));
+			updateChooseBar(level2.findViewById(R.id.indicator_score));
 			currentSort = "score";
 			updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			break;
 		case R.id.byRecent:
-			updateChooseBar(chooseBar.findViewById(R.id.indicator_recent));
+			updateChooseBar(level2.findViewById(R.id.indicator_recent));
 			currentSort = "recent";
 			updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			break;
 		case R.id.byCondition:
 			showDialog(DIALOG_CONDITIONBAR);
+			break;
+		//==================================
+		case R.id.bySearch:
+			showDialog(DIALOG_SEARCH);
 			break;
 		//==================================
 			
@@ -509,10 +506,10 @@ public class MATActivity extends Activity implements OnClickListener{
 	
 	
 	private void updateChooseBar(View indicator) {
-		chooseBar.findViewById(R.id.indicator_play).setBackgroundResource(R.drawable.red_normal);
-		chooseBar.findViewById(R.id.indicator_score).setBackgroundResource(R.drawable.red_normal);
-		chooseBar.findViewById(R.id.indicator_comment).setBackgroundResource(R.drawable.red_normal);
-		chooseBar.findViewById(R.id.indicator_recent).setBackgroundResource(R.drawable.red_normal);
+		level2.findViewById(R.id.indicator_play).setBackgroundResource(R.drawable.red_normal);
+		level2.findViewById(R.id.indicator_score).setBackgroundResource(R.drawable.red_normal);
+		level2.findViewById(R.id.indicator_comment).setBackgroundResource(R.drawable.red_normal);
+		level2.findViewById(R.id.indicator_recent).setBackgroundResource(R.drawable.red_normal);
 		indicator.setBackgroundResource(R.drawable.red_active);
 	}
 
@@ -567,7 +564,6 @@ public class MATActivity extends Activity implements OnClickListener{
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					// TODO Auto-generated method stub
 					finish();
 				}
 			});
@@ -616,9 +612,125 @@ public class MATActivity extends Activity implements OnClickListener{
 			Dialog dialog = new Dialog(this,R.style.dialog);
 			dialog.setContentView(menu);
 			return dialog;
+		}else if(id==DIALOG_SEARCH){
+			Dialog dialog = new Dialog(this,R.style.dialog);
+			dialog.setContentView(searchBar);
+			Window dialogWindow = dialog.getWindow();
+	        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+	        dialogWindow.setGravity(Gravity.CENTER_VERTICAL);
+	        lp.y = -100;
+	        lp.alpha = 1.0f; 
+	        dialogWindow.setAttributes(lp);
+			return dialog;
 		}
 		return null;
 	}
+
+	private String bywhat = "name";
+	
+	private void initSearchBar() {
+		searchBar = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.page_search, null);
+		final EditText keyEt = (EditText) searchBar.findViewById(R.id.mat_search_key);
+		RadioGroup group = (RadioGroup) searchBar.findViewById(R.id.radioGroup1);
+		Button search = (Button) searchBar.findViewById(R.id.mat_search_search);
+		Button clean = (Button) searchBar.findViewById(R.id.mat_search_clean);
+		Button back = (Button) searchBar.findViewById(R.id.mat_search_back);
+		search.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				String keywords =  keyEt.getText().toString(); 
+				if(!TextUtils.isEmpty(keywords)){
+					toSearchResultPage(getSearchUrl(bywhat,keywords));
+					keyEt.getText().clear();
+					dismissDialog(DIALOG_SEARCH);
+				}else{
+					Toast.makeText(MATActivity.this, MATActivity.this.getString(R.string.qingshuru), 1).show();
+				}
+			}
+		});
+		clean.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				int length = keyEt.getText().toString().length();
+				System.out.println("length::==>?"+ length);
+				if(length-1>=0){
+					keyEt.getText().delete(length-1, length);  
+				}else{
+					Toast.makeText(MATActivity.this, MATActivity.this.getString(R.string.meiyoushuru), 1).show();
+				}
+			}
+		});
+		clean.setOnLongClickListener(new OnLongClickListener() {
+			
+			@Override
+			public boolean onLongClick(View v) {
+				keyEt.setText("");
+				return false;
+			}
+		});
+		back.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				dismissDialog(DIALOG_SEARCH);
+			}
+		});
+		group.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			
+			@Override
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+				switch (checkedId) {
+				case R.id.search_byName:
+					bywhat = "name";
+					break;
+				case R.id.search_byDirector:
+					bywhat = "directors";
+					break;
+				case R.id.search_byActors:
+					bywhat = "artists";
+					break;
+				case R.id.search_byType:
+					bywhat = "type";
+					break;
+				case R.id.search_byArea:
+					bywhat = "area";
+					break;
+				case R.id.search_byYear:
+					bywhat = "year";
+					break;
+
+				default:
+					break;
+				}
+				
+			}
+		});
+	}
+
+
+	protected void toSearchResultPage(String searchUrl) {
+		SearchResultPage page = new SearchResultPage(this, parent);
+		page.loadPage(searchUrl, R.layout.page_film_class);
+	}
+
+
+	protected String getSearchUrl(String bywhat, String keywords) {
+		// TODO Auto-generated method stub
+		Pattern p = Pattern.compile("\\t|\r|\n");
+		Matcher m = p.matcher(keywords);
+		keywords = m.replaceAll("").trim();
+		String url = "http://tvsrv.webhop.net:9061/query?"
+				+"source="+currentOrigin
+				+"&page="+FilmClassPage
+				+"&pagesize="+FilmClassPageSize
+				+"&"+bywhat+"="+keywords;
+		
+		Log.d("MAT", "search url==>"+url);
+		return url;
+	}
+
 
 	@Override
 	protected void onPause() {

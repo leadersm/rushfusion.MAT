@@ -1,8 +1,6 @@
 package com.rushfusion.mat.page;
 
 import java.io.IOException;
-import java.text.AttributedCharacterIterator.Attribute;
-import java.util.jar.Attributes;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -12,9 +10,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.inputmethodservice.Keyboard;
-import android.inputmethodservice.Keyboard.Key;
-import android.inputmethodservice.KeyboardView.OnKeyboardActionListener;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnBufferingUpdateListener;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -24,7 +19,6 @@ import android.media.MediaPlayer.OnPreparedListener;
 import android.media.MediaPlayer.OnSeekCompleteListener;
 import android.media.MediaPlayer.OnVideoSizeChangedListener;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.SurfaceHolder;
@@ -32,7 +26,6 @@ import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnKeyListener;
 import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
@@ -94,6 +87,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 		try {
 			mediaPlayer.setDataSource(filePath);
 //			mediaPlayer.setDataSource("/mnt/sdcard/video/f_001126.mp4");
+//			mediaPlayer.setDataSource("/mnt/sdcard/transferred/DVD_VIDEO-9.mp4");
 		} catch (IllegalArgumentException e) {
 			System.out.println("mediaplayer 设置数据中出错，错误信息："+e.toString());
 		} catch (IllegalStateException e) {
@@ -140,7 +134,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 				saveTime = mediaPlayer.getCurrentPosition();
 				return saveTime;
 			}else{
-				return 0;
+				return saveTime;
 			}
 		}
 		return 0;
@@ -176,6 +170,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	@Override
 	public void seekTo(int pos) {
 		if(mediaPlayer!=null){
+//			mediaPlayer.pause();
 			pDialog.show();
 			mediaPlayer.seekTo(pos);
 		}else{
@@ -298,6 +293,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
+					mediaPlayer.seekTo(0);
 //					Toast.makeText(MediaPlayerShow.this, "从头开始播放",500).show();
 				}
 			});
@@ -315,6 +311,9 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 		Editor editor = prefs.edit();
 		editor.putInt(movieId,saveTime);
 		editor.commit();
+		if(mediaPlayer!=null){
+			mediaPlayer.release();
+		}
 		System.out.println("已保存数据： "+movieId +":"+saveTime);
 		super.onPause();
 	}
@@ -327,13 +326,47 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	@Override
 	public boolean onInfo(MediaPlayer mp, int what, int extra) {
 //		Toast.makeText(this, "信息读取状态代码："+what, 500).show();
-		return false;
+		switch(what){
+		case MediaPlayer.MEDIA_INFO_BAD_INTERLEAVING:
+			System.out.println("音视频交叉错误");
+			break;
+//		case MediaPlayer.MEDIA_INFO_BUFFERING_END:
+//			System.out.println("缓冲结束");
+//			break;
+//		case MediaPlayer.MEDIA_INFO_BUFFERING_START:
+//			System.out.println("缓冲开始");
+//			break;
+		case MediaPlayer.MEDIA_INFO_METADATA_UPDATE:
+			System.out.println("原资料更新");
+			break;
+		case MediaPlayer.MEDIA_INFO_NOT_SEEKABLE:
+			System.out.println("该视频类型，无法定位");
+			break;
+		case MediaPlayer.MEDIA_INFO_VIDEO_TRACK_LAGGING:
+			System.out.println("音视频交叉错误");
+			break;
+		}
+		return true;
 	}
 
 	@Override
 	public boolean onError(MediaPlayer mp, int what, int extra) {
 //		Toast.makeText(this, "错误代码："+what , 500).show();
-		return false;
+		switch(what){
+		case MediaPlayer.MEDIA_ERROR_UNKNOWN:
+			Toast.makeText(this, "网络连接出现错误，请稍后再试！", 1000).show();
+			finish();
+			break;
+		case MediaPlayer.MEDIA_ERROR_SERVER_DIED:
+			Toast.makeText(this, "网络连接出现错误，请稍后再试！", 1000).show();
+			finish();
+			break;
+		case MediaPlayer.MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK:
+			Toast.makeText(this, "网络连接出现错误，请稍后再试！", 1000).show();
+			finish();
+			break;
+		}
+		return true;
 	}
 
 	@Override

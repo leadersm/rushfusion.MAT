@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">MAT</string>
-        
     <string name="director">"导演"</string>
     <string name="actor">"主演"</string>
     <string name="area">"地区"</string>
@@ -12,7 +12,6 @@
     <string name="page">"页"</string>
     <string name="prev_page">"上一页"</string>
     <string name="next_page">"下一页"</string>
-    
     <string name="pause">暂停</string>
     <string name="play">播放</string>
     <string name="fastforward">快进</string>
@@ -24,17 +23,34 @@
     <string name="settings">设置</string>
     
     
-    <string name="byType">按类型:</string>
-    <string name="byArea">按地区:</string>
-    <string name="byYear">按年份:</string>
+    
+    <string name="byName">按名称</string>
+    <string name="byType">按类型</string>
+    <string name="byArea">按地区</string>
+    <string name="byYear">按年份</string>
+    <string name="byDirector">按导演</string>
+    <string name="byActors">按演员</string>
+    
+    
+    
     <string name="all">全部</string>
     <string name="netword">网络不可用，请检查网络是否连接！</string>
     <string name="tip_menu">选择一个视频源，按menu键显示此菜单。</string>
     
+    <string name="search">"搜索"</string>
+    <string name="search_example">"请选择一个查询条件"</string>
+    <string name="search_clean">"清除"</string>
+
+    <string name="research">"重新搜索"</string>
+    <string name="qingshuru">"请输入关键字..."</string>
+    <string name="meiyoushuru">"您还没有输入..."</string>
+    <string name="sorry">"非常抱歉找不到与***相关的内容"</string>
+    <string name="searchinfo_a">"非常抱歉找不到与“" </string>
+    <string name="searchinfo_b">"”相关的内容"</string>
+    <string name="searchinfo_c">"搜索 “" </string>
+    <string name="searchinfo_d">"” ，共找到视频"</string>
+    <string name="searchinfo_e">"个"</string>
+    <string name="search_result_top">"观看排行："</string>
     
-    
-    
-        
-        
     
 </resources>
