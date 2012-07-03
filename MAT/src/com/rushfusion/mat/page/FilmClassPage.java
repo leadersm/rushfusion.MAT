@@ -289,7 +289,7 @@ public class FilmClassPage extends BasePage {
 	
 	protected int itemSize(){
 		int size = FILM_NUM ;
-		if(nodeList.size()<=FILM_NUM) {
+		if(nodeList!=null && nodeList.size()<=FILM_NUM) {
 			size = nodeList.size() ;
 		}
 		return size ;
