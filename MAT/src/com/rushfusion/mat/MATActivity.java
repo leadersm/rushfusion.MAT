@@ -80,7 +80,6 @@ public class MATActivity extends Activity implements OnClickListener{
         }
     }
 
-
 	private void init() {
 		parent = (ViewGroup) findViewById(R.id.parent);
 		conditionBar = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.conditionbar, null);
