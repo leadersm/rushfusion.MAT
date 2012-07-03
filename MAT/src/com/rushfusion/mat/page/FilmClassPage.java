@@ -104,10 +104,24 @@ public class FilmClassPage extends BasePage {
 				@Override
 				public void onClick(View v) {
 					Map<String,String> map = (Map<String, String>)v.getTag() ;
-					Movie movie = new Movie(Integer.parseInt(map.get("count")),Integer.parseInt(map.get("total")),Integer.parseInt(map.get("score")),
-							Integer.parseInt(map.get("comment")),map.get("category"),map.get("name"),map.get("type"),Integer.parseInt(map.get("year")),
-							map.get("directors"),map.get("artists"),map.get("area"),map.get("description"),
-							map.get("thumb"),map.get("length"),map.get("url"),Integer.parseInt(map.get("play")),map.get("id"),Integer.parseInt(map.get("recent"))) ;
+					Movie movie = new Movie(Integer.parseInt(map.get("count")),
+							                Integer.parseInt(map.get("total")),
+							                Integer.parseInt(map.get("score")),
+							                Integer.parseInt(map.get("comment")),
+							                map.get("category"),
+							                map.get("name"),
+							                map.get("type"),
+							                Integer.parseInt(map.get("year")),
+							                map.get("directors"),
+							                map.get("artists"),
+							                map.get("area"),
+							                map.get("description"),
+							                map.get("thumb"),
+							                map.get("length"),
+							                map.get("url"),
+							                Integer.parseInt(map.get("play")),
+							                Integer.parseInt(map.get("id")),
+							                Integer.parseInt(map.get("recent"))) ;
 					Intent intent = new Intent(mContext,ItemDetailPage.class) ;
 					Bundle bundle = new Bundle() ;
 					bundle.putSerializable("movieInfo", movie) ;
@@ -275,7 +289,7 @@ public class FilmClassPage extends BasePage {
 	
 	protected int itemSize(){
 		int size = FILM_NUM ;
-		if(nodeList!=null && nodeList.size()<=FILM_NUM) {
+		if(nodeList.size()<=FILM_NUM) {
 			size = nodeList.size() ;
 		}
 		return size ;
