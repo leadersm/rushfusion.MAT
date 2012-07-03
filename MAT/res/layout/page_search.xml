@@ -98,7 +98,7 @@
         android:layout_height="78dip"
         android:layout_below="@+id/RelativeLayout"
         android:layout_centerHorizontal="true" >
-
+
         <EditText
             android:id="@+id/mat_search_key"
             android:layout_width="500dip"
@@ -107,6 +107,7 @@
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/mat_search_search"
             android:background="@drawable/search"
+            android:hint="@string/pleaseinputkey"
             android:paddingLeft="67dip"
             android:textColor="@color/white"
             android:textSize="30sp" />

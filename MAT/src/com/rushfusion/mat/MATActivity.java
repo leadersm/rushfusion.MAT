@@ -29,6 +29,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
@@ -54,6 +55,7 @@ public class MATActivity extends Activity implements OnClickListener{
 	public static final int DIALOG_WIRELESS_SETTING = 4;
 	public static final int DIALOG_ORIGIN_MENU = 5;
 	public static final int DIALOG_SEARCH = 6;
+	public static final int DIALOG_NO_SOURCE = 7;
 	
 	private ViewGroup parent;
 	private ViewGroup menu;
@@ -258,17 +260,61 @@ public class MATActivity extends Activity implements OnClickListener{
 
 
 	private void initMenu() {
+		String sourceUrl = "http://tvsrv.webhop.net:9061/source";
 		menu = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.menu, null);//findViewById(R.id.menu);
-		Button leshi = (Button) menu.findViewById(R.id.leshi);
-		Button qiyi = (Button) menu.findViewById(R.id.qiyi);
-		Button souhu = (Button) menu.findViewById(R.id.souhu);
-		Button tudou = (Button) menu.findViewById(R.id.tudou);
-		Button sina = (Button) menu.findViewById(R.id.sina);
-		leshi.setOnClickListener(this);
-		qiyi.setOnClickListener(this);
-		souhu.setOnClickListener(this);
-		tudou.setOnClickListener(this);
-		sina.setOnClickListener(this);
+		final ViewGroup sourceGroup = (ViewGroup) menu.findViewById(R.id.source_group);
+		sourceGroup.removeAllViews();
+		final ProgressBar progress = (ProgressBar) findViewById(R.id.menu_progress);
+		new AsyncTask<String, Void, List<String>>(){
+
+			@Override
+			protected void onPreExecute() {
+				progress.setVisibility(View.VISIBLE);
+			}
+
+			@Override
+			protected void onPostExecute(List<String> result) {
+				progress.setVisibility(View.INVISIBLE);
+				if(result==null||result.size()<=0){
+					dismissDialog(DIALOG_ORIGIN_MENU);
+					showDialog(DIALOG_NO_SOURCE);
+					return;
+				}
+				for(int i=0;i<result.size();i++){
+					Button sourceBtn = new Button(MATActivity.this);
+					final String sourceName = result.get(i);
+					setCategoryBtnStyle(sourceBtn, sourceName);
+					sourceBtn.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							changeDataByOriginName(sourceName);
+							dismissDialog(DIALOG_ORIGIN_MENU);
+						}
+					});
+					sourceGroup.addView(sourceBtn);
+				}
+				
+			}
+
+			@Override
+			protected List<String> doInBackground(String... params) {
+				// TODO Auto-generated method stub
+				return DataParser.getInstance(MATActivity.this,params[0]).getSource();
+			}
+			
+		}.execute(sourceUrl);
+		
+//		Button leshi = (Button) menu.findViewById(R.id.leshi);
+//		Button qiyi = (Button) menu.findViewById(R.id.qiyi);
+//		Button souhu = (Button) menu.findViewById(R.id.souhu);
+//		Button tudou = (Button) menu.findViewById(R.id.tudou);
+//		Button sina = (Button) menu.findViewById(R.id.sina);
+//		leshi.setOnClickListener(this);
+//		qiyi.setOnClickListener(this);
+//		souhu.setOnClickListener(this);
+//		tudou.setOnClickListener(this);
+//		sina.setOnClickListener(this);
 	}
 
 	private void addConditionButtons(final ViewGroup typeView,
@@ -448,31 +494,31 @@ public class MATActivity extends Activity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.leshi:
-//			updateLastWatchRecord("乐视");
-			changeDataByOriginName("163");
-			dismissDialog(DIALOG_ORIGIN_MENU);
-			break;
-		case R.id.qiyi:
-//			updateLastWatchRecord("奇艺");
-			changeDataByOriginName("sina");
-			dismissDialog(DIALOG_ORIGIN_MENU);
-			break;
-		case R.id.souhu:
-//			updateLastWatchRecord("搜狐");
-			changeDataByOriginName("sina");
-			dismissDialog(DIALOG_ORIGIN_MENU);
-			break;
-		case R.id.tudou:
-//			updateLastWatchRecord("土豆");
-			changeDataByOriginName("sina");
-			dismissDialog(DIALOG_ORIGIN_MENU);
-			break;
-		case R.id.sina:
-//			updateLastWatchRecord("新浪");
-			changeDataByOriginName("sina");
-			dismissDialog(DIALOG_ORIGIN_MENU);
-			break;
+//		case R.id.leshi:
+////			updateLastWatchRecord("乐视");
+//			changeDataByOriginName("163");
+//			dismissDialog(DIALOG_ORIGIN_MENU);
+//			break;
+//		case R.id.qiyi:
+////			updateLastWatchRecord("奇艺");
+//			changeDataByOriginName("sina");
+//			dismissDialog(DIALOG_ORIGIN_MENU);
+//			break;
+//		case R.id.souhu:
+////			updateLastWatchRecord("搜狐");
+//			changeDataByOriginName("sina");
+//			dismissDialog(DIALOG_ORIGIN_MENU);
+//			break;
+//		case R.id.tudou:
+////			updateLastWatchRecord("土豆");
+//			changeDataByOriginName("sina");
+//			dismissDialog(DIALOG_ORIGIN_MENU);
+//			break;
+//		case R.id.sina:
+////			updateLastWatchRecord("新浪");
+//			changeDataByOriginName("sina");
+//			dismissDialog(DIALOG_ORIGIN_MENU);
+//			break;
 		//==================================
 		case R.id.byPlay:
 			updateChooseBar(level2.findViewById(R.id.indicator_play));
@@ -631,6 +677,18 @@ public class MATActivity extends Activity implements OnClickListener{
 	        lp.alpha = 1.0f; 
 	        dialogWindow.setAttributes(lp);
 			return dialog;
+		}else if(id == DIALOG_NO_SOURCE){
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle("提示");
+			builder.setMessage("加载视频源失败，请退出重试！");
+			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					finish();
+				}
+			});
+			return builder.create();
 		}
 		return null;
 	}
