@@ -77,7 +77,7 @@ public class MATActivity extends Activity implements OnClickListener{
         }else{
         	showDialog(DIALOG_WIRELESS_SETTING);
         }
-    }
+    } 
 
 	private void init() {
 		parent = (ViewGroup) findViewById(R.id.parent);
@@ -553,7 +553,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		if(id==DIALOG_EXIT){
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("提示");
-			builder.setMessage("确定逄1�7出吗＄1�7");
+			builder.setMessage("确定逄1�7出吗＄1�7");
 			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 				
 				@Override
@@ -573,7 +573,7 @@ public class MATActivity extends Activity implements OnClickListener{
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("提示");
 			builder.setMessage(currentOrigin+"服务器无响应，请联系客服010-xxxxxxx");
-			builder.setNegativeButton("逄1�7出程庄1�7", new DialogInterface.OnClickListener() {
+			builder.setNegativeButton("逄1�7出程庄1�7", new DialogInterface.OnClickListener() {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
@@ -581,7 +581,7 @@ public class MATActivity extends Activity implements OnClickListener{
 					finish();
 				}
 			});
-			builder.setPositiveButton("重�1�7�视频源", new DialogInterface.OnClickListener() {
+			builder.setPositiveButton("重�1�7�视频源", new DialogInterface.OnClickListener() {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
@@ -592,7 +592,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		}else if(id==DIALOG_WIRELESS_SETTING){
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("提示");
-			builder.setMessage("网络没有连接，请棄1�7查您的网络！");
+			builder.setMessage("网络没有连接，请棄1�7查您的网络！");
 			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 				
 				@Override
@@ -604,7 +604,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		}else if(id == DIALOG_LOADING){
 			ProgressDialog dialog = new ProgressDialog(this);
 			dialog.setTitle("提示:");
-			dialog.setMessage("数据正在加载中，请稍各1�7...");
+			dialog.setMessage("数据正在加载中，请稍各1�7...");
 //			dialog.setCancelable(false);
 			return dialog;
 			
