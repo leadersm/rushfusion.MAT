@@ -120,7 +120,7 @@ public class FilmClassPage extends BasePage {
 							                map.get("length"),
 							                map.get("url"),
 							                Integer.parseInt(map.get("play")),
-							                Integer.parseInt(map.get("id")),
+							                map.get("id"),
 							                Integer.parseInt(map.get("recent"))) ;
 					Intent intent = new Intent(mContext,ItemDetailPage.class) ;
 					Bundle bundle = new Bundle() ;

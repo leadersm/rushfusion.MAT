@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -81,8 +82,9 @@ public class ItemDetailPage extends Activity{
 				// 播放  163:http://163.letv.com/dianying/E7JRABGJ9/M7KS70Q27_mini.html
 
 				String path = list.get(arg2);
+				Log.d("ViodeUrl", path) ;
 				if(path.indexOf("html")==(path.length()-4)){
-					Intent it = new Intent(Intent.ACTION_VIEW , Uri.parse(path));
+					Intent it = new Intent(Intent.ACTION_VIEW , Uri.parse(path));//打开浏览器播放
 					startActivity(it);
 					
 				}else{
