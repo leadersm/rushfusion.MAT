@@ -2,6 +2,8 @@ package com.rushfusion.mat;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -205,7 +207,6 @@ public class MATActivity extends Activity implements OnClickListener{
 	
 	
 	private void initConditionBar() {
-		System.out.println("initConditionBar currentCategory-->"+currentCategory);
 		if(currentCategory.equals("首页")){
 			level2.setVisibility(View.GONE);
 			return;
@@ -729,6 +730,9 @@ public class MATActivity extends Activity implements OnClickListener{
 
 	protected String getSearchUrl(String bywhat, String keywords) {
 		// TODO Auto-generated method stub
+		Pattern p = Pattern.compile("\\t|\r|\n");
+		Matcher m = p.matcher(keywords);
+		keywords = m.replaceAll("").trim();
 		String url = "http://tvsrv.webhop.net:9061/query?"
 				+"source="+currentOrigin
 				+"&page="+FilmClassPage
