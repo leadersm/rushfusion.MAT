@@ -4,26 +4,23 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.app.Activity;
 import android.util.Log;
-import android.widget.Toast;
-
 public class DataParser {
 	private String CATEGORY_URL = "http://tvsrv.webhop.net:9061/" ;
 	private static final String TAG = "DataParser" ;
 	private static String mSource ;
 	private static DataParser parser;
 	private static Activity mContext;
+	private Map<String, String> url = null ;
 	private int total;
 	private DataParser() {
 	}
@@ -47,6 +44,12 @@ public class DataParser {
 		return null;
 	}
 
+	public List<String> getSource() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
 	public List<String> getTypes(String category) {
 		HttpUtil httpUtil = HttpUtil.getInstance(mContext) ;
 		String strUrl = CATEGORY_URL+ "type?source=" + mSource + "&category=" + category ;
@@ -97,10 +100,6 @@ public class DataParser {
 	public List<String> loadData(InputStream inputSteam) {
 		List<String> dataList = null ;
 		try {
-			Log.d("InputSteam", "inputSteam:"+inputSteam) ;
-			if(inputSteam==null) {
-				return null ;
-			}
 			StringBuilder builder = new StringBuilder() ;
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputSteam)) ;
 			for(String s = bufferedReader.readLine(); s != null; s = bufferedReader.readLine()) {
@@ -111,11 +110,10 @@ public class DataParser {
 			String total = jsonObject.getString("total") ;
 			JSONArray itemsArray = jsonObject.getJSONArray("items") ;
 			dataList = new ArrayList<String>() ;
+			//dataList.add(total) ;
 			for(int i=0; i<itemsArray.length(); i++) {
 				dataList.add(itemsArray.getString(i)) ;
 			}
-		} catch (SocketTimeoutException ex) {
-			Log.d(TAG, "网络连接异常！") ;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -124,15 +122,15 @@ public class DataParser {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			Log.d(TAG, "JSONException"+e.getStackTrace()+"") ;
-		} 
+		}
 		return dataList;
 	}
+	
 	
 	public List<Map<String,String>> loadFileData(InputStream inputSteam) {
 		String[] PROPERTIES = {"total","score","comment","artists","name","area","play","count","length","recent","year","directors","thumb","url","type","id","description","category"} ;
 		Map<String, String> nodeMap = null ;
 		List<Map<String,String>> dataList = new ArrayList<Map<String,String>>() ;
-		if(inputSteam==null)return dataList;
 		try {
 			StringBuilder builder = new StringBuilder() ;
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputSteam)) ;
@@ -165,6 +163,6 @@ public class DataParser {
 	public int getTotal() {
 		return total;
 	}
-	
+
 	
 }

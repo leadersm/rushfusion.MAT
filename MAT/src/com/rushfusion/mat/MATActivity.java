@@ -2,6 +2,8 @@ package com.rushfusion.mat;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -14,21 +16,29 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rushfusion.mat.page.FilmClassPage;
 import com.rushfusion.mat.page.PageCache;
 import com.rushfusion.mat.page.RecommendPage;
+import com.rushfusion.mat.page.SearchResultPage;
 import com.rushfusion.mat.utils.DataParser;
 import com.rushfusion.mat.utils.HttpUtil;
 
@@ -44,12 +54,14 @@ public class MATActivity extends Activity implements OnClickListener{
 	public static final int DIALOG_CONDITIONBAR = 3;
 	public static final int DIALOG_WIRELESS_SETTING = 4;
 	public static final int DIALOG_ORIGIN_MENU = 5;
+	public static final int DIALOG_SEARCH = 6;
+	public static final int DIALOG_NO_SOURCE = 7;
 	
 	private ViewGroup parent;
-	private View level2;
 	private ViewGroup menu;
 	private ViewGroup conditionBar;
-	private ViewGroup chooseBar;
+	private ViewGroup level2;
+	private ViewGroup searchBar;
 	
 	private String currentOrigin="sina";
 	private String currentCategory="首页";
@@ -57,6 +69,8 @@ public class MATActivity extends Activity implements OnClickListener{
 	private String currentYear="";
 	private String currentArea="";
 	private String currentSort="play";
+	private String currentSortInfo="";
+	
 	
 	private List<String> categories;
 	private HashMap<String,List<String>> conditions = new HashMap<String, List<String>>();
@@ -77,7 +91,8 @@ public class MATActivity extends Activity implements OnClickListener{
         }else{
         	showDialog(DIALOG_WIRELESS_SETTING);
         }
-    } 
+    }
+
 
 	private void init() {
 		parent = (ViewGroup) findViewById(R.id.parent);
@@ -85,8 +100,9 @@ public class MATActivity extends Activity implements OnClickListener{
 		sp = getSharedPreferences("MatHistory",Context.MODE_WORLD_READABLE);
 		editor = sp.edit();
 		res = getResources();
-		level2 = findViewById(R.id.level_2);
-		level2.setVisibility(View.INVISIBLE);
+		level2 = (ViewGroup) findViewById(R.id.level_2);
+		initSearchBar();
+		updateHeaderInfo();
 	}
     
     Handler handler = new Handler(){
@@ -103,15 +119,11 @@ public class MATActivity extends Activity implements OnClickListener{
     };
     
 	private void initChooseBar() {
-		chooseBar = (ViewGroup) findViewById(R.id.level_2);
-		if(currentCategory.equals("首页"))
-			chooseBar.setVisibility(View.GONE);
-		else
-			chooseBar.setVisibility(View.VISIBLE);
 		Button byPlay = (Button) findViewById(R.id.byPlay);
 		Button byRecent = (Button) findViewById(R.id.byRecent);
 		Button byScore = (Button) findViewById(R.id.byScore);
 		Button byComment = (Button) findViewById(R.id.byComment);
+		Button bySearch = (Button) findViewById(R.id.bySearch);
 		Button byCondition = (Button) findViewById(R.id.byCondition);
 		
 		byPlay.setOnClickListener(this);
@@ -119,23 +131,22 @@ public class MATActivity extends Activity implements OnClickListener{
 		byScore.setOnClickListener(this);
 		byComment.setOnClickListener(this);
 		byCondition.setOnClickListener(this);
-		updateChooseBar(chooseBar.findViewById(R.id.indicator_play));
+		bySearch.setOnClickListener(this);
+		updateChooseBar(level2.findViewById(R.id.indicator_play));
 	}
 
 
 	private void initCategory(String origin) {
+		parent.removeAllViews();
 		final ViewGroup level1 = (ViewGroup) findViewById(R.id.level1);
 		level1.removeAllViews();
-
 		new AsyncTask<String, Void, List<String>>(){
 
 			@Override
 			protected void onPreExecute() {
 				super.onPreExecute();
+				level2.setVisibility(View.GONE);
 				showDialog(DIALOG_LOADING);
-				if(categories!=null){
-					categories.clear();
-				}
 			}
 
 			@Override
@@ -148,7 +159,6 @@ public class MATActivity extends Activity implements OnClickListener{
 			protected void onPostExecute(List<String> result) {
 				super.onPostExecute(result);
 				dismissDialog(DIALOG_LOADING);
-				level2.setVisibility(View.VISIBLE);
 				if(result==null){
 					handler.sendEmptyMessage(DIALOG_CONNECTEDREFUSED);
 					return;
@@ -162,13 +172,7 @@ public class MATActivity extends Activity implements OnClickListener{
 					public void onClick(View v) {
 						currentCategory = "首页";
 						initConditionBar();
-//						while(types==null){
-//							try {
-//								Thread.sleep(10);
-//							} catch (InterruptedException e) {
-//								e.printStackTrace();
-//							}
-//						}
+						currentSortInfo = "";
 						updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 					}
 				});
@@ -185,17 +189,11 @@ public class MATActivity extends Activity implements OnClickListener{
 						public void onClick(View v) {
 							currentCategory = name;
 							initConditionBar();
-//							while(types==null||areas==null||years==null){
-//								try {
-//									Thread.sleep(10);
-//								} catch (InterruptedException e) {
-//									e.printStackTrace();
-//								}
-//							}
 							currentType = "";
 							currentArea = "";
 							currentYear = "";
 							currentSort = "play";
+							currentSortInfo = "热播";
 							updatePage(currentCategory,currentType, currentArea, currentYear, currentSort);
 						}
 					});
@@ -214,9 +212,10 @@ public class MATActivity extends Activity implements OnClickListener{
 	
 	private void initConditionBar() {
 		if(currentCategory.equals("首页")){
-			chooseBar.setVisibility(View.GONE);
+			level2.setVisibility(View.GONE);
+			return;
 		}else
-			chooseBar.setVisibility(View.VISIBLE);
+			level2.setVisibility(View.VISIBLE);
 		final ViewGroup typeView = (ViewGroup) conditionBar.findViewById(R.id.byType);
 		final ViewGroup areaView = (ViewGroup) conditionBar.findViewById(R.id.byArea);
 		final ViewGroup yearView = (ViewGroup) conditionBar.findViewById(R.id.byYear);
@@ -226,9 +225,6 @@ public class MATActivity extends Activity implements OnClickListener{
 			@Override
 			protected void onPreExecute() {
 				super.onPreExecute();
-				typeView.removeAllViews();
-				yearView.removeAllViews();
-				areaView.removeAllViews();
 				if(types!=null)
 				types.clear();
 				if(years!=null)
@@ -243,13 +239,6 @@ public class MATActivity extends Activity implements OnClickListener{
 				types = DataParser.getInstance(MATActivity.this,currentOrigin).getTypes(params[0]);
 				years = DataParser.getInstance(MATActivity.this,currentOrigin).getYears(params[0]);
 				areas = DataParser.getInstance(MATActivity.this,currentOrigin).getAreas(params[0]);
-				while(types==null||years==null||areas==null){
-					try {
-						Thread.sleep(10);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
 				conditions.put("type", types);
 				conditions.put("year", years);
 				conditions.put("area", areas);
@@ -271,22 +260,70 @@ public class MATActivity extends Activity implements OnClickListener{
 
 
 	private void initMenu() {
+		String sourceUrl = "http://tvsrv.webhop.net:9061/source";
 		menu = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.menu, null);//findViewById(R.id.menu);
-		Button leshi = (Button) menu.findViewById(R.id.leshi);
-		Button qiyi = (Button) menu.findViewById(R.id.qiyi);
-		Button souhu = (Button) menu.findViewById(R.id.souhu);
-		Button tudou = (Button) menu.findViewById(R.id.tudou);
-		Button sina = (Button) menu.findViewById(R.id.sina);
-		leshi.setOnClickListener(this);
-		qiyi.setOnClickListener(this);
-		souhu.setOnClickListener(this);
-		tudou.setOnClickListener(this);
-		sina.setOnClickListener(this);
+		final ViewGroup sourceGroup = (ViewGroup) menu.findViewById(R.id.source_group);
+		sourceGroup.removeAllViews();
+		final ProgressBar progress = (ProgressBar) findViewById(R.id.menu_progress);
+		new AsyncTask<String, Void, List<String>>(){
+
+			@Override
+			protected void onPreExecute() {
+				progress.setVisibility(View.VISIBLE);
+			}
+
+			@Override
+			protected void onPostExecute(List<String> result) {
+				progress.setVisibility(View.INVISIBLE);
+				if(result==null||result.size()<=0){
+					dismissDialog(DIALOG_ORIGIN_MENU);
+					showDialog(DIALOG_NO_SOURCE);
+					return;
+				}
+				for(int i=0;i<result.size();i++){
+					Button sourceBtn = new Button(MATActivity.this);
+					final String sourceName = result.get(i);
+					setCategoryBtnStyle(sourceBtn, sourceName);
+					sourceBtn.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							changeDataByOriginName(sourceName);
+							dismissDialog(DIALOG_ORIGIN_MENU);
+						}
+					});
+					sourceGroup.addView(sourceBtn);
+				}
+				
+			}
+
+			@Override
+			protected List<String> doInBackground(String... params) {
+				// TODO Auto-generated method stub
+				return DataParser.getInstance(MATActivity.this,params[0]).getSource();
+			}
+			
+		}.execute(sourceUrl);
+		
+//		Button leshi = (Button) menu.findViewById(R.id.leshi);
+//		Button qiyi = (Button) menu.findViewById(R.id.qiyi);
+//		Button souhu = (Button) menu.findViewById(R.id.souhu);
+//		Button tudou = (Button) menu.findViewById(R.id.tudou);
+//		Button sina = (Button) menu.findViewById(R.id.sina);
+//		leshi.setOnClickListener(this);
+//		qiyi.setOnClickListener(this);
+//		souhu.setOnClickListener(this);
+//		tudou.setOnClickListener(this);
+//		sina.setOnClickListener(this);
 	}
 
 	private void addConditionButtons(final ViewGroup typeView,
 			final ViewGroup areaView, final ViewGroup yearView,
 			List<String> types, List<String> years, List<String> areas) {
+		
+		typeView.removeAllViews();
+		areaView.removeAllViews();
+		yearView.removeAllViews();
 		
 		final Button allType = new Button(this);
 		final Button allYear = new Button(this);
@@ -409,7 +446,7 @@ public class MATActivity extends Activity implements OnClickListener{
 	}
 	private void updateHeaderInfo() {
 		TextView headerInfo = (TextView) findViewById(R.id.headerInfo);
-		headerInfo.setText(currentOrigin+">"+currentCategory+">"+currentType);
+		headerInfo.setText(currentOrigin+">"+currentCategory+">"+currentSortInfo);
 	}
 
     
@@ -457,54 +494,63 @@ public class MATActivity extends Activity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.souhu:
-//			updateLastWatchRecord("搜狐");
-			changeDataByOriginName("sina");
-			dismissDialog(DIALOG_ORIGIN_MENU);
-			break;
-		case R.id.sina:
-//			updateLastWatchRecord("新浪");
-			changeDataByOriginName("sina");
-			dismissDialog(DIALOG_ORIGIN_MENU);
-			break;
-		case R.id.qiyi:
-//			updateLastWatchRecord("奇艺");
-			changeDataByOriginName("sina");
-			dismissDialog(DIALOG_ORIGIN_MENU);
-			break;
-		case R.id.tudou:
-//			updateLastWatchRecord("土豆");
-			changeDataByOriginName("sina");
-			dismissDialog(DIALOG_ORIGIN_MENU);
-			break;
-		case R.id.leshi:
-//			updateLastWatchRecord("乐视");
-			changeDataByOriginName("163");
-			dismissDialog(DIALOG_ORIGIN_MENU);
-			break;
+//		case R.id.leshi:
+////			updateLastWatchRecord("乐视");
+//			changeDataByOriginName("163");
+//			dismissDialog(DIALOG_ORIGIN_MENU);
+//			break;
+//		case R.id.qiyi:
+////			updateLastWatchRecord("奇艺");
+//			changeDataByOriginName("sina");
+//			dismissDialog(DIALOG_ORIGIN_MENU);
+//			break;
+//		case R.id.souhu:
+////			updateLastWatchRecord("搜狐");
+//			changeDataByOriginName("sina");
+//			dismissDialog(DIALOG_ORIGIN_MENU);
+//			break;
+//		case R.id.tudou:
+////			updateLastWatchRecord("土豆");
+//			changeDataByOriginName("sina");
+//			dismissDialog(DIALOG_ORIGIN_MENU);
+//			break;
+//		case R.id.sina:
+////			updateLastWatchRecord("新浪");
+//			changeDataByOriginName("sina");
+//			dismissDialog(DIALOG_ORIGIN_MENU);
+//			break;
 		//==================================
 		case R.id.byPlay:
-			updateChooseBar(chooseBar.findViewById(R.id.indicator_play));
+			updateChooseBar(level2.findViewById(R.id.indicator_play));
 			currentSort = "play";
+			currentSortInfo = "热播";
 			updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			break;
 		case R.id.byComment:
-			updateChooseBar(chooseBar.findViewById(R.id.indicator_comment));
+			updateChooseBar(level2.findViewById(R.id.indicator_comment));
 			currentSort = "comment";
+			currentSortInfo = "热议";
 			updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);			
 			break;
 		case R.id.byScore:
-			updateChooseBar(chooseBar.findViewById(R.id.indicator_score));
+			updateChooseBar(level2.findViewById(R.id.indicator_score));
 			currentSort = "score";
+			currentSortInfo = "好评";
 			updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			break;
 		case R.id.byRecent:
-			updateChooseBar(chooseBar.findViewById(R.id.indicator_recent));
+			updateChooseBar(level2.findViewById(R.id.indicator_recent));
 			currentSort = "recent";
+			currentSortInfo = "最新";
 			updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			break;
 		case R.id.byCondition:
 			showDialog(DIALOG_CONDITIONBAR);
+			break;
+		//==================================
+		case R.id.bySearch:
+			currentSortInfo = "搜索结果";
+			showDialog(DIALOG_SEARCH);
 			break;
 		//==================================
 			
@@ -515,20 +561,16 @@ public class MATActivity extends Activity implements OnClickListener{
 	
 	
 	private void updateChooseBar(View indicator) {
-		chooseBar.findViewById(R.id.indicator_play).setBackgroundResource(R.drawable.red_normal);
-		chooseBar.findViewById(R.id.indicator_score).setBackgroundResource(R.drawable.red_normal);
-		chooseBar.findViewById(R.id.indicator_comment).setBackgroundResource(R.drawable.red_normal);
-		chooseBar.findViewById(R.id.indicator_recent).setBackgroundResource(R.drawable.red_normal);
+		level2.findViewById(R.id.indicator_play).setBackgroundResource(R.drawable.red_normal);
+		level2.findViewById(R.id.indicator_score).setBackgroundResource(R.drawable.red_normal);
+		level2.findViewById(R.id.indicator_comment).setBackgroundResource(R.drawable.red_normal);
+		level2.findViewById(R.id.indicator_recent).setBackgroundResource(R.drawable.red_normal);
 		indicator.setBackgroundResource(R.drawable.red_active);
 	}
 
 
 	private void changeDataByOriginName(String origin) {
 		currentOrigin = origin;
-		currentCategory = "";
-		currentType = "";
-		currentArea = "";
-		currentYear = "";
 		initCategory(currentOrigin);
 	}
 
@@ -553,7 +595,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		if(id==DIALOG_EXIT){
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("提示");
-			builder.setMessage("确定逄1�7出吗＄1�7");
+			builder.setMessage("确定退出吗？");
 			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 				
 				@Override
@@ -573,15 +615,14 @@ public class MATActivity extends Activity implements OnClickListener{
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("提示");
 			builder.setMessage(currentOrigin+"服务器无响应，请联系客服010-xxxxxxx");
-			builder.setNegativeButton("逄1�7出程庄1�7", new DialogInterface.OnClickListener() {
+			builder.setNegativeButton("退出程序", new DialogInterface.OnClickListener() {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					// TODO Auto-generated method stub
 					finish();
 				}
 			});
-			builder.setPositiveButton("重�1�7�视频源", new DialogInterface.OnClickListener() {
+			builder.setPositiveButton("重选视频源", new DialogInterface.OnClickListener() {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
@@ -592,7 +633,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		}else if(id==DIALOG_WIRELESS_SETTING){
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("提示");
-			builder.setMessage("网络没有连接，请棄1�7查您的网络！");
+			builder.setMessage("网络没有连接，请检查您的网络！");
 			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 				
 				@Override
@@ -604,8 +645,8 @@ public class MATActivity extends Activity implements OnClickListener{
 		}else if(id == DIALOG_LOADING){
 			ProgressDialog dialog = new ProgressDialog(this);
 			dialog.setTitle("提示:");
-			dialog.setMessage("数据正在加载中，请稍各1�7...");
-//			dialog.setCancelable(false);
+			dialog.setMessage("数据正在加载中，请稍后...");
+			dialog.setCancelable(false);
 			return dialog;
 			
 		}else if(id==DIALOG_CONDITIONBAR){
@@ -626,9 +667,139 @@ public class MATActivity extends Activity implements OnClickListener{
 			Dialog dialog = new Dialog(this,R.style.dialog);
 			dialog.setContentView(menu);
 			return dialog;
+		}else if(id==DIALOG_SEARCH){
+			Dialog dialog = new Dialog(this,R.style.dialog);
+			dialog.setContentView(searchBar);
+			Window dialogWindow = dialog.getWindow();
+	        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+	        dialogWindow.setGravity(Gravity.CENTER_VERTICAL);
+	        lp.y = -100;
+	        lp.alpha = 1.0f; 
+	        dialogWindow.setAttributes(lp);
+			return dialog;
+		}else if(id == DIALOG_NO_SOURCE){
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle("提示");
+			builder.setMessage("加载视频源失败，请退出重试！");
+			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					finish();
+				}
+			});
+			return builder.create();
 		}
 		return null;
 	}
+
+	private String bywhat = "name";
+	
+	private void initSearchBar() {
+		searchBar = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.page_search, null);
+		final EditText keyEt = (EditText) searchBar.findViewById(R.id.mat_search_key);
+		RadioGroup group = (RadioGroup) searchBar.findViewById(R.id.radioGroup1);
+		Button search = (Button) searchBar.findViewById(R.id.mat_search_search);
+		Button clean = (Button) searchBar.findViewById(R.id.mat_search_clean);
+		Button back = (Button) searchBar.findViewById(R.id.mat_search_back);
+		search.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				String keywords =  keyEt.getText().toString(); 
+				if(!TextUtils.isEmpty(keywords)){
+					toSearchResultPage(getSearchUrl(bywhat,keywords),keywords);
+					keyEt.getText().clear();
+					dismissDialog(DIALOG_SEARCH);
+					updateHeaderInfo();
+				}else{
+					Toast.makeText(MATActivity.this, MATActivity.this.getString(R.string.qingshuru), 1).show();
+				}
+			}
+		});
+		clean.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				int length = keyEt.getText().toString().length();
+				System.out.println("length::==>?"+ length);
+				if(length-1>=0){
+					keyEt.getText().delete(length-1, length);  
+				}else{
+					Toast.makeText(MATActivity.this, MATActivity.this.getString(R.string.meiyoushuru), 1).show();
+				}
+			}
+		});
+		clean.setOnLongClickListener(new OnLongClickListener() {
+			
+			@Override
+			public boolean onLongClick(View v) {
+				keyEt.setText("");
+				return false;
+			}
+		});
+		back.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				dismissDialog(DIALOG_SEARCH);
+			}
+		});
+		group.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			
+			@Override
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+				switch (checkedId) {
+				case R.id.search_byName:
+					bywhat = "name";
+					break;
+				case R.id.search_byDirector:
+					bywhat = "directors";
+					break;
+				case R.id.search_byActors:
+					bywhat = "artists";
+					break;
+				case R.id.search_byType:
+					bywhat = "type";
+					break;
+				case R.id.search_byArea:
+					bywhat = "area";
+					break;
+				case R.id.search_byYear:
+					bywhat = "year";
+					break;
+
+				default:
+					break;
+				}
+				
+			}
+		});
+	}
+
+
+	protected void toSearchResultPage(String searchUrl,String searchKey) {
+		SearchResultPage page = new SearchResultPage(this, parent);
+		page.setKey(searchKey);
+		page.loadPage(searchUrl, R.layout.page_search_result);
+	}
+
+
+	protected String getSearchUrl(String bywhat, String keywords) {
+		// TODO Auto-generated method stub
+		Pattern p = Pattern.compile("\\t|\r|\n");
+		Matcher m = p.matcher(keywords);
+		keywords = m.replaceAll("").trim();
+		String url = "http://tvsrv.webhop.net:9061/query?"
+				+"source="+currentOrigin
+				+"&page="+FilmClassPage
+				+"&pagesize="+FilmClassPageSize
+				+"&"+bywhat+"="+keywords;
+		
+		Log.d("MAT", "search url==>"+url);
+		return url;
+	}
+
 
 	@Override
 	protected void onPause() {

@@ -2,12 +2,7 @@ package com.rushfusion.mat.page;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.rushfusion.mat.R;
-import com.rushfusion.mat.utils.ImageLoadTask;
-import com.rushfusion.mat.utils.ItemDetailGridViewAdapter;
-import com.rushfusion.mat.video.entity.Movie;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -16,9 +11,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView.ScaleType;
+
+import com.rushfusion.mat.utils.ImageLoadTask;
+import com.rushfusion.mat.utils.ItemDetailGridViewAdapter;
+import com.rushfusion.mat.video.entity.Movie;
 
 public class ItemDetailPage extends Activity{
 	ImageView image;
