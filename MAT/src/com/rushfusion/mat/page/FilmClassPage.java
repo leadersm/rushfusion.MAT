@@ -20,6 +20,7 @@ import com.rushfusion.mat.utils.ImageLoadTask;
 import com.rushfusion.mat.video.entity.Movie;
 
 public class FilmClassPage extends BasePage {
+	//phone test
 	private static final int FILM_NUM = 8 ;
 	private Context mContext ;
 	private ViewGroup mParent ;
