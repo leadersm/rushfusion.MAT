@@ -294,6 +294,7 @@ public class MATActivity extends Activity implements OnClickListener{
 					});
 					sourceGroup.addView(sourceBtn);
 				}
+				sourceGroup.getChildAt(0).requestFocus();
 				
 			}
 
