@@ -45,7 +45,12 @@ public class DataParser {
 	}
 
 	public List<String> getSource() {
-		// TODO Auto-generated method stub
+		HttpUtil httpUtil = HttpUtil.getInstance(mContext) ;
+		String strUrl = CATEGORY_URL+"source";
+		Log.d(TAG, "getSource url:"+strUrl) ;
+		if(httpUtil.connectServerByURL(strUrl)) {
+			return loadData(httpUtil.getInputStreamFromUrl(strUrl)) ;
+		}
 		return null;
 	}
 	

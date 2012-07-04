@@ -264,7 +264,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		menu = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.menu, null);//findViewById(R.id.menu);
 		final ViewGroup sourceGroup = (ViewGroup) menu.findViewById(R.id.source_group);
 		sourceGroup.removeAllViews();
-		final ProgressBar progress = (ProgressBar) findViewById(R.id.menu_progress);
+		final ProgressBar progress = (ProgressBar) menu.findViewById(R.id.menu_progress);
 		new AsyncTask<String, Void, List<String>>(){
 
 			@Override
@@ -294,6 +294,7 @@ public class MATActivity extends Activity implements OnClickListener{
 					});
 					sourceGroup.addView(sourceBtn);
 				}
+				sourceGroup.getChildAt(0).requestFocus() ;
 				
 			}
 
