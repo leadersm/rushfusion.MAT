@@ -293,7 +293,7 @@ public class MATActivity extends Activity implements OnClickListener{
 					});
 					sourceGroup.addView(sourceBtn);
 				}
-				sourceGroup.getChildAt(0).requestFocus() ;
+				sourceGroup.getChildAt(0).requestFocus();
 			}
 
 			@Override
@@ -611,6 +611,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		}else if(id==DIALOG_CONNECTEDREFUSED){
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("提示");
+			builder.setIcon(R.drawable.nowifi_icon);
 			builder.setMessage(currentOrigin+"服务器无响应，请联系客服010-xxxxxxx");
 			builder.setNegativeButton("退出程序", new DialogInterface.OnClickListener() {
 				
@@ -630,6 +631,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		}else if(id==DIALOG_WIRELESS_SETTING){
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("提示");
+			builder.setIcon(R.drawable.nowifi_icon);
 			builder.setMessage("网络没有连接，请检查您的网络！");
 			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 				
@@ -677,6 +679,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		}else if(id == DIALOG_NO_SOURCE){
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("提示");
+			builder.setIcon(R.drawable.nowifi_icon);
 			builder.setMessage("加载视频源失败，请退出重试！");
 			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 				
