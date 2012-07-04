@@ -547,12 +547,10 @@ public class MATActivity extends Activity implements OnClickListener{
 		case R.id.byCondition:
 			showDialog(DIALOG_CONDITIONBAR);
 			break;
-		//==================================
 		case R.id.bySearch:
 			currentSortInfo = "搜索结果";
 			showDialog(DIALOG_SEARCH);
 			break;
-		//==================================
 			
 		default:
 			break;
