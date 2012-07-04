@@ -184,13 +184,13 @@ public class FilmClassPage extends BasePage {
 		if(total==0) 
 			currentPage = total ;
 		Log.d("total", total+"") ;
-		if(loadTag.equals("first")) {
+		//if(loadTag.equals("first")) {
 			if(total % size == 0) {
 				pageSize = total / size ;
 			} else {
 				pageSize = (total / size) + 1 ;
 			}
-		}
+		//}
 		updatePageState() ;
 	}
 	
@@ -295,7 +295,7 @@ public class FilmClassPage extends BasePage {
 			contentView.findViewById(R.id.arrow_left_film_class).setBackgroundResource(R.drawable.arrow_left_film_class_enable) ;
 		}
 	 
-		if(total <= FILM_NUM){
+		if(currentPage >= pageSize){
 			contentView.findViewById(R.id.arrow_right_film_class).setBackgroundResource(R.drawable.arrow_right_film_class_disable) ;
 		}else{
 			contentView.findViewById(R.id.arrow_right_film_class).setBackgroundResource(R.drawable.arrow_right_film_class_enable) ;

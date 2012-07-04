@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -77,6 +78,7 @@ public class VideoPlayer extends Activity implements SurfaceHolder.Callback,OnCo
 		Intent i=getIntent();
 		Bundle bd = i.getExtras();
 		filePath = bd.getString("url") ;
+		Log.d("viodeUrl", filePath) ;
 		ht.start();
 		handler_sent = new Handler(ht.getLooper());
 		run_sent=new Runnable() {
