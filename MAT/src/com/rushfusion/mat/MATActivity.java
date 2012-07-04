@@ -264,7 +264,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		menu = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.menu, null);//findViewById(R.id.menu);
 		final ViewGroup sourceGroup = (ViewGroup) menu.findViewById(R.id.source_group);
 		sourceGroup.removeAllViews();
-		final ProgressBar progress = (ProgressBar) findViewById(R.id.menu_progress);
+		final ProgressBar progress = (ProgressBar) menu.findViewById(R.id.menu_progress);
 		new AsyncTask<String, Void, List<String>>(){
 
 			@Override
@@ -614,6 +614,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		}else if(id==DIALOG_CONNECTEDREFUSED){
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("提示");
+			builder.setIcon(R.drawable.nowifi_icon);
 			builder.setMessage(currentOrigin+"服务器无响应，请联系客服010-xxxxxxx");
 			builder.setNegativeButton("退出程序", new DialogInterface.OnClickListener() {
 				
@@ -633,6 +634,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		}else if(id==DIALOG_WIRELESS_SETTING){
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("提示");
+			builder.setIcon(R.drawable.nowifi_icon);
 			builder.setMessage("网络没有连接，请检查您的网络！");
 			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 				
@@ -680,6 +682,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		}else if(id == DIALOG_NO_SOURCE){
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("提示");
+			builder.setIcon(R.drawable.nowifi_icon);
 			builder.setMessage("加载视频源失败，请退出重试！");
 			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 				
