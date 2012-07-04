@@ -35,7 +35,6 @@ public class FilmClassPage extends BasePage {
 	private String loadTag = "first" ;
 	public boolean loading = false;
 	public boolean updating = false;
-	
 	int LOADPAGEPOST_DELAY_TIME = 300;
 	int UPDATEPAGEPOST_DELAY = 300;
 
