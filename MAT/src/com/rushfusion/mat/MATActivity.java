@@ -38,7 +38,6 @@ import android.widget.Toast;
 import com.rushfusion.mat.page.FilmClassPage;
 import com.rushfusion.mat.page.PageCache;
 import com.rushfusion.mat.page.RecommendPage;
-import com.rushfusion.mat.page.SearchResultPage;
 import com.rushfusion.mat.utils.DataParser;
 import com.rushfusion.mat.utils.HttpUtil;
 
@@ -101,7 +100,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		editor = sp.edit();
 		res = getResources();
 		level2 = (ViewGroup) findViewById(R.id.level_2);
-		initSearchBar();
+		//initSearchBar();
 		updateHeaderInfo();
 	}
     
@@ -693,7 +692,7 @@ public class MATActivity extends Activity implements OnClickListener{
 
 	private String bywhat = "name";
 	
-	private void initSearchBar() {
+	/*private void initSearchBar() {
 		searchBar = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.page_search, null);
 		final EditText keyEt = (EditText) searchBar.findViewById(R.id.mat_search_key);
 		RadioGroup group = (RadioGroup) searchBar.findViewById(R.id.radioGroup1);
@@ -774,13 +773,13 @@ public class MATActivity extends Activity implements OnClickListener{
 			}
 		});
 	}
+*/
 
-
-	protected void toSearchResultPage(String searchUrl,String searchKey) {
+	/*protected void toSearchResultPage(String searchUrl,String searchKey) {
 		SearchResultPage page = new SearchResultPage(this, parent);
 		page.setKey(searchKey);
 		page.loadPage(searchUrl, R.layout.page_search_result);
-	}
+	}*/
 
 
 	protected String getSearchUrl(String bywhat, String keywords) {
