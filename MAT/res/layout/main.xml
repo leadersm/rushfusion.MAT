@@ -29,7 +29,6 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/level_1"
         layout="@layout/level2" />
-
 
     <LinearLayout
         android:id="@+id/parent"

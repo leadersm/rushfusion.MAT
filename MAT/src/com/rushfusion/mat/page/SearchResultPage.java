@@ -2,26 +2,34 @@ package com.rushfusion.mat.page;
 
 import java.util.List;
 import java.util.Map;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.rushfusion.mat.MATActivity;
 import com.rushfusion.mat.R;
 import com.rushfusion.mat.utils.DataParser;
 import com.rushfusion.mat.utils.ImageLoadTask;
 import com.rushfusion.mat.video.entity.Movie;
 
-public class FilmClassPage extends BasePage {
-	//phone test
-	private static final int FILM_NUM = 8 ;
+public class SearchResultPage extends BasePage {
+	private int FILM_NUM;
 	private Context mContext ;
 	private ViewGroup mParent ;
 	private String mUrl ;
@@ -30,8 +38,7 @@ public class FilmClassPage extends BasePage {
 	private int total ;
 	private List<Map<String, String>> nodeList;
 	protected ViewGroup filmItems[];
-	protected int filmItemResIds[] = { R.id.item1, R.id.item2, R.id.item3, R.id.item4,
-			R.id.item5, R.id.item6, R.id.item7, R.id.item8 };
+	protected int filmItemResIds[];
 	private TextView page_indext;
 	private String loadTag = "first" ;
 	public boolean loading = false;
@@ -39,6 +46,17 @@ public class FilmClassPage extends BasePage {
 	
 	int LOADPAGEPOST_DELAY_TIME = 300;
 	int UPDATEPAGEPOST_DELAY = 300;
+	
+	private String key = "";
+	
+
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
+	}
 
 	private static final int UPDATE_DATA = 10 ;
 	Handler handler = new Handler(){
@@ -55,7 +73,7 @@ public class FilmClassPage extends BasePage {
 			}
 		};
 	} ;
-	public FilmClassPage(Activity context, ViewGroup parent) {
+	public SearchResultPage(Activity context, ViewGroup parent) {
 		super(context, parent);
 		mContext = context ;
 		mParent = parent ;
@@ -72,6 +90,9 @@ public class FilmClassPage extends BasePage {
 			public void onPrepare() {
 				// TODO Auto-generated method stub
 				loading = true ;
+				FILM_NUM = 8;
+				filmItemResIds = new int[]{ R.id.item1, R.id.item2, R.id.item3, R.id.item4,
+							R.id.item5, R.id.item6, R.id.item7, R.id.item8 };
 				initFilm() ;
 			}
 			
@@ -89,9 +110,55 @@ public class FilmClassPage extends BasePage {
 			@Override
 			public void onFinished(List<Map<String, String>> result) {
 				loading = false ;
-				initPage() ;
-				fillData(result) ;
-				updateArrow() ;
+				if(result!=null&&result.size()>0){
+					initPage() ;
+					fillData(result) ;
+					updateArrow() ;
+				}else{
+					loadPage("推荐 url??", R.layout.page_search_noresult,new BasePage.onLoadingDataCallBack() {
+						
+						@Override
+						public void onPrepare() {
+							// TODO Auto-generated method stub
+							loading = true ;
+							FILM_NUM = 6;
+							filmItemResIds = new int[] { R.id.item1, R.id.item2, R.id.item3, R.id.item4,
+									R.id.item5, R.id.item6 };
+							initFilm() ;
+							TextView key = (TextView) contentView.findViewById(R.id.search_failed_key);
+							String msg = "非常抱歉，没有找到与"+getKey()+"相关的内容。";
+							SpannableStringBuilder style=new SpannableStringBuilder(msg);
+							style.setSpan(new ForegroundColorSpan(Color.RED),10,10+getKey().getBytes().length,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+							key.setText(style);
+							Button research = (Button) contentView.findViewById(R.id.search_result_researchBtn);
+							research.setOnClickListener(new OnClickListener() {
+								
+								@Override
+								public void onClick(View v) {
+									// TODO Auto-generated method stub
+									context.showDialog(MATActivity.DIALOG_SEARCH);
+								}
+							});
+						}
+						@Override
+						public List<Map<String, String>> onExcute(String url) {
+							// TODO Auto-generated method stub
+							return null;
+						}
+						
+						@Override
+						public void onFinished(List<Map<String, String>> result) {
+							// TODO Auto-generated method stub
+							loading = false ;
+							if(result==null)return;
+							initPage() ;
+							fillData(result) ;
+							updateArrow() ;
+						}
+						
+					});
+					
+				}
 			}
 		});
 	}
@@ -145,23 +212,38 @@ public class FilmClassPage extends BasePage {
 		contentView.findViewById(R.id.item1).setNextFocusLeftId(R.id.item1) ;
 		contentView.findViewById(R.id.item4).setNextFocusRightId(R.id.item5) ;
 		contentView.findViewById(R.id.item5).setNextFocusLeftId(R.id.item4) ;
-		
-		contentView.findViewById(R.id.item8).setOnKeyListener(new View.OnKeyListener() {
-			
-			@Override
-			public boolean onKey(View v, int keyCode, KeyEvent event) {
-				if( event.getAction() == KeyEvent.ACTION_DOWN){
+		if(FILM_NUM==8)
+			contentView.findViewById(R.id.item8).setOnKeyListener(new View.OnKeyListener() {
 				
-					if(keyCode == KeyEvent.KEYCODE_DPAD_RIGHT){
-						if(!loading && !updating)
-							nextPage();
-						return true;
+				@Override
+				public boolean onKey(View v, int keyCode, KeyEvent event) {
+					if( event.getAction() == KeyEvent.ACTION_DOWN){
+					
+						if(keyCode == KeyEvent.KEYCODE_DPAD_RIGHT){
+							if(!loading && !updating)
+								nextPage();
+							return true;
+						}
 					}
+					return false;
 				}
-				return false;
-			}
-		});
-		
+			});
+		else if(FILM_NUM==6)
+			contentView.findViewById(R.id.item6).setOnKeyListener(new View.OnKeyListener() {
+				
+				@Override
+				public boolean onKey(View v, int keyCode, KeyEvent event) {
+					if( event.getAction() == KeyEvent.ACTION_DOWN){
+					
+						if(keyCode == KeyEvent.KEYCODE_DPAD_RIGHT){
+							if(!loading && !updating)
+								nextPage();
+							return true;
+						}
+					}
+					return false;
+				}
+			});
 		contentView.findViewById(R.id.item1).setOnKeyListener(new View.OnKeyListener() {
 			
 			@Override
@@ -230,7 +312,7 @@ public class FilmClassPage extends BasePage {
 		@Override
 		public void run() {
 			loadPage(mUrl,R.layout.page_film_class) ;
-			PageCache.getInstance().set(R.layout.page_film_class, FilmClassPage.this);
+			PageCache.getInstance().set(R.layout.page_film_class, SearchResultPage.this);
 		}};
 	
 	private void updateData(Map<String,String> map) {

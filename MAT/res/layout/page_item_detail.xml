@@ -1,36 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"  
-    android:orientation="horizontal"
- android:layout_width="fill_parent"
- android:layout_height="fill_parent"
- android:background="#80cccccc">
- 
- <LinearLayout android:id="@+id/page_item_detail_main_left"
-     android:orientation="vertical"
-     android:layout_width="fill_parent"
-     android:layout_height="fill_parent"
-     android:layout_weight="7">
-     
-     <LinearLayout android:id="@+id/page_item_detail_main_left_top"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/main"
+    android:orientation="vertical">
+    
+    <RelativeLayout 
+        android:id="@+id/subRelativeLayout_01"
+        android:layout_width="400dip"
+        android:layout_height="400dip">
+    <LinearLayout android:id="@+id/page_item_detail_main_left_top"
          android:layout_width="fill_parent"
          android:layout_height="fill_parent"
          android:layout_weight="3"
          android:orientation="horizontal">
-         
          <LinearLayout android:layout_width="fill_parent"
              android:layout_height="fill_parent"
              android:layout_weight="2">
-             
          </LinearLayout>
          <LinearLayout android:layout_width="fill_parent"
              android:layout_height="fill_parent"
              android:layout_weight="1"
              android:orientation="vertical">
-             
              <LinearLayout android:layout_width="fill_parent"
                  android:layout_height="fill_parent"
                  android:layout_weight="19"></LinearLayout>
-             
              <LinearLayout android:layout_width="fill_parent"
                  android:layout_height="fill_parent"
                  android:layout_weight="2">
@@ -39,58 +33,47 @@
                 android:layout_height="fill_parent"
                 android:scaleType="fitXY"/>
              </LinearLayout>
-             
               <LinearLayout android:layout_width="fill_parent"
                  android:layout_height="fill_parent"
                  android:layout_weight="19"></LinearLayout>
-             
          </LinearLayout>
          <LinearLayout android:layout_width="fill_parent"
              android:layout_height="fill_parent"
              android:layout_weight="2">
-             
          </LinearLayout>
-         
-         
      </LinearLayout>
      
-     <LinearLayout android:id="@+id/page_item_detail_main_left_bottom"
-         android:layout_width="fill_parent"
-         android:layout_height="fill_parent"
-         android:layout_weight="2"
-         android:orientation="vertical"
-         android:gravity="top">
-         
-         <TextView android:id="@+id/page_item_detail_name"
+     
+     
+	</RelativeLayout>
+	<RelativeLayout 
+	    android:id="@+id/subRelativeLayout_01_right_filmName"
+	    android:layout_width="fill_parent"
+	    android:layout_height="50dip"
+	    android:layout_toRightOf="@+id/subRelativeLayout_01">
+    	<TextView android:id="@+id/page_item_detail_name"
              android:layout_width="fill_parent"
              android:layout_height="wrap_content"
              android:layout_gravity="center|top"
+             android:singleLine="true"
              android:gravity="center"
-             android:textSize="30dip"
+             android:textSize="35dip"
              android:textStyle="bold"
              android:textColor="#ffffffff"
              />
-         <TextView android:id="@+id/page_item_detail_description"
-             android:layout_width="fill_parent"
-             android:layout_height="fill_parent"
-             android:textSize="20dip"
-             android:textColor="#80afffff"/>
-         
-     </LinearLayout>
-     
- </LinearLayout>
- 
- 	<LinearLayout android:id="@+id/page_item_detail_main_right"
-     android:orientation="vertical"
-     android:layout_width="fill_parent"
-     android:layout_height="fill_parent"
-     android:layout_weight="3">
-     
-     <LinearLayout android:id="@+id/page_item_detail_main_right_top"
+	    
+	</RelativeLayout>
+	<RelativeLayout 
+         android:id="@+id/subRelativeLayout_01_right_top"
          android:layout_width="fill_parent"
-         android:layout_height="fill_parent"
-         android:layout_weight="4"
-         android:orientation="vertical">
+         android:layout_height="150dip"
+         android:layout_toRightOf="@+id/subRelativeLayout_01">
+         <LinearLayout android:id="@+id/page_item_detail_main_right_top"
+	         android:layout_width="fill_parent"
+	         android:layout_height="fill_parent"
+	         android:layout_weight="4"
+	         android:layout_toRightOf="@+id/page_item_detail_main_left_top"
+	         android:orientation="vertical">
          <LinearLayout android:id="@+id/page_item_detail_main_right_top_ue"
              android:layout_width="fill_parent"
              android:layout_height="fill_parent"
@@ -103,11 +86,12 @@
                   android:orientation="horizontal"
                   >
                   <TextView android:layout_width="wrap_content"
-                      android:layout_height="fill_parent"
+                      android:layout_height="wrap_content"
                       android:gravity="bottom"
                       android:textColor="#80afffff"
                       android:textSize="20dip"
-                      android:text="评分 ："/>
+                      android:background="@drawable/bg_text"
+                      android:text="  评分 ："/>
                   <TextView android:id="@+id/page_item_detail_socres"
                       android:layout_width="fill_parent"
                       android:layout_height="fill_parent"
@@ -125,11 +109,12 @@
                   android:layout_weight="1"
                   android:orientation="horizontal">
                   <TextView android:layout_width="wrap_content"
-                      android:layout_height="fill_parent"
+                      android:layout_height="wrap_content"
                       android:gravity="bottom"
                       android:textColor="#80afffff"
                       android:textSize="20dip"
-                      android:text="时长 ："/>
+                      android:background="@drawable/bg_text"
+                      android:text="  时长 ："/>
                   <TextView android:id="@+id/page_item_detail_length"
                       android:layout_width="fill_parent"
                       android:layout_height="fill_parent"
@@ -147,11 +132,12 @@
                   android:layout_weight="1"
                   android:orientation="horizontal">
                   <TextView android:layout_width="wrap_content"
-                      android:layout_height="fill_parent"
+                      android:layout_height="wrap_content"
                       android:gravity="bottom"
                       android:textColor="#80afffff"
                       android:textSize="20dip"
-                      android:text="年代 ："/>
+                      android:background="@drawable/bg_text"
+                      android:text="  年代 ："/>
                   <TextView android:id="@+id/page_item_detail_year"
                       android:layout_width="fill_parent"
                       android:layout_height="fill_parent"
@@ -168,6 +154,7 @@
          <LinearLayout android:id="@+id/page_item_detail_main_right_top_sita"
              android:layout_width="fill_parent"
              android:layout_height="wrap_content"
+             android:layout_marginTop="10dip"
              android:orientation="horizontal"
              android:gravity="center_vertical">
                <LinearLayout android:id="@+id/page_item_detail_main_right_top_sita_directors"
@@ -180,7 +167,8 @@
                       android:textColor="#80afffff"
                       android:textSize="20dip"
                       android:gravity="bottom"
-                      android:text="导演 ："/>
+                      android:background="@drawable/bg_text"
+                      android:text="  导演 ："/>
                   <TextView android:id="@+id/page_item_detail_directors"
                       android:layout_width="fill_parent"
                       android:layout_height="fill_parent"
@@ -202,7 +190,8 @@
                       android:textColor="#80afffff"
                       android:textSize="20dip"
                       android:gravity="bottom"
-                      android:text="演员 ："/>
+                      android:background="@drawable/bg_text"
+                      android:text="  演员 ："/>
                   <TextView android:id="@+id/page_item_detail_artists"
                       android:layout_width="fill_parent"
                       android:layout_height="fill_parent"
@@ -217,11 +206,40 @@
              
          </LinearLayout>
      </LinearLayout>
-     
-     <LinearLayout android:id="@+id/page_item_detail_main_right_bottom"
+     </RelativeLayout>
+     <RelativeLayout 
+         android:id="@+id/subRelativeLayout_01_right_bottom"
+         android:layout_width="fill_parent"
+         android:layout_height="200dip"
+         android:layout_toRightOf="@+id/subRelativeLayout_01"
+         android:layout_below="@+id/subRelativeLayout_01_right_top"
+         android:layout_marginTop="40dip">
+         <LinearLayout android:id="@+id/page_item_detail_main_left_bottom"
          android:layout_width="fill_parent"
          android:layout_height="fill_parent"
-         android:background="#ff105010"
+         android:layout_weight="2"
+         android:orientation="vertical"
+         android:layout_marginRight="30dip"
+         android:gravity="top">
+         
+         
+	         <TextView android:id="@+id/page_item_detail_description"
+	             android:layout_width="fill_parent"
+	             android:layout_height="fill_parent"
+	             android:textSize="20dip"
+	             android:focusable="false"
+	             android:textColor="#66FF33"/>
+     </LinearLayout>
+         
+     </RelativeLayout>
+    <RelativeLayout 
+        android:id="@+id/subRelativeLayout_02"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/subRelativeLayout_01">
+    	<LinearLayout android:id="@+id/page_item_detail_main_right_bottom"
+         android:layout_width="fill_parent"
+         android:layout_height="fill_parent"
          android:paddingLeft="30dip"
          android:paddingRight="30dip"
          android:layout_weight="1">
@@ -229,26 +247,15 @@
              android:layout_width="fill_parent"
              android:layout_height="fill_parent"
              android:layout_gravity="center"
-             android:numColumns="6"
+             android:numColumns="10"
              android:padding="10dip"
+             android:horizontalSpacing="30dip"
              android:verticalSpacing="15dip"
 	         android:gravity="center">
-		       <!--  android:padding="25dip"
-		       android:verticalSpacing="35dip"
-		       android:horizontalSpacing="30dip"
-		       android:listSelector=""
-    		   android:drawSelectorOnTop="false" 
-    		        选中 状态 的图片 以及 是否 覆盖该item绘画该图形 -->
-       			</GridView>
-         
+       		</GridView>
         </LinearLayout>
         
-    </LinearLayout>
+    </RelativeLayout>
     
-    
-</LinearLayout>
 
-
-
-
-
+</RelativeLayout>
