@@ -11,6 +11,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.AsyncTask;
@@ -35,6 +36,7 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rushfusion.mat.control.ReceiveService;
 import com.rushfusion.mat.page.FilmClassPage;
 import com.rushfusion.mat.page.PageCache;
 import com.rushfusion.mat.page.RecommendPage;
@@ -103,9 +105,15 @@ public class MATActivity extends Activity implements OnClickListener{
 		level2 = (ViewGroup) findViewById(R.id.level_2);
 		initSearchBar();
 		updateHeaderInfo();
+		searchSTBs();
 	}
     
-    Handler handler = new Handler(){
+    private void searchSTBs() {
+    	Intent i = new Intent(this,ReceiveService.class);
+    	startService(i);
+	}
+
+	Handler handler = new Handler(){
     	public void handleMessage(android.os.Message msg) {
     		switch (msg.what) {
 			case DIALOG_CONNECTEDREFUSED:
