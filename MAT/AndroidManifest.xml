@@ -14,22 +14,25 @@
         android:label="@string/app_name" >
         <activity
             android:name=".MATActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="landscape" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".page.MediaPlayerShow">
+        <activity android:name=".page.MediaPlayerShow" android:screenOrientation="landscape" >
             
         </activity>
-        <activity android:name=".page.VideoPlayer">
+        <activity android:name=".page.VideoPlayer" android:screenOrientation="landscape" >
             
         </activity>
-        <activity android:name=".page.ItemDetailPage">
+        <activity android:name=".page.ItemDetailPage" android:screenOrientation="landscape" >
             
         </activity>
+        
+        <service android:name="com.rushfusion.mat.control.ReceiveService"></service>
     </application>
 
 </manifest>

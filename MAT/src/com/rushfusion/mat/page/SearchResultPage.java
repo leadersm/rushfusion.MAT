@@ -64,7 +64,7 @@ public class SearchResultPage extends BasePage {
 			switch (msg.what) {
 			case UPDATE_DATA:
 				Map<String,String> map = (Map<String, String>) msg.obj ;
-				updateData(map) ;
+				//updateData(map) ;
 				
 				break;
 
@@ -201,7 +201,7 @@ public class SearchResultPage extends BasePage {
 							message.obj = map ;
 							message.what = UPDATE_DATA ;
 							handler.sendMessageDelayed(message, 300) ;
-							updateData(map) ;
+							//updateData(map) ;
 						}
 					}
 				}
@@ -258,7 +258,7 @@ public class SearchResultPage extends BasePage {
 				return false;
 			}
 		});
-		page_indext = (TextView)contentView.findViewById(R.id.field_page_index);
+		//page_indext = (TextView)contentView.findViewById(R.id.field_page_index);
 	}
 	
 	private void initPage() {
@@ -315,7 +315,7 @@ public class SearchResultPage extends BasePage {
 			PageCache.getInstance().set(R.layout.page_film_class, SearchResultPage.this);
 		}};
 	
-	private void updateData(Map<String,String> map) {
+	/*private void updateData(Map<String,String> map) {
 		//Map<String, String> map = nodeList.get(index) ;
 		TextView filmName = (TextView)contentView.findViewById(R.id.field_filmname) ;
 		filmName.setText(map.get("name")) ;
@@ -327,7 +327,7 @@ public class SearchResultPage extends BasePage {
 		area.setText(mContext.getString(R.string.area) + ":" +map.get("area")) ;
 		TextView introduction = (TextView)contentView.findViewById(R.id.field_introduction) ;
 		introduction.setText(mContext.getString(R.string.introduction) + ":" +map.get("description")) ;
-	}
+	}*/
 	
 	public void updatePageState() {
 		page_indext.setText(currentPage+"/"+pageSize+mContext.getString(R.string.page)) ;

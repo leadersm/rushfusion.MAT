@@ -12,6 +12,7 @@ import java.util.HashMap;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -20,7 +21,7 @@ public class ReceiveService extends Service {
 	public static String ACTION = "com.rushfusion.matservice";
 	private static final int PORT = 6806;
 	private static final String TAG = "MAT";
-	private DatagramSocket s = null;
+	private static DatagramSocket s = null;
 	private String mIp;
 	
 	@Override
@@ -34,13 +35,39 @@ public class ReceiveService extends Service {
 		super.onCreate();
 		Log.d(TAG, "------------onCreate----------");
 		try {
-			s = new DatagramSocket(PORT);
+			getSocket() ;
 			mIp = getLocalIpAddress();
+			Log.d("TAG", "ip:"+mIp) ;
 			Thread mReceiveThread = new Thread(receiveRunnable);
 			mReceiveThread.start();
+			
+			
+			final String destIp = mIp.substring(0,mIp.lastIndexOf(".") + 1);
+			System.out.println("destIp---->" + destIp);
+			new Thread(new Runnable() {
+
+				@Override
+				public void run() {
+					for (int i = 2; i < 255; i++) {
+						if (!mIp.equals(destIp + i))
+							search(destIp + i);
+					}
+				}
+			}).start();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static DatagramSocket getSocket() {
+		try {
+			if(s==null)
+				s = new DatagramSocket(PORT);
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
+		return s ;
 	}
 	
 	public String getLocalIpAddress() {
@@ -60,6 +87,19 @@ public class ReceiveService extends Service {
 			ex.printStackTrace();
 		}
 		return null;
+	}
+	
+	public void search(String destip) {
+		try {
+			InetAddress stbIp = InetAddress.getByName(destip);
+			byte[] data = ConstructRequestXML.SearchReq("123456", getLocalIpAddress());
+			DatagramPacket p = new DatagramPacket(data, data.length, stbIp,ConstructRequestXML.STB_PORT);
+			s.send(p);
+		} catch (SocketException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	Runnable receiveRunnable = new Runnable() {
@@ -87,8 +127,11 @@ public class ReceiveService extends Service {
 									if (map != null) {
 										String resp = map.get("cmd");
 										String IP = map.get("IP");
+										Log.d(TAG, "IP:"+IP);
 										if(resp.equals("searchresp")){
-											Log.d(TAG, "searchresp-->");
+											Log.d(TAG, "---------searchresp-->");
+											SharedPreferences preferences = getSharedPreferences("server_ip", 0) ;
+											preferences.edit().putString("IP", IP).commit();  
 											
 										}else if(resp.equals("playresp")){
 											Log.d(TAG, "playresp-->");

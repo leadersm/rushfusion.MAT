@@ -10,8 +10,8 @@
         android:layout_height="50dip"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="48dip"
-        android:layout_marginTop="100dip"
+        android:layout_marginLeft="8dip"
+        android:layout_marginTop="30dip"
         android:background="@drawable/arrow_left_film_class_disable" />
 
     <RelativeLayout
@@ -19,8 +19,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="18dip"
-        android:layout_marginTop="-10dip"
+        android:layout_marginLeft="8dip"
+        android:layout_marginTop="-33dip"
         android:layout_toRightOf="@+id/arrow_left_film_class" >
 
         <include
@@ -94,83 +94,9 @@
         android:layout_width="26dip"
         android:layout_height="50dip"
         android:layout_alignBottom="@+id/items"
-        android:layout_marginBottom="100dip"
-        android:layout_marginLeft="18dip"
+        android:layout_marginBottom="45dip"
+        android:layout_marginLeft="8dip"
         android:layout_toRightOf="@+id/items"
         android:background="@drawable/arrow_right_film_class_enable" />
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/items"
-        android:layout_marginLeft="26dip"
-        android:layout_marginTop="2dip"
-        android:layout_toRightOf="@+id/arrow_right_film_class"
-        android:background="@drawable/epg_dian_ying_film_class_page_detail_bg"
-        android:paddingLeft="10dip" >
-
-        <TextView
-            android:id="@+id/field_filmname"
-            style="@style/font.filmname"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dip"
-            android:singleLine="true"
-            android:text="filmname" >
-        </TextView>
-
-        <TextView
-            android:id="@+id/field_director"
-            style="@style/font.text"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/field_filmname"
-            android:layout_marginTop="40dip"
-            android:singleLine="true"
-            android:text="director :" >
-        </TextView>
-
-        <TextView
-            android:id="@+id/field_actor"
-            style="@style/font.text"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/field_director"
-            android:singleLine="true"
-            android:text="actor : " >
-        </TextView>
-
-        <TextView
-            android:id="@+id/field_area"
-            style="@style/font.text"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/field_actor"
-            android:singleLine="true"
-            android:text="area :" >
-        </TextView>
-
-        <TextView
-            android:id="@+id/field_introduction"
-            style="@style/font.text"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/field_page_index"
-            android:layout_below="@+id/field_area"
-            android:layout_marginBottom="10dip"
-            android:maxLines="8"
-            android:text="introduction :" >
-        </TextView>
-
-        <TextView
-            android:id="@+id/field_page_index"
-            style="@style/font.page_index"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:singleLine="true"
-            android:text="15/60 pages" >
-        </TextView>
-    </RelativeLayout>
 
 </RelativeLayout>

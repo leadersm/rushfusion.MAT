@@ -53,5 +53,9 @@
     <string name="search_result_top">"观看排行："</string>
     <string name="pleaseinputkey">请输入搜索关键字</string>
     
+    <string name="tv_play">"电视播放"</string>
+    <string name="mobile_play">"手机播放"</string>
+    
+    
     
 </resources>

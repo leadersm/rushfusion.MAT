@@ -5,14 +5,14 @@
     android:background="@drawable/main"
     android:orientation="vertical" >
 
-    <TextView
+    <!-- TextView
         android:id="@+id/headerInfo"
         style="@style/font.header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="" />
+        android:text="" / -->
 
     <include
         android:id="@+id/level_1"

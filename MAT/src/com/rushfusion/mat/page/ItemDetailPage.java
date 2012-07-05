@@ -1,25 +1,39 @@
 package com.rushfusion.mat.page;
 
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
-import com.rushfusion.mat.R;
+
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView.ScaleType;
+import android.widget.TextView;
 
+import com.rushfusion.mat.R;
+import com.rushfusion.mat.control.ConstructRequestXML;
+import com.rushfusion.mat.control.ReceiveService;
 import com.rushfusion.mat.utils.ImageLoadTask;
 import com.rushfusion.mat.utils.ItemDetailGridViewAdapter;
 import com.rushfusion.mat.video.entity.Movie;
 
 public class ItemDetailPage extends Activity{
+	private static final int PORT = 6806;
 	ImageView image;
 	TextView name;
 	TextView description;
@@ -30,13 +44,17 @@ public class ItemDetailPage extends Activity{
 	TextView artists;
 	GridView episode;
 	Movie movie ;
+	private View adapterView ;
 	ItemDetailGridViewAdapter gda;
+	DatagramSocket s ;
 
 	List<String> list = new ArrayList<String>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE); 
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); 
 		setContentView(R.layout.page_item_detail);
 		movie = (Movie) getIntent().getSerializableExtra("movieInfo");
 //		if(movie==null){
@@ -79,8 +97,48 @@ public class ItemDetailPage extends Activity{
 			public void onItemClick(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
 				// 播放  163:http://163.letv.com/dianying/E7JRABGJ9/M7KS70Q27_mini.html
+				adapterView=arg1 ;
+				adapterView.setTag(arg2) ;
+				showDialog() ;
 
-				String path = list.get(arg2);
+			}
+
+		});
+	}
+	
+	public void showDialog() {
+		Dialog dialog = new Dialog(this) ;
+		View view = getLayoutInflater().inflate(R.layout.choice_dialog, null) ;
+		dialog.setContentView(view) ;
+		dialog.show() ;
+		View tv_play = view.findViewById(R.id.tv_play) ;
+		tv_play.setOnClickListener(ChoiceListener) ;
+		View mobile_play = view.findViewById(R.id.mobile_play) ;
+		mobile_play.setOnClickListener(ChoiceListener) ;
+	}
+	
+	View.OnClickListener ChoiceListener = new View.OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			int position = (Integer) adapterView.getTag() ;
+			String path = list.get(position);
+			if(v.getId()==R.id.tv_play) {
+				SharedPreferences preferences = getSharedPreferences("server_ip", 0) ;
+				String IP = preferences.getString("IP", "") ;
+				Log.d("IP", "IP:"+IP) ;
+				try {
+					s = ReceiveService.getSocket() ;
+					byte[] data = ConstructRequestXML.PlayReq(1, IP, movie.getName(), 0, path);
+					InetAddress stbIp = InetAddress.getByName(IP);
+					DatagramPacket p = new DatagramPacket(data, data.length, stbIp,ConstructRequestXML.STB_PORT);
+					s.send(p);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if(v.getId()==R.id.mobile_play) {
+				Log.d("ViodPlay", "viodPlay url:" + path) ;
 				if(path.indexOf("html")==(path.length()-4)){
 					Intent it = new Intent(Intent.ACTION_VIEW , Uri.parse(path));
 					startActivity(it);
@@ -89,17 +147,14 @@ public class ItemDetailPage extends Activity{
 					Intent it =  new Intent(ItemDetailPage.this, MediaPlayerShow.class);
 //					Intent it =  new Intent(ItemDetailPage.this, VideoPlayer.class);
 					Bundle bd = new Bundle();
-					bd.putString("url", list.get(arg2));
-					bd.putString("id", movie.getId()+""+arg2);
+					bd.putString("url", list.get(position));
+					bd.putString("id", movie.getId()+""+position);
 					it.putExtras(bd);
 					startActivity(it);
 				}
-
 			}
-
-		});
-	}
-	
+		}
+	};
 	
 	
 }

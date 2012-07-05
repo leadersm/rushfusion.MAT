@@ -86,6 +86,8 @@ public class MATActivity extends Activity implements OnClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE); 
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN); 
         setContentView(R.layout.main);
         if(HttpUtil.checkNetworkEnabled(this)){
         	init();
@@ -104,7 +106,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		res = getResources();
 		level2 = (ViewGroup) findViewById(R.id.level_2);
 		initSearchBar();
-		updateHeaderInfo();
+		//updateHeaderInfo();
 		searchSTBs();
 	}
     
@@ -210,7 +212,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		    	String url = "shouye url ???";
 		    	initRecommendPage(url);
 		    	initChooseBar();
-		    	updateHeaderInfo();
+		    	//updateHeaderInfo();
 				
 			}
 			
@@ -452,10 +454,10 @@ public class MATActivity extends Activity implements OnClickListener{
 		btn.setTextColor(res.getColor(R.color.white));
 		btn.setBackgroundDrawable(res.getDrawable(R.drawable.btn_condition));
 	}
-	private void updateHeaderInfo() {
+	/*private void updateHeaderInfo() {
 		TextView headerInfo = (TextView) findViewById(R.id.headerInfo);
 		headerInfo.setText(currentOrigin+">"+currentCategory+">"+currentSortInfo);
-	}
+	}*/
 
     
 	/**
@@ -476,7 +478,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		baseUrl.append("&page="+FilmClassPage+"&pagesize="+FilmClassPageSize);
 		String url = baseUrl.toString();
 		Log.d("MAT","LoadPage url==>"+url);
-		updateHeaderInfo();
+		//updateHeaderInfo();
 		if(currentCategory.equals("首页")){
 			initRecommendPage(url);
 		}else{
@@ -720,7 +722,7 @@ public class MATActivity extends Activity implements OnClickListener{
 					toSearchResultPage(getSearchUrl(bywhat,keywords),keywords);
 					keyEt.getText().clear();
 					dismissDialog(DIALOG_SEARCH);
-					updateHeaderInfo();
+					//updateHeaderInfo();
 				}else{
 					Toast.makeText(MATActivity.this, MATActivity.this.getString(R.string.qingshuru), 1).show();
 				}
@@ -829,7 +831,7 @@ public class MATActivity extends Activity implements OnClickListener{
 			@Override
 			protected void onPreExecute() {
 				super.onPreExecute();
-				updateHeaderInfo();
+				//updateHeaderInfo();
 			}
 			@Override
 			protected String doInBackground(String... params) {
