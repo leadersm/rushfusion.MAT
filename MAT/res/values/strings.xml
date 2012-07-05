@@ -51,6 +51,7 @@
     <string name="searchinfo_d">"” ，共找到视频"</string>
     <string name="searchinfo_e">"个"</string>
     <string name="search_result_top">"观看排行："</string>
+    <string name="pleaseinputkey">请输入搜索关键字</string>
     
     
 </resources>

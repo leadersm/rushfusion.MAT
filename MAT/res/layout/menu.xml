@@ -10,12 +10,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="50dip"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dip"
         android:text="@string/tip_menu" />
 
     <LinearLayout
-        android:id="@+id/linearLayout1"
+        android:id="@+id/source_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -56,5 +56,12 @@
             android:layout_height="80dip"
             android:background="@drawable/leshi" />
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/menu_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
 
 </RelativeLayout>
