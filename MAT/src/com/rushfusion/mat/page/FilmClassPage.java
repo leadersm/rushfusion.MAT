@@ -2,19 +2,18 @@ package com.rushfusion.mat.page;
 
 import java.util.List;
 import java.util.Map;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.rushfusion.mat.R;
 import com.rushfusion.mat.utils.DataParser;
 import com.rushfusion.mat.utils.ImageLoadTask;
@@ -40,6 +39,21 @@ public class FilmClassPage extends BasePage {
 	int LOADPAGEPOST_DELAY_TIME = 300;
 	int UPDATEPAGEPOST_DELAY = 300;
 
+	private static final int UPDATE_DATA = 10 ;
+	Handler handler = new Handler(){
+		public void handleMessage(android.os.Message msg) {
+			switch (msg.what) {
+			case UPDATE_DATA:
+				Map<String,String> map = (Map<String, String>) msg.obj ;
+				updateData(map) ;
+				
+				break;
+
+			default:
+				break;
+			}
+		};
+	} ;
 	public FilmClassPage(Activity context, ViewGroup parent) {
 		super(context, parent);
 		mContext = context ;
@@ -93,7 +107,7 @@ public class FilmClassPage extends BasePage {
 					Movie movie = new Movie(Integer.parseInt(map.get("count")),Integer.parseInt(map.get("total")),Integer.parseInt(map.get("score")),
 							Integer.parseInt(map.get("comment")),map.get("category"),map.get("name"),map.get("type"),Integer.parseInt(map.get("year")),
 							map.get("directors"),map.get("artists"),map.get("area"),map.get("description"),
-							map.get("thumb"),map.get("length"),map.get("url"),Integer.parseInt(map.get("play")),Integer.parseInt(map.get("id")),Integer.parseInt(map.get("recent"))) ;
+							map.get("thumb"),map.get("length"),map.get("url"),Integer.parseInt(map.get("play")),map.get("id"),Integer.parseInt(map.get("recent"))) ;
 					Intent intent = new Intent(mContext,ItemDetailPage.class) ;
 					Bundle bundle = new Bundle() ;
 					bundle.putSerializable("movieInfo", movie) ;
@@ -115,6 +129,10 @@ public class FilmClassPage extends BasePage {
 					if(hasFocus){
 						Map<String,String> map = (Map<String, String>) v.getTag() ;
 						if(map!=null) {
+							Message message = new Message() ;
+							message.obj = map ;
+							message.what = UPDATE_DATA ;
+							handler.sendMessageDelayed(message, 300) ;
 							updateData(map) ;
 						}
 					}
@@ -210,8 +228,8 @@ public class FilmClassPage extends BasePage {
 	Runnable loadPagePostRunnable = new Runnable(){
 		@Override
 		public void run() {
-//			mParent.removeAllViews() ;
 			loadPage(mUrl,R.layout.page_film_class) ;
+			PageCache.getInstance().set(R.layout.page_film_class, FilmClassPage.this);
 		}};
 	
 	private void updateData(Map<String,String> map) {
@@ -257,7 +275,7 @@ public class FilmClassPage extends BasePage {
 	
 	protected int itemSize(){
 		int size = FILM_NUM ;
-		if(nodeList.size()<=FILM_NUM) {
+		if(nodeList!=null && nodeList.size()<=FILM_NUM) {
 			size = nodeList.size() ;
 		}
 		return size ;

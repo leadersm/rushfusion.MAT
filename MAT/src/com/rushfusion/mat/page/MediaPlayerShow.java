@@ -1,8 +1,6 @@
 package com.rushfusion.mat.page;
 
 import java.io.IOException;
-import java.text.AttributedCharacterIterator.Attribute;
-import java.util.jar.Attributes;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -12,9 +10,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.inputmethodservice.Keyboard;
-import android.inputmethodservice.Keyboard.Key;
-import android.inputmethodservice.KeyboardView.OnKeyboardActionListener;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnBufferingUpdateListener;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -24,7 +19,6 @@ import android.media.MediaPlayer.OnPreparedListener;
 import android.media.MediaPlayer.OnSeekCompleteListener;
 import android.media.MediaPlayer.OnVideoSizeChangedListener;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.SurfaceHolder;
@@ -32,7 +26,6 @@ import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnKeyListener;
 import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
