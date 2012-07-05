@@ -10,10 +10,13 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
+
 import com.rushfusion.mat.R;
 import com.rushfusion.mat.utils.DataParser;
 import com.rushfusion.mat.utils.ImageLoadTask;
@@ -33,6 +36,7 @@ public class FilmClassPage extends BasePage {
 	protected int filmItemResIds[] = { R.id.item1, R.id.item2, R.id.item3, R.id.item4,
 			R.id.item5, R.id.item6, R.id.item7, R.id.item8 };
 	private TextView page_indext;
+	private ViewFlipper viewFlipper ;
 	private String loadTag = "first" ;
 	public boolean loading = false;
 	public boolean updating = false;
@@ -97,6 +101,7 @@ public class FilmClassPage extends BasePage {
 	}
 	
 	private void initFilm(){
+		
 		int size = FILM_NUM ;
 		filmItems = new ViewGroup[size];
 		for(int i = 0; i<size; i++){
@@ -290,17 +295,37 @@ public class FilmClassPage extends BasePage {
 	}
 	
 	private void updateArrow() {
+		View arrow_left = contentView.findViewById(R.id.arrow_left_film_class) ;
+		View arrow_right = contentView.findViewById(R.id.arrow_right_film_class) ;
 		if(currentPage <= 1){
-			contentView.findViewById(R.id.arrow_left_film_class).setBackgroundResource(R.drawable.arrow_left_film_class_disable) ;
+			arrow_left.setBackgroundResource(R.drawable.arrow_left_film_class_disable) ;
 		}else{
-			contentView.findViewById(R.id.arrow_left_film_class).setBackgroundResource(R.drawable.arrow_left_film_class_enable) ;
+			arrow_left.setBackgroundResource(R.drawable.arrow_left_film_class_enable) ;
 		}
 	 
 		if(currentPage >= pageSize){
-			contentView.findViewById(R.id.arrow_right_film_class).setBackgroundResource(R.drawable.arrow_right_film_class_disable) ;
+			arrow_right.setBackgroundResource(R.drawable.arrow_right_film_class_disable) ;
 		}else{
-			contentView.findViewById(R.id.arrow_right_film_class).setBackgroundResource(R.drawable.arrow_right_film_class_enable) ;
+			arrow_right.setBackgroundResource(R.drawable.arrow_right_film_class_enable) ;
 		}
+		arrow_left.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				if(!loading && !updating)
+					prevPage() ;
+			}
+		}) ;
+		
+		arrow_right.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if(!loading && !updating)
+					nextPage();
+			}
+		}) ;
 	}
 	
 }

@@ -106,8 +106,9 @@ public class ItemDetailPage extends Activity{
 		});
 	}
 	
+	private Dialog dialog ;
 	public void showDialog() {
-		Dialog dialog = new Dialog(this) ;
+		dialog = new Dialog(this) ;
 		View view = getLayoutInflater().inflate(R.layout.choice_dialog, null) ;
 		dialog.setContentView(view) ;
 		dialog.show() ;
@@ -117,6 +118,10 @@ public class ItemDetailPage extends Activity{
 		mobile_play.setOnClickListener(ChoiceListener) ;
 	}
 	
+	private void dismissDialog() {
+		dialog.dismiss() ;
+	}
+	
 	View.OnClickListener ChoiceListener = new View.OnClickListener() {
 		
 		@Override
@@ -124,7 +129,7 @@ public class ItemDetailPage extends Activity{
 			int position = (Integer) adapterView.getTag() ;
 			String path = list.get(position);
 			if(v.getId()==R.id.tv_play) {
-				SharedPreferences preferences = getSharedPreferences("server_ip", 0) ;
+				/*SharedPreferences preferences = getSharedPreferences("server_ip", 0) ;
 				String IP = preferences.getString("IP", "") ;
 				Log.d("IP", "IP:"+IP) ;
 				try {
@@ -135,10 +140,20 @@ public class ItemDetailPage extends Activity{
 					s.send(p);
 				} catch (Exception e) {
 					e.printStackTrace();
-				}
+				}*/
+				dismissDialog() ;
+				Intent intent = new Intent(ItemDetailPage.this,ScreenControl.class) ;
+				Bundle bundle = new Bundle() ;
+				bundle.putString("viodeUrl", path) ;
+				bundle.putString("name", movie.getName()) ;
+				bundle.putString("duration", movie.getLength()) ;
+				intent.putExtras(bundle) ;
+				startActivity(intent) ;
+				
 			}
 			if(v.getId()==R.id.mobile_play) {
 				Log.d("ViodPlay", "viodPlay url:" + path) ;
+				dismissDialog() ;
 				if(path.indexOf("html")==(path.length()-4)){
 					Intent it = new Intent(Intent.ACTION_VIEW , Uri.parse(path));
 					startActivity(it);

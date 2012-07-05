@@ -36,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="7dip"
         android:background="#33FF33" />
-
+
     <ScrollView
         android:id="@+id/scrollView1"
         android:layout_width="fill_parent"

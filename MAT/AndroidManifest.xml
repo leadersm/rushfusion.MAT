@@ -31,6 +31,9 @@
         <activity android:name=".page.ItemDetailPage" android:screenOrientation="landscape" >
             
         </activity>
+        <activity android:name=".page.ScreenControl" >
+            
+        </activity>
         
         <service android:name="com.rushfusion.mat.control.ReceiveService"></service>
     </application>

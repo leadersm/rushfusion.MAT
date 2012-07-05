@@ -1,7 +1,7 @@
-<<<<<<< HEAD
-#Tue Jul 03 18:40:53 CST 2012
-=======
-#Mon Jul 02 10:59:54 CST 2012
->>>>>>> refs/remotes/origin/lsm
+#Thu Jul 05 09:16:36 CST 2012
+=\=\=\=\=\=\=
+<<<<<<<=HEAD
+>>>>>>>=refs/remotes/origin/lsm
 eclipse.preferences.version=1
+encoding//src/com/rushfusion/mat/page/ScreenControl.java=UTF-8
 encoding/<project>=UTF-8

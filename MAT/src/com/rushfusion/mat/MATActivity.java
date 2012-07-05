@@ -2,6 +2,7 @@ package com.rushfusion.mat;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -107,7 +108,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		level2 = (ViewGroup) findViewById(R.id.level_2);
 		initSearchBar();
 		//updateHeaderInfo();
-		searchSTBs();
+		//searchSTBs();
 	}
     
     private void searchSTBs() {
@@ -275,7 +276,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		final ViewGroup sourceGroup = (ViewGroup) menu.findViewById(R.id.source_group);
 		sourceGroup.removeAllViews();
 		final ProgressBar progress = (ProgressBar) menu.findViewById(R.id.menu_progress);
-		new AsyncTask<String, Void, List<String>>(){
+		new AsyncTask<String, Void, List<Map<String,String>>>(){
 
 			@Override
 			protected void onPreExecute() {
@@ -283,7 +284,7 @@ public class MATActivity extends Activity implements OnClickListener{
 			}
 
 			@Override
-			protected void onPostExecute(List<String> result) {
+			protected void onPostExecute(List<Map<String,String>> result) {
 				progress.setVisibility(View.INVISIBLE);
 				if(result==null||result.size()<=0){
 					dismissDialog(DIALOG_ORIGIN_MENU);
@@ -292,13 +293,14 @@ public class MATActivity extends Activity implements OnClickListener{
 				}
 				for(int i=0;i<result.size();i++){
 					Button sourceBtn = new Button(MATActivity.this);
-					final String sourceName = result.get(i);
+					final Map<String,String> map = result.get(i) ;
+					final String sourceName = map.get("name");
 					setCategoryBtnStyle(sourceBtn, sourceName);
 					sourceBtn.setOnClickListener(new OnClickListener() {
 						
 						@Override
 						public void onClick(View v) {
-							changeDataByOriginName(sourceName);
+							changeDataByOriginName(map.get("source"));
 							dismissDialog(DIALOG_ORIGIN_MENU);
 						}
 					});
@@ -308,7 +310,7 @@ public class MATActivity extends Activity implements OnClickListener{
 			}
 
 			@Override
-			protected List<String> doInBackground(String... params) {
+			protected List<Map<String,String>> doInBackground(String... params) {
 				// TODO Auto-generated method stub
 				return DataParser.getInstance(MATActivity.this,params[0]).getSource();
 			}
