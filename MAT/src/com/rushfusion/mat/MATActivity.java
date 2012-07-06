@@ -108,7 +108,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		editor = sp.edit();
 		res = getResources();
 		level2 = (ViewGroup) findViewById(R.id.level_2);
-		//initSearchBar();
+//		initSearchBar();
 		updateHeaderInfo();
 	}
     
@@ -304,6 +304,7 @@ public class MATActivity extends Activity implements OnClickListener{
 					sourceGroup.addView(sourceBtn);
 				}
 				sourceGroup.getChildAt(0).requestFocus();
+				
 			}
 
 			@Override
@@ -766,8 +767,8 @@ public class MATActivity extends Activity implements OnClickListener{
 				
 			}
 		});
-	}
-*/
+	}*/
+
 
 	/*protected void toSearchResultPage(String searchUrl,String searchKey) {
 		SearchResultPage page = new SearchResultPage(this, parent);
