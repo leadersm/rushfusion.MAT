@@ -44,12 +44,12 @@ public class DataParser {
 		return null;
 	}
 
-	public List<String> getSource() {
+	public List<Map<String,String>> getSource() {
 		HttpUtil httpUtil = HttpUtil.getInstance(mContext) ;
 		String strUrl = CATEGORY_URL+"source" ;
 		Log.d(TAG, "Source url:"+strUrl) ;
 		if(httpUtil.connectServerByURL(strUrl)) {
-			return loadData(httpUtil.getInputStreamFromUrl(strUrl)) ;
+			return loadSource(httpUtil.getInputStreamFromUrl(strUrl)) ;
 		}
 		return null;
 	}
@@ -100,6 +100,42 @@ public class DataParser {
 			return loadFileData(httpUtil.getInputStreamFromUrl(strUrl)) ;
 		}
 		return null;
+	}
+	
+	
+	public List<Map<String,String>> loadSource(InputStream inputSteam) {
+		List<Map<String,String>> sourceList = null ;
+		try {
+			StringBuilder builder = new StringBuilder() ;
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputSteam)) ;
+			for(String s = bufferedReader.readLine(); s != null; s = bufferedReader.readLine()) {
+				builder.append(s) ;
+			}
+			Log.d("JSON", builder.toString()) ;
+			JSONObject jsonObject = new JSONObject(builder.toString()) ;
+			String total = jsonObject.getString("total") ;
+			JSONArray itemsArray = jsonObject.getJSONArray("items") ;
+			Log.d("JsonArray", itemsArray.toString()) ;
+			sourceList = new ArrayList<Map<String,String>>() ;
+			//dataList.add(total) ;
+			for(int i=0; i<itemsArray.length(); i++) {
+				JSONObject obj = new JSONObject(itemsArray.getString(i)) ;
+				 Map<String,String> sourceMap = new HashMap<String, String>() ;
+				 sourceMap.put("source",obj.get("source").toString()) ;
+				 sourceMap.put("logo",obj.get("logo").toString()) ;
+				 sourceMap.put("name",obj.get("name").toString()) ;
+				 sourceList.add(sourceMap) ;
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.d(TAG, "IOException:"+e.getStackTrace()+"") ;
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.d(TAG, "JSONException"+e.getStackTrace()+"") ;
+		}
+		return sourceList;
 	}
 	
 	public List<String> loadData(InputStream inputSteam) {
