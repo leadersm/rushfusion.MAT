@@ -142,10 +142,8 @@ public class ReceiveService extends Service {
 										}else if(resp.equals("stopresp")){
 											Log.d(TAG, "stopresp-->");
 											
-										}else if(resp.equals("ffresp")){
-											Log.d(TAG, "stopresp-->");
-											
-										}else if(resp.endsWith("fbresp")){
+										}else if(resp.equals("seekresp")){
+											Log.d(TAG, "seekresp-->"+map.get("pos"));
 											
 										}
 										

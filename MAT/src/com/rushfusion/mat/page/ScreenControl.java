@@ -88,6 +88,7 @@ public class ScreenControl extends Activity {
 				sp = getSharedPreferences("interact_title",MODE_WORLD_WRITEABLE);
 				editor = sp.edit();
 				findByIds();
+				searchSTBIP() ;
 				Thread mReceiveThread = new Thread(updateThread);
 				mReceiveThread.start();
 			} catch (SocketException e) {
@@ -154,8 +155,10 @@ public class ScreenControl extends Activity {
 		searchBtn.setEnabled(false);
 		showDialog(DIALOG_PROGRESS);
 		localIp = getLocalIpAddress();// "192.168.2.xxx";
+		Log.d(TAG, "localIP:"+localIp) ;
+		mIp.setText("本机ip-->" + localIp);
 		final String destIp = localIp.substring(0,localIp.lastIndexOf(".") + 1);
-		System.out.println("destIp---->" + destIp);
+		System.out.println("destIp---->" + localIp);
 		new Thread(new Runnable() {
 
 			@Override
@@ -175,9 +178,7 @@ public class ScreenControl extends Activity {
 		searchBtn = (Button) findViewById(R.id.search);
 		clearBtn = (Button) findViewById(R.id.clear);
 		stblist = (LinearLayout) findViewById(R.id.list);
-		String currentIp = getLocalIpAddress() ;
-		Log.d(TAG, currentIp) ;
-		mIp.setText("本机ip-->" + currentIp);
+		//mIp.setText("本机ip-->" + localIp);
 		handler = new Handler() {
 
 			@Override
@@ -220,8 +221,6 @@ public class ScreenControl extends Activity {
 				stbs.clear();
 			}
 		});
-
-		searchSTBIP() ;
 	}
 
 	public void search(String destip) {
@@ -396,7 +395,7 @@ public class ScreenControl extends Activity {
 					try {
 						Log.d(TAG, "=======onStopTrackingTouch======") ;
 						Log.d(TAG, "seekPosition:"+seekPosition) ;
-						byte[] data = ConstructRequestXML.SeekReq(1, viodeUrl, seekPosition) ;
+						byte[] data = ConstructRequestXML.SeekReq(1, localIp, seekPosition) ;
 						InetAddress stbIp = InetAddress.getByName(stb.getIp());
 						DatagramPacket p = new DatagramPacket(data, data.length, stbIp,ConstructRequestXML.STB_PORT);
 						s.send(p);
