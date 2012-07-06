@@ -34,8 +34,14 @@ import android.widget.Toast;
 
 import com.rushfusion.mat.R;
 
-public class MediaPlayerShow extends Activity implements OnBufferingUpdateListener,OnVideoSizeChangedListener,OnCompletionListener,OnErrorListener,
-														OnInfoListener,OnPreparedListener,OnSeekCompleteListener,Callback,MediaPlayerControl{
+public class MediaPlayerShow extends Activity implements OnBufferingUpdateListener,
+														 OnVideoSizeChangedListener,
+														 OnCompletionListener,
+														 OnErrorListener,
+														 OnInfoListener,
+														 OnPreparedListener,
+														 OnSeekCompleteListener,
+														 Callback,MediaPlayerControl{
 	String filePath;
 	SurfaceView surfaceView;
 	SurfaceHolder surfaceHolder;
