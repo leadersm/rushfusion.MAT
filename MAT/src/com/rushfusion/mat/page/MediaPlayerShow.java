@@ -19,6 +19,7 @@ import android.media.MediaPlayer.OnPreparedListener;
 import android.media.MediaPlayer.OnSeekCompleteListener;
 import android.media.MediaPlayer.OnVideoSizeChangedListener;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.SurfaceHolder;
@@ -75,6 +76,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 			Toast.makeText(this, "连接错误", 1000).show();
 		}else{
 			filePath = bd.getString("url") ;
+			Log.d("url", filePath) ;
 			movieId = bd.getString("id");
 			int testPosition = prefs.getInt(movieId, -1);
 			if(testPosition != -1){
