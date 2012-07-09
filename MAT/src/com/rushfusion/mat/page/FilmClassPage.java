@@ -235,6 +235,7 @@ public class FilmClassPage extends BasePage {
 		@Override
 		public void run() {
 			loadPage(mUrl,R.layout.page_film_class) ;
+			Log.d("Furl", mUrl) ;
 			PageCache.getInstance().set(R.layout.page_film_class, FilmClassPage.this);
 		}};
 	
