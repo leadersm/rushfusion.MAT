@@ -2,6 +2,7 @@ package com.rushfusion.mat;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,6 +15,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,10 +30,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
@@ -43,6 +49,7 @@ import com.rushfusion.mat.page.RecommendPage;
 import com.rushfusion.mat.page.SearchResultPage;
 import com.rushfusion.mat.utils.DataParser;
 import com.rushfusion.mat.utils.HttpUtil;
+import com.rushfusion.mat.utils.ImageLoadTask;
 
 public class MATActivity extends Activity implements OnClickListener{
     /** Called when the activity is first created. */
@@ -66,6 +73,7 @@ public class MATActivity extends Activity implements OnClickListener{
 	private ViewGroup searchBar;
 	
 	private String currentOrigin="sina";
+	private String currentOriginName="新浪视频";
 	private String currentCategory="首页";
 	private String currentType="";
 	private String currentYear="";
@@ -273,7 +281,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		final ViewGroup sourceGroup = (ViewGroup) menu.findViewById(R.id.source_group);
 		sourceGroup.removeAllViews();
 		final ProgressBar progress = (ProgressBar) menu.findViewById(R.id.menu_progress);
-		new AsyncTask<String, Void, List<String>>(){
+		new AsyncTask<String, Void, List<Map<String,String>>>(){
 
 			@Override
 			protected void onPreExecute() {
@@ -281,7 +289,7 @@ public class MATActivity extends Activity implements OnClickListener{
 			}
 
 			@Override
-			protected void onPostExecute(List<String> result) {
+			protected void onPostExecute(List<Map<String,String>> result) {
 				progress.setVisibility(View.INVISIBLE);
 				if(result==null||result.size()<=0){
 					dismissDialog(DIALOG_ORIGIN_MENU);
@@ -289,14 +297,16 @@ public class MATActivity extends Activity implements OnClickListener{
 					return;
 				}
 				for(int i=0;i<result.size();i++){
-					Button sourceBtn = new Button(MATActivity.this);
-					final String sourceName = result.get(i);
-					setCategoryBtnStyle(sourceBtn, sourceName);
+					ImageButton sourceBtn = new ImageButton(MATActivity.this);
+					final String name = result.get(i).get("name");
+					final String source = result.get(i).get("source");
+					final String logoUrl = result.get(i).get("logo");
+					setSourceButtonStyle(sourceBtn, name,logoUrl);
 					sourceBtn.setOnClickListener(new OnClickListener() {
 						
 						@Override
 						public void onClick(View v) {
-							changeDataByOriginName(sourceName);
+							changeDataByOriginName(source,name);
 							dismissDialog(DIALOG_ORIGIN_MENU);
 						}
 					});
@@ -307,23 +317,13 @@ public class MATActivity extends Activity implements OnClickListener{
 			}
 
 			@Override
-			protected List<String> doInBackground(String... params) {
+			protected List<Map<String,String>> doInBackground(String... params) {
 				// TODO Auto-generated method stub
 				return DataParser.getInstance(MATActivity.this,params[0]).getSource();
 			}
 			
 		}.execute(sourceUrl);
 		
-//		Button leshi = (Button) menu.findViewById(R.id.leshi);
-//		Button qiyi = (Button) menu.findViewById(R.id.qiyi);
-//		Button souhu = (Button) menu.findViewById(R.id.souhu);
-//		Button tudou = (Button) menu.findViewById(R.id.tudou);
-//		Button sina = (Button) menu.findViewById(R.id.sina);
-//		leshi.setOnClickListener(this);
-//		qiyi.setOnClickListener(this);
-//		souhu.setOnClickListener(this);
-//		tudou.setOnClickListener(this);
-//		sina.setOnClickListener(this);
 	}
 
 	private void addConditionButtons(final ViewGroup typeView,
@@ -440,11 +440,18 @@ public class MATActivity extends Activity implements OnClickListener{
 		destBtn.setBackgroundResource(R.drawable.filter_selected);
 	}
 
-	private void setCategoryBtnStyle(Button btn,String text) {
-		btn.setText(text);
+	protected void setCategoryBtnStyle(Button btn, String name) {
+		// TODO Auto-generated method stub
+		btn.setText(name);
 		btn.setTextSize(20);
 		btn.setTextColor(res.getColor(R.color.white));
 		btn.setBackgroundDrawable(res.getDrawable(R.drawable.btn_level1_selector));
+	}
+	
+	private void setSourceButtonStyle(ImageButton btn,String name,String logourl) {
+		btn.setLayoutParams(new LayoutParams(200,80));
+		Bitmap bm = ImageLoadTask.loadBitmap(logourl) ;
+		btn.setImageBitmap(zoomBitmap(bm, 180, 60));
 	}
 	
 	private void setConditionBtnStyle(Button btn, String text) {
@@ -455,10 +462,19 @@ public class MATActivity extends Activity implements OnClickListener{
 	}
 	private void updateHeaderInfo() {
 		TextView headerInfo = (TextView) findViewById(R.id.headerInfo);
-		headerInfo.setText(currentOrigin+">"+currentCategory+">"+currentSortInfo);
+		headerInfo.setText(currentOriginName+">"+currentCategory+">"+currentSortInfo);
 	}
 
-    
+	public static Bitmap zoomBitmap(Bitmap bitmap,int w,int h){    
+        int width = bitmap.getWidth();    
+        int height = bitmap.getHeight();    
+        Matrix matrix = new Matrix();    
+        float scaleWidht = ((float)w / width);    
+        float scaleHeight = ((float)h / height);    
+        matrix.postScale(scaleWidht, scaleHeight);    
+        Bitmap newbmp = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);    
+        return newbmp;    
+    }
 	/**
 	 * 
 	 * @param category
@@ -503,32 +519,6 @@ public class MATActivity extends Activity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-//		case R.id.leshi:
-////			updateLastWatchRecord("乐视");
-//			changeDataByOriginName("163");
-//			dismissDialog(DIALOG_ORIGIN_MENU);
-//			break;
-//		case R.id.qiyi:
-////			updateLastWatchRecord("奇艺");
-//			changeDataByOriginName("sina");
-//			dismissDialog(DIALOG_ORIGIN_MENU);
-//			break;
-//		case R.id.souhu:
-////			updateLastWatchRecord("搜狐");
-//			changeDataByOriginName("sina");
-//			dismissDialog(DIALOG_ORIGIN_MENU);
-//			break;
-//		case R.id.tudou:
-////			updateLastWatchRecord("土豆");
-//			changeDataByOriginName("sina");
-//			dismissDialog(DIALOG_ORIGIN_MENU);
-//			break;
-//		case R.id.sina:
-////			updateLastWatchRecord("新浪");
-//			changeDataByOriginName("sina");
-//			dismissDialog(DIALOG_ORIGIN_MENU);
-//			break;
-		//==================================
 		case R.id.byPlay:
 			updateChooseBar(level2.findViewById(R.id.indicator_play));
 			currentSort = "play";
@@ -576,8 +566,9 @@ public class MATActivity extends Activity implements OnClickListener{
 	}
 
 
-	private void changeDataByOriginName(String origin) {
+	private void changeDataByOriginName(String origin,String originName) {
 		currentOrigin = origin;
+		currentOriginName = originName;
 		initCategory(currentOrigin);
 	}
 
