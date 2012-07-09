@@ -267,14 +267,14 @@ public class SearchResultPage extends BasePage {
 		if(total==0) 
 			currentPage = total ;
 		Log.d("total", total+"") ;
-		if(loadTag.equals("first")) {
+		//if(loadTag.equals("first")) {
 			if(total % size == 0) {
 				pageSize = total / size ;
 			} else {
 				pageSize = (total / size) + 1 ;
 			}
-		}
-		updatePageState() ;
+		//}
+		//updatePageState() ;
 	}
 	
 	private void nextPage() {
@@ -304,7 +304,7 @@ public class SearchResultPage extends BasePage {
 		if(loading || updating)
 			return;
 		contentView.removeCallbacks(loadPagePostRunnable);
-		updatePageState() ;
+		//updatePageState() ;
 		contentView.postDelayed(loadPagePostRunnable,LOADPAGEPOST_DELAY_TIME);
 	}
 	
