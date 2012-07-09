@@ -35,7 +35,6 @@ public class FilmClassPage extends BasePage {
 	private String loadTag = "first" ;
 	public boolean loading = false;
 	public boolean updating = false;
-	
 	int LOADPAGEPOST_DELAY_TIME = 300;
 	int UPDATEPAGEPOST_DELAY = 300;
 
@@ -107,7 +106,7 @@ public class FilmClassPage extends BasePage {
 					Movie movie = new Movie(Integer.parseInt(map.get("count")),Integer.parseInt(map.get("total")),Integer.parseInt(map.get("score")),
 							Integer.parseInt(map.get("comment")),map.get("category"),map.get("name"),map.get("type"),Integer.parseInt(map.get("year")),
 							map.get("directors"),map.get("artists"),map.get("area"),map.get("description"),
-							map.get("thumb"),map.get("length"),map.get("url"),Integer.parseInt(map.get("play")),map.get("id"),Integer.parseInt(map.get("recent"))) ;
+							map.get("thumb"),map.get("length"),map.get("url"),Integer.parseInt(map.get("play")),map.get("id"),Long.parseLong(map.get("recent"))) ;
 					Intent intent = new Intent(mContext,ItemDetailPage.class) ;
 					Bundle bundle = new Bundle() ;
 					bundle.putSerializable("movieInfo", movie) ;
@@ -184,13 +183,13 @@ public class FilmClassPage extends BasePage {
 		if(total==0) 
 			currentPage = total ;
 		Log.d("total", total+"") ;
-		if(loadTag.equals("first")) {
+		//if(loadTag.equals("first")) {
 			if(total % size == 0) {
 				pageSize = total / size ;
 			} else {
 				pageSize = (total / size) + 1 ;
 			}
-		}
+		//}
 		updatePageState() ;
 	}
 	
@@ -295,7 +294,7 @@ public class FilmClassPage extends BasePage {
 			contentView.findViewById(R.id.arrow_left_film_class).setBackgroundResource(R.drawable.arrow_left_film_class_enable) ;
 		}
 	 
-		if(total <= FILM_NUM){
+		if(currentPage >= pageSize){
 			contentView.findViewById(R.id.arrow_right_film_class).setBackgroundResource(R.drawable.arrow_right_film_class_disable) ;
 		}else{
 			contentView.findViewById(R.id.arrow_right_film_class).setBackgroundResource(R.drawable.arrow_right_film_class_enable) ;
