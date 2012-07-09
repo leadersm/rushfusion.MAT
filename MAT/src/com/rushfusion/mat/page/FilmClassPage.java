@@ -266,6 +266,7 @@ public class FilmClassPage extends BasePage {
 	
 	private void fillData(List<Map<String,String>> params) {
 		updating = true ;
+		if(params==null)return;
 		int size = itemSize();
 		for(int i=0; i<size; i++) {
 			Map<String,String> nodeMap = params.get(i) ;

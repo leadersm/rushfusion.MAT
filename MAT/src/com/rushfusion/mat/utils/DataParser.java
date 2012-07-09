@@ -44,6 +44,17 @@ public class DataParser {
 		return null;
 	}
 
+	public List<String> getSource() {
+		HttpUtil httpUtil = HttpUtil.getInstance(mContext) ;
+		String strUrl = CATEGORY_URL+"source" ;
+		Log.d(TAG, "Source url:"+strUrl) ;
+		if(httpUtil.connectServerByURL(strUrl)) {
+			return loadData(httpUtil.getInputStreamFromUrl(strUrl)) ;
+		}
+		return null;
+	}
+	
+	
 	public List<String> getTypes(String category) {
 		HttpUtil httpUtil = HttpUtil.getInstance(mContext) ;
 		String strUrl = CATEGORY_URL+ "type?source=" + mSource + "&category=" + category ;
@@ -157,6 +168,6 @@ public class DataParser {
 	public int getTotal() {
 		return total;
 	}
-	
+
 	
 }

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+    <LinearLayout
+        android:id="@+id/search_result_failed"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        >
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="200dip" >
+
+            <TextView
+                android:id="@+id/search_failed_key"
+                style="@style/font.text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="50dp"
+                android:text="@string/sorry" />
+
+            <Button
+                android:id="@+id/search_result_researchBtn"
+                android:layout_width="190dip"
+                android:layout_height="85dip"
+                android:layout_below="@+id/search_failed_key"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="10dip"
+                android:background="@drawable/search_button"
+                android:text="@string/research"
+                android:textColor="@color/white"
+                android:textSize="33sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout2"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/textView1"
+                style="@style/font.text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/linearLayout1"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="15dip"
+                android:layout_marginTop="20dip"
+                android:text="@string/search_result_top" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView1"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="5dip"
+                android:layout_toRightOf="@+id/arrow_left_search_result" >
+
+                <include
+                    android:id="@+id/item1"
+                    android:layout_width="185dip"
+                    android:layout_height="290dip"
+                    layout="@layout/page_film_class_item"
+                    android:nextFocusLeft="@+id/item1"
+                    android:nextFocusRight="@+id/item2" />
+
+                <include
+                    android:id="@+id/item2"
+                    android:layout_width="185dip"
+                    android:layout_height="290dip"
+                    layout="@layout/page_film_class_item"
+                    android:nextFocusRight="@+id/item3" />
+
+                <include
+                    android:id="@+id/item3"
+                    android:layout_width="185dip"
+                    android:layout_height="290dip"
+                    layout="@layout/page_film_class_item"
+                    android:nextFocusRight="@+id/item4" />
+
+                <include
+                    android:id="@+id/item4"
+                    android:layout_width="185dip"
+                    android:layout_height="290dip"
+                    layout="@layout/page_film_class_item"
+                    android:nextFocusRight="@+id/item5" />
+
+                <include
+                    android:id="@+id/item5"
+                    android:layout_width="185dip"
+                    android:layout_height="290dip"
+                    layout="@layout/page_film_class_item"
+                    android:nextFocusRight="@+id/item6" />
+
+                <include
+                    android:id="@+id/item6"
+                    android:layout_width="185dip"
+                    android:layout_height="290dip"
+                    layout="@layout/page_film_class_item"
+                    android:nextFocusRight="@+id/item6" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/search_result_pageIndex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/linearLayout1"
+                android:layout_marginBottom="20dip"
+                android:layout_toRightOf="@+id/linearLayout1"
+                android:text="@string/page"
+                android:textColor="@color/white"
+                android:textSize="24sp" />
+
+            <View
+                android:id="@+id/arrow_left_search_result"
+                android:layout_width="26dip"
+                android:layout_height="50dip"
+                android:layout_alignBottom="@+id/linearLayout1"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="135dip"
+                android:layout_marginLeft="20dip"
+                android:background="@drawable/arrow_left_film_class_disable" />
+
+            <View
+                android:id="@+id/arrow_right_search_result"
+                android:layout_width="26dip"
+                android:layout_height="50dip"
+                android:layout_alignLeft="@+id/search_result_pageIndex"
+                android:layout_alignTop="@+id/arrow_left_search_result"
+                android:layout_centerVertical="true"
+                android:background="@drawable/arrow_right_film_class_disable" />
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>
