@@ -2,19 +2,20 @@ package com.rushfusion.mat.page;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.rushfusion.mat.R;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView.ScaleType;
+import android.widget.TextView;
 
+import com.rushfusion.mat.R;
 import com.rushfusion.mat.utils.ImageLoadTask;
 import com.rushfusion.mat.utils.ItemDetailGridViewAdapter;
 import com.rushfusion.mat.video.entity.Movie;
@@ -82,9 +83,10 @@ public class ItemDetailPage extends Activity{
 
 				String path = list.get(arg2);
 				if(path.indexOf("html")==(path.length()-4)){
+//					Intent it = new Intent(ItemDetailPage.this , Service_WebViewPlayer.class);
+//					it.putExtra("url", path);
 					Intent it = new Intent(Intent.ACTION_VIEW , Uri.parse(path));
 					startActivity(it);
-					
 				}else{
 					Intent it =  new Intent(ItemDetailPage.this, MediaPlayerShow.class);
 //					Intent it =  new Intent(ItemDetailPage.this, VideoPlayer.class);

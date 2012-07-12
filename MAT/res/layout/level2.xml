@@ -17,6 +17,7 @@
 
     <View
         android:id="@+id/indicator_play"
+        android:layout_marginTop="13dip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/byPlay"
@@ -35,6 +36,7 @@
 
     <View
         android:id="@+id/indicator_score"
+        android:layout_marginTop="13dip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/byScore"
@@ -53,6 +55,7 @@
 
     <View
         android:id="@+id/indicator_comment"
+        android:layout_marginTop="13dip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/byComment"
@@ -73,6 +76,7 @@
 
     <View
         android:id="@+id/indicator_recent"
+        android:layout_marginTop="13dip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/byRecent"

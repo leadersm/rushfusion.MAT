@@ -32,6 +32,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -367,6 +368,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		yearView.addView(allYear);
 		
 		//=====================types====================
+		if(types!=null)
 		for(int i = 0;i<types.size();i++){
 			final Button typeBtn = new Button(MATActivity.this);
 			final String type = types.get(i);
@@ -384,6 +386,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		}
 		
 		//=====================areas====================
+		if(areas!=null)
 		for(int i = 0;i<areas.size();i++){
 			final Button areaBtn = new Button(MATActivity.this);
 			final String area = areas.get(i);
@@ -401,6 +404,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		}
 		
 		//=====================years====================
+		if(years!=null)
 		for(int i = 0;i<years.size();i++){
 			final Button yearBtn = new Button(MATActivity.this);
 			final String year = years.get(i);
@@ -496,8 +500,10 @@ public class MATActivity extends Activity implements OnClickListener{
 	}
 	
 	private void initRecommendPage(String url) {
+		String recommendUrl = "http://tvsrv.webhop.net:9061/query?source="
+				+currentOrigin+"&sort=play&page=1&pagesize=10";
 		RecommendPage recommendPage = new RecommendPage(this,parent);
-		recommendPage.loadPage(url,R.layout.page_recommend);
+		recommendPage.loadPage(recommendUrl,R.layout.page_recommend);
 		recommendPage.setPageCache(recommendPage, R.layout.page_recommend);
 		
 	}
@@ -772,17 +778,21 @@ public class MATActivity extends Activity implements OnClickListener{
 
 
 	protected void toSearchResultPage(String searchUrl,String searchKey) {
-		SearchResultPage page = new SearchResultPage(this, parent);
-		page.setKey(searchKey);
-		page.loadPage(searchUrl, R.layout.page_search_result);
+		if(URLUtil.isValidUrl(searchUrl)){
+			SearchResultPage page = new SearchResultPage(this, currentOrigin ,currentCategory,parent);
+			page.setKey(searchKey);
+			page.loadPage(searchUrl, R.layout.page_search_result);
+		}else
+			Toast.makeText(this, "无效的关键字", 1).show();
 	}
 
 
 	protected String getSearchUrl(String bywhat, String keywords) {
 		// TODO Auto-generated method stub
+		keywords = keywords.trim().replace(" ", "");
 		Pattern p = Pattern.compile("\\t|\r|\n");
 		Matcher m = p.matcher(keywords);
-		keywords = m.replaceAll("").trim();
+		keywords = m.replaceAll("");
 		String url = "http://tvsrv.webhop.net:9061/query?"
 				+"source="+currentOrigin
 				+"&page="+FilmClassPage
