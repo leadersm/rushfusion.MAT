@@ -171,6 +171,7 @@ public class DataParser {
 	public List<Map<String,String>> loadFileData(InputStream inputSteam) {
 		String[] PROPERTIES = {"total","score","comment","artists","name","area","play","count","length","recent","year","directors","thumb","url","type","id","description","category"} ;
 		Map<String, String> nodeMap = null ;
+		if(inputSteam==null)return null;
 		List<Map<String,String>> dataList = new ArrayList<Map<String,String>>() ;
 		try {
 			StringBuilder builder = new StringBuilder() ;

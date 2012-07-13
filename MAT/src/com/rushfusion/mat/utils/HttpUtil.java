@@ -39,8 +39,8 @@ public class HttpUtil {
 		return httpClient ;
 	}
 	
-	private static int NETWORK_CONNECT_TIMEOUT = 10000;
-	private static int NETWORK_SO_TIMEOUT = 10000;
+	private static int NETWORK_CONNECT_TIMEOUT = 500000;
+	private static int NETWORK_SO_TIMEOUT = 500000;
 	/**
 	 * 获取网络连接 200
 	 * @param url

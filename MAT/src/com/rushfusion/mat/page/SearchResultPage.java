@@ -32,6 +32,9 @@ public class SearchResultPage extends BasePage {
 	private int FILM_NUM;
 	private Context mContext ;
 	private ViewGroup mParent ;
+	private String mCurrentOrigin;
+	private String mCurrentCategory;
+	
 	private String mUrl ;
 	private int currentPage = 1 ;
 	private int pageSize = 0 ;
@@ -59,6 +62,7 @@ public class SearchResultPage extends BasePage {
 	}
 
 	private static final int UPDATE_DATA = 10 ;
+	
 	Handler handler = new Handler(){
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
@@ -73,14 +77,18 @@ public class SearchResultPage extends BasePage {
 			}
 		};
 	} ;
-	public SearchResultPage(Activity context, ViewGroup parent) {
+	
+	public SearchResultPage(Activity context, String currentOrigin,String currentCategory,
+			ViewGroup parent) {
 		super(context, parent);
 		mContext = context ;
 		mParent = parent ;
+		mCurrentOrigin = currentOrigin;
+		mCurrentCategory = currentCategory;
 	}
 	
-	@Override
-	public void loadPage(String url, int layoutId) {
+
+	public void loadPage(String url,int layoutId) {
 		mUrl = url ;
 		Log.d("", mUrl) ;
 		Log.d("childCount", mParent.getChildCount()+"") ;
@@ -115,7 +123,9 @@ public class SearchResultPage extends BasePage {
 					fillData(result) ;
 					updateArrow() ;
 				}else{
-					loadPage("推荐 url??", R.layout.page_search_noresult,new BasePage.onLoadingDataCallBack() {
+					String recommendUrl = "http://tvsrv.webhop.net:9061/query?source="
+				+mCurrentOrigin+"&category="+mCurrentCategory+"&sort=play&page=1&pagesize=6";
+					loadPage(recommendUrl, R.layout.page_search_noresult,new BasePage.onLoadingDataCallBack() {
 						
 						@Override
 						public void onPrepare() {
@@ -126,9 +136,11 @@ public class SearchResultPage extends BasePage {
 									R.id.item5, R.id.item6 };
 							initFilm() ;
 							TextView key = (TextView) contentView.findViewById(R.id.search_failed_key);
-							String msg = "非常抱歉，没有找到与"+getKey()+"相关的内容。";
+							String msg = "非常抱歉，没有找到与\""+getKey()+"\"相关的内容。";
 							SpannableStringBuilder style=new SpannableStringBuilder(msg);
-							style.setSpan(new ForegroundColorSpan(Color.RED),10,10+getKey().getBytes().length,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+							int a = msg.indexOf("\"")+1;
+							int b = msg.lastIndexOf("\"");
+							style.setSpan(new ForegroundColorSpan(Color.RED),a,b,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 							key.setText(style);
 							Button research = (Button) contentView.findViewById(R.id.search_result_researchBtn);
 							research.setOnClickListener(new OnClickListener() {
@@ -143,7 +155,10 @@ public class SearchResultPage extends BasePage {
 						@Override
 						public List<Map<String, String>> onExcute(String url) {
 							// TODO Auto-generated method stub
-							return null;
+							DataParser parser = DataParser.getInstance(context, "") ;
+							nodeList = parser.get(url);
+							total = parser.getTotal() ;
+							return nodeList ;
 						}
 						
 						@Override
@@ -153,7 +168,6 @@ public class SearchResultPage extends BasePage {
 							if(result==null)return;
 							initPage() ;
 							fillData(result) ;
-							updateArrow() ;
 						}
 						
 					});
@@ -384,5 +398,6 @@ public class SearchResultPage extends BasePage {
 			contentView.findViewById(R.id.arrow_right_film_class).setBackgroundResource(R.drawable.arrow_right_film_class_enable) ;
 		}
 	}
+
 	
 }
