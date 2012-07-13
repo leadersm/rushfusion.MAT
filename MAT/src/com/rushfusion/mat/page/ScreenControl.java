@@ -418,11 +418,6 @@ public class ScreenControl extends Activity {
 					}
 				}
 			}) ;
-			
 		}
-		
-		
-		
 	}
-
 }

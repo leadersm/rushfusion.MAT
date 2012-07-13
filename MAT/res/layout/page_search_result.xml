@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="8dip"
-        android:layout_marginTop="-10dip"
+        android:layout_marginTop="-33dip"
         android:layout_toRightOf="@+id/arrow_left_film_class" >
 
         <include

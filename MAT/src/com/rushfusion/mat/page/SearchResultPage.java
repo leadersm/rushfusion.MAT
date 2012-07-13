@@ -175,7 +175,7 @@ public class SearchResultPage extends BasePage {
 					Movie movie = new Movie(Integer.parseInt(map.get("count")),Integer.parseInt(map.get("total")),Integer.parseInt(map.get("score")),
 							Integer.parseInt(map.get("comment")),map.get("category"),map.get("name"),map.get("type"),Integer.parseInt(map.get("year")),
 							map.get("directors"),map.get("artists"),map.get("area"),map.get("description"),
-							map.get("thumb"),map.get("length"),map.get("url"),Integer.parseInt(map.get("play")),map.get("id"),Integer.parseInt(map.get("recent"))) ;
+							map.get("thumb"),map.get("length"),map.get("url"),Integer.parseInt(map.get("play")),map.get("id"),Long.parseLong(map.get("recent"))) ;
 					Intent intent = new Intent(mContext,ItemDetailPage.class) ;
 					Bundle bundle = new Bundle() ;
 					bundle.putSerializable("movieInfo", movie) ;
@@ -372,17 +372,35 @@ public class SearchResultPage extends BasePage {
 	}
 	
 	private void updateArrow() {
+		View arrow_left = contentView.findViewById(R.id.arrow_left_film_class) ;
+		View arrow_right = contentView.findViewById(R.id.arrow_right_film_class) ;
 		if(currentPage <= 1){
-			contentView.findViewById(R.id.arrow_left_film_class).setBackgroundResource(R.drawable.arrow_left_film_class_disable) ;
+			arrow_left.setBackgroundResource(R.drawable.arrow_left_film_class_disable) ;
 		}else{
-			contentView.findViewById(R.id.arrow_left_film_class).setBackgroundResource(R.drawable.arrow_left_film_class_enable) ;
+			arrow_left.setBackgroundResource(R.drawable.arrow_left_film_class_enable) ;
 		}
 	 
-		if(total <= FILM_NUM){
-			contentView.findViewById(R.id.arrow_right_film_class).setBackgroundResource(R.drawable.arrow_right_film_class_disable) ;
+		if(currentPage >= pageSize){
+			arrow_right.setBackgroundResource(R.drawable.arrow_right_film_class_disable) ;
 		}else{
-			contentView.findViewById(R.id.arrow_right_film_class).setBackgroundResource(R.drawable.arrow_right_film_class_enable) ;
+			arrow_right.setBackgroundResource(R.drawable.arrow_right_film_class_enable) ;
 		}
+		arrow_left.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+				if(!loading && !updating)
+					prevPage() ;
+			}
+		}) ;
+		
+		arrow_right.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if(!loading && !updating)
+					nextPage();
+			}
+		}) ;
 	}
 	
 }
