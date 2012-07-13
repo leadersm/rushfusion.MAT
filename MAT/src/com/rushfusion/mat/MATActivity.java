@@ -16,7 +16,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -33,6 +32,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -215,8 +215,7 @@ public class MATActivity extends Activity implements OnClickListener{
 					});
 					level1.addView(btn);
 				}
-		    	String url = "shouye url ???";
-		    	initRecommendPage(url);
+		    	initRecommendPage();
 		    	initChooseBar();
 		    	updateHeaderInfo();
 				
@@ -375,6 +374,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		yearView.addView(allYear);
 		
 		//=====================types====================
+		if(types!=null)
 		for(int i = 0;i<types.size();i++){
 			final Button typeBtn = new Button(MATActivity.this);
 			final String type = types.get(i);
@@ -392,6 +392,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		}
 		
 		//=====================areas====================
+		if(areas!=null)
 		for(int i = 0;i<areas.size();i++){
 			final Button areaBtn = new Button(MATActivity.this);
 			final String area = areas.get(i);
@@ -409,6 +410,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		}
 		
 		//=====================years====================
+		if(years!=null)
 		for(int i = 0;i<years.size();i++){
 			final Button yearBtn = new Button(MATActivity.this);
 			final String year = years.get(i);
@@ -495,7 +497,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		Log.d("MAT","LoadPage url==>"+url);
 		updateHeaderInfo();
 		if(currentCategory.equals("首页")){
-			initRecommendPage(url);
+			initRecommendPage();
 		}else{
 			//to other page...
 			initFilmClassPage(url);
@@ -503,11 +505,12 @@ public class MATActivity extends Activity implements OnClickListener{
 		
 	}
 	
-	private void initRecommendPage(String url) {
+	private void initRecommendPage() {
+		String recommendUrl = "http://tvsrv.webhop.net:9061/query?source="
+				+currentOrigin+"&sort=play&page=1&pagesize=10";
 		RecommendPage recommendPage = new RecommendPage(this,parent);
-		recommendPage.loadPage(url,R.layout.page_recommend);
-		recommendPage.setPageCache(recommendPage, R.layout.page_recommend);
-		
+		recommendPage.loadPage(recommendUrl,R.layout.page_recommend);
+		PageCache.getInstance().set(R.layout.page_recommend, recommendPage);
 	}
 
 	private void initFilmClassPage(String url) {
@@ -570,6 +573,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		currentOrigin = origin;
 		currentOriginName = originName;
 		initCategory(currentOrigin);
+		PageCache.getInstance().release();
 	}
 
 
@@ -780,17 +784,21 @@ public class MATActivity extends Activity implements OnClickListener{
 
 
 	protected void toSearchResultPage(String searchUrl,String searchKey) {
-		SearchResultPage page = new SearchResultPage(this, parent);
-		page.setKey(searchKey);
-		page.loadPage(searchUrl, R.layout.page_search_result);
+		if(URLUtil.isValidUrl(searchUrl)){
+			SearchResultPage page = new SearchResultPage(this, currentOrigin ,currentCategory,parent);
+			page.setKey(searchKey);
+			page.loadPage(searchUrl, R.layout.page_search_result);
+		}else
+			Toast.makeText(this, "无效的关键字", 1).show();
 	}
 
 
 	protected String getSearchUrl(String bywhat, String keywords) {
 		// TODO Auto-generated method stub
+		keywords = keywords.trim().replace(" ", "");
 		Pattern p = Pattern.compile("\\t|\r|\n");
 		Matcher m = p.matcher(keywords);
-		keywords = m.replaceAll("").trim();
+		keywords = m.replaceAll("");
 		String url = "http://tvsrv.webhop.net:9061/query?"
 				+"source="+currentOrigin
 				+"&page="+FilmClassPage

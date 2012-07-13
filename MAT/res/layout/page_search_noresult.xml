@@ -108,8 +108,9 @@
                     android:nextFocusRight="@+id/item6" />
             </LinearLayout>
 
+            
             <TextView
-                android:id="@+id/search_result_pageIndex"
+                android:id="@+id/field_page_index"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/linearLayout1"
