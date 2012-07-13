@@ -50,7 +50,6 @@ import com.rushfusion.mat.utils.ImageLoadTask;
 
 public class MATActivity extends Activity implements OnClickListener{
     /** Called when the activity is first created. */
-	
 	private static final int FilmClassPage = 1;
 	private static final int FilmClassPageSize = 8;
 	
