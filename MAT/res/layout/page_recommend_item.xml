@@ -1,100 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="300dip"
-    android:orientation="horizontal" >
-
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="170dip"
+    android:layout_height="fill_parent"
+    android:background="@drawable/ring_box_selector"
+    android:focusable="true"
+    android:orientation="vertical" >
+
     <ImageView
-        android:id="@+id/bigImage"
-        android:layout_width="900dip"
-        android:layout_height="fill_parent"
+        android:id="@+id/ItemIcon"
+        android:layout_width="150dip"
+        android:layout_height="190dip"
+        android:layout_centerHorizontal="true"
         android:scaleType="fitXY"
-        android:src="@drawable/s201207121101036708" />
+        android:src="@drawable/film_bg_loading" >
+    </ImageView>
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
+    <TextView
+        android:id="@+id/ItemTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ItemIcon"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="2dip"
+        android:gravity="center_horizontal"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:textSize="24dip"
+        android:text="Applications" >
+    </TextView>
 
-        <TextView
-            android:id="@+id/title"
-            style="@style/font.recommendtext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:text="啦啦啦" />
-
-        <TextView
-            android:id="@+id/directortv"
-            style="@style/font.recommendtext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/title"
-            android:text="导演:" />
-
-        <TextView
-            android:id="@+id/director"
-            style="@style/font.recommendtext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/directortv"
-            android:layout_toRightOf="@+id/directortv"
-            android:text="张艺谋" />
-
-        <TextView
-            android:id="@+id/actorstv"
-            style="@style/font.recommendtext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/director"
-            android:text="主演: " />
-
-        <TextView
-            android:id="@+id/actors"
-            style="@style/font.recommendtext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/actorstv"
-            android:layout_toRightOf="@+id/directortv"
-            android:text="金喜善" />
-
-        <TextView
-            android:id="@+id/timelongtv"
-            style="@style/font.recommendtext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/actors"
-            android:text="时长: " />
-
-        <TextView
-            android:id="@+id/timelong"
-            style="@style/font.recommendtext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/timelongtv"
-            android:layout_toRightOf="@+id/timelongtv"
-            android:text="2:20" />
-
-        <TextView
-            android:id="@+id/infotv"
-            style="@style/font.recommendtext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/timelong"
-            android:text="简介:" />
-
-        <TextView
-            android:id="@+id/info"
-            style="@style/font.recommendtext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/timelong"
-            android:layout_toRightOf="@+id/infotv"
-            android:text="村里有个姑娘叫小芳……" />
-    </RelativeLayout>
-
-</LinearLayout>
+</RelativeLayout>

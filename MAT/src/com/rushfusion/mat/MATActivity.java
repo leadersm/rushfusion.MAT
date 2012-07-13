@@ -15,7 +15,6 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -208,8 +207,7 @@ public class MATActivity extends Activity implements OnClickListener{
 					});
 					level1.addView(btn);
 				}
-		    	String url = "shouye url ???";
-		    	initRecommendPage(url);
+		    	initRecommendPage();
 		    	initChooseBar();
 		    	updateHeaderInfo();
 				
@@ -491,7 +489,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		Log.d("MAT","LoadPage url==>"+url);
 		updateHeaderInfo();
 		if(currentCategory.equals("首页")){
-			initRecommendPage(url);
+			initRecommendPage();
 		}else{
 			//to other page...
 			initFilmClassPage(url);
@@ -499,13 +497,12 @@ public class MATActivity extends Activity implements OnClickListener{
 		
 	}
 	
-	private void initRecommendPage(String url) {
+	private void initRecommendPage() {
 		String recommendUrl = "http://tvsrv.webhop.net:9061/query?source="
 				+currentOrigin+"&sort=play&page=1&pagesize=10";
 		RecommendPage recommendPage = new RecommendPage(this,parent);
 		recommendPage.loadPage(recommendUrl,R.layout.page_recommend);
-		recommendPage.setPageCache(recommendPage, R.layout.page_recommend);
-		
+		PageCache.getInstance().set(R.layout.page_recommend, recommendPage);
 	}
 
 	private void initFilmClassPage(String url) {
@@ -568,6 +565,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		currentOrigin = origin;
 		currentOriginName = originName;
 		initCategory(currentOrigin);
+		PageCache.getInstance().release();
 	}
 
 
