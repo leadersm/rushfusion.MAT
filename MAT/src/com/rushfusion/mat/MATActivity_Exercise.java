@@ -9,7 +9,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,13 +19,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.rushfusion.mat.control.ReceiveService;
+import com.rushfusion.mat.page.FilmClassPage;
 import com.rushfusion.mat.utils.DataParser;
 import com.rushfusion.mat.utils.HttpUtil;
+import com.rushfusion.mat.utils.ImageLoadTask;
 
 public class MATActivity_Exercise extends Activity implements OnClickListener{
 	private static final int FilmClassPage = 1;
@@ -191,15 +197,14 @@ public class MATActivity_Exercise extends Activity implements OnClickListener{
 					});
 					level1.addView(btn);
 				}
-				String url = "shouyeUrl ???";
-				initRecommendPage(url);
+				initRecommendPage();
 				initChooseBar();
 				updateHeaderInfo();
 			}
 		}.execute(currentOrigin);
 	}
 	
-	protected void initRecommendPage(String url) {
+	protected void initRecommendPage() {
 		// TODO Auto-generated method stub
 		
 	}
@@ -312,11 +317,7 @@ public class MATActivity_Exercise extends Activity implements OnClickListener{
 		
 	}
 	
-	protected void setSourceButtonSytle(ImageButton sourceBtn, String name,
-			String source) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 	protected void addConditionButtons(final ViewGroup typeView, final ViewGroup yearView,
 			final ViewGroup areaView, List<String> types, List<String> years,
 			List<String> areas) {
@@ -433,13 +434,12 @@ public class MATActivity_Exercise extends Activity implements OnClickListener{
 		}
 		destBtn.setBackgroundResource(R.drawable.filter_selected);
 	}
-	private void setConditionBtnStyle(Button allType, String string) {
+	private void setConditionBtnStyle(Button btn, String name) {
 		// TODO Auto-generated method stub
-		
-	}
-	private void updatePage(String currentCategory,String currentType, String currentArea,String currentYear, String currentSort) {
-		// TODO Auto-generated method stub
-		
+		btn.setText(name);
+		btn.setTextSize(18);
+		btn.setTextColor(res.getColor(Color.WHITE));
+		btn.setBackgroundDrawable(res.getDrawable(R.drawable.btn_condition));
 	}
 	
 	protected void setCategoryBtnStyle(Button btn, String name) {
@@ -449,13 +449,57 @@ public class MATActivity_Exercise extends Activity implements OnClickListener{
 		btn.setTextColor(res.getColor(Color.WHITE));
 		btn.setBackgroundDrawable(res.getDrawable(R.drawable.btn_level1_selector));
 	}
+	
+	protected void setSourceButtonSytle(ImageButton sourceBtn, String name,
+			String logoUrl) {
+		// TODO Auto-generated method stub
+		sourceBtn.setLayoutParams(new LayoutParams(200, 80));
+		Bitmap bm = ImageLoadTask.loadBitmap(logoUrl);
+		sourceBtn.setImageBitmap(zoomBitmap(bm,180,60));
+	}
+	private Bitmap zoomBitmap(Bitmap bm, int w, int h) {
+		// TODO Auto-generated method stub
+		int width = bm.getWidth();
+		int height = bm.getHeight();
+		Matrix matrix = new Matrix();
+		float scaleWidth = (float)w/width;
+		float scaleHeight = (float)h/height;
+		matrix.postScale(scaleWidth, scaleHeight);
+		Bitmap newbm = Bitmap.createBitmap(bm, 0, 0, w, h, matrix, true);
+		return newbm;
+	}
+	private void updatePage(String category,String type, String area,String year, String sort) {
+		// TODO Auto-generated method stub
+		StringBuffer baseUrl = new StringBuffer("http://tvsrv.webhop.net:9061/query?source="+currentOrigin);
+		if(!category.equals("")) baseUrl.append("&category="+category);
+		if(!type.equals("")) baseUrl.append("&type="+type);
+		if(!area.equals("")) baseUrl.append("&area="+area);
+		if(!year.equals("")) baseUrl.append("&year="+year);
+		if(!sort.equals("")) baseUrl.append("&sort="+sort);
+		baseUrl.append("&page="+FilmClassPage+"&pagesize="+FilmClassPageSize);
+		String url = baseUrl.toString();
+		if(currentOrigin.equals("首页")){
+			initRecommendPage();
+		}else{
+			initFilmClassPage(url);
+		}
+	}
+	
+	
+	private void initFilmClassPage(String url) {
+		// TODO Auto-generated method stub
+		FilmClassPage  page = new FilmClassPage(this, parent);
+		page.loadPage(url, R.layout.page_film_class);
+		page.setPageCache(page, R.layout.page_film_class);
+	}
 	private void updateChooseBar(View findViewById) {
 		// TODO Auto-generated method stub
 		
 	}
 	private void updateHeaderInfo() {
 		// TODO Auto-generated method stub
-		
+		TextView headInfo = (TextView)findViewById(R.id.headerInfo);
+		headInfo.setText(currentOriginName+">"+currentCategory+">"+currentSortInfo);
 	}
 	private void initSearchBar() {
 		// TODO Auto-generated method stub
