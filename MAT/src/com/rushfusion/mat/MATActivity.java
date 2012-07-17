@@ -496,7 +496,9 @@ public class MATActivity extends Activity implements OnClickListener{
 				+currentOrigin+"&sort=play&page=1&pagesize=10";
 		RecommendPage  recommendPage = RecommendPage.getInstance(this,parent);
 		recommendPage.loadPage(recommendUrl,R.layout.page_recommend);
-		PageCache.getInstance().set(R.layout.page_recommend, recommendPage);
+		if(PageCache.getInstance().get(R.layout.page_recommend)==null) {
+			PageCache.getInstance().set(R.layout.page_recommend, recommendPage);
+		}
 	}
 
 	private void initFilmClassPage(String url) {
@@ -588,7 +590,8 @@ public class MATActivity extends Activity implements OnClickListener{
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					finish();
+					System.exit(-1) ;
+					//finish();
 				}
 			});
 			builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {

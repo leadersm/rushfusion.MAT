@@ -5,7 +5,8 @@
     android:layout_height="fill_parent"
     android:background="@drawable/search"
     android:orientation="vertical" >
-
+
+
     <RelativeLayout
         android:id="@+id/RelativeLayout"
         android:layout_width="wrap_content"
@@ -21,7 +22,8 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:src="@drawable/search_icon2" />
-
+
+
         <RadioGroup
             android:id="@+id/radioGroup1"
             android:layout_width="wrap_content"
@@ -104,7 +106,8 @@
         android:layout_height="78dip"
         android:layout_below="@+id/RelativeLayout"
         android:layout_centerHorizontal="true" >
-
+
+
         <EditText
             android:id="@+id/mat_search_key"
             android:layout_width="500dip"

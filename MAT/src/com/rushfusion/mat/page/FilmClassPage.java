@@ -2,6 +2,7 @@ package com.rushfusion.mat.page;
 
 import java.util.List;
 import java.util.Map;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.rushfusion.mat.R;
 import com.rushfusion.mat.utils.DataParser;
 import com.rushfusion.mat.utils.ImageLoadTask;
@@ -69,6 +71,7 @@ public class FilmClassPage extends BasePage {
 		mParent = parent ;
 	}
 	
+	
 	@Override
 	public void loadPage(String url, int layoutId) {
 		mUrl = url ;
@@ -113,10 +116,10 @@ public class FilmClassPage extends BasePage {
 				@Override
 				public void onClick(View v) {
 					Map<String,String> map = (Map<String, String>)v.getTag() ;
-					Movie movie = new Movie(Integer.parseInt(map.get("count")),Integer.parseInt(map.get("total")),Integer.parseInt(map.get("score")),
-							Integer.parseInt(map.get("comment")),map.get("category"),map.get("name"),map.get("type"),Integer.parseInt(map.get("year")),
+					Movie movie = new Movie(Integer.parseInt(map.get("count").equals("null")?"0":map.get("count")),Integer.parseInt(map.get("total").equals("null")?"0":map.get("total")),Integer.parseInt(map.get("score").equals("null")?"0":map.get("score")),
+							Integer.parseInt(map.get("comment").equals("null")?"0":map.get("comment")),map.get("category"),map.get("name"),map.get("type"),Integer.parseInt(map.get("year").equals("null")?"0":map.get("year")),
 							map.get("directors"),map.get("artists"),map.get("area"),map.get("description"),
-							map.get("thumb"),map.get("length"),map.get("url"),Integer.parseInt(map.get("play")),map.get("id"),Long.parseLong(map.get("recent"))) ;
+							map.get("thumb"),map.get("length"),map.get("url"),Integer.parseInt(map.get("play").equals("null")?"0":map.get("play")),map.get("id"),Long.parseLong(map.get("recent").equals("null")?"0":map.get("recent"))) ;
 					Intent intent = new Intent(mContext,ItemDetailPage.class) ;
 					Bundle bundle = new Bundle() ;
 					bundle.putSerializable("movieInfo", movie) ;
