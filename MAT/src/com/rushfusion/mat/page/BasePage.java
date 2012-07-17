@@ -36,9 +36,12 @@ public abstract class BasePage {
 	}
 
 	public abstract void loadPage(String url,int layoutId);
+	public abstract void onKill();
+	
 	
 	private void setContentView(int layoutId) {
 		View contentView ;
+		this.onKill() ;
 		parent.removeAllViews();
 		if(PageCache.getInstance().get(layoutId)!=null){
 			contentView = PageCache.getInstance().get(layoutId).getContentView();
@@ -57,6 +60,7 @@ public abstract class BasePage {
 	public AsyncTask<String, Void, List<Map<String, String>>> task ;
 	
 	public void loadPage(String url,int layoutId,final onLoadingDataCallBack callback){
+		if(PageCache.getInstance().getLastPage()!=null)PageCache.getInstance().getLastPage().onKill();
 		setContentView(layoutId);
 		if(isLoading&&task!=null){
 			task.cancel(true);
@@ -118,6 +122,10 @@ public abstract class BasePage {
 		public void onFinished(List<Map<String,String>> result);
 	}
 	
+	
+	public void loadPage(String url,onLoadingDataCallBack cb){
+		
+	}
 	
 	
 }
