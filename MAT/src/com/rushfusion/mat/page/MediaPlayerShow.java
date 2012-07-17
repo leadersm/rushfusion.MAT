@@ -91,6 +91,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 		}
 
 		try {
+//			filePath="http://meta.video.qiyi.com/26/0b2cf1e0b73bbd530b9be6688c2e26d9.m3u8";
 			mediaPlayer.setDataSource(filePath);
 //			mediaPlayer.setDataSource("/mnt/sdcard/video/f_001126.mp4");
 //			mediaPlayer.setDataSource("/mnt/sdcard/transferred/DVD_VIDEO-9.mp4");
@@ -336,12 +337,6 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 		case MediaPlayer.MEDIA_INFO_BAD_INTERLEAVING:
 			System.out.println("音视频交叉错误");
 			break;
-//		case MediaPlayer.MEDIA_INFO_BUFFERING_END:
-//			System.out.println("缓冲结束");
-//			break;
-//		case MediaPlayer.MEDIA_INFO_BUFFERING_START:
-//			System.out.println("缓冲开始");
-//			break;
 		case MediaPlayer.MEDIA_INFO_METADATA_UPDATE:
 			System.out.println("原资料更新");
 			break;
