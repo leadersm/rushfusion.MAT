@@ -213,7 +213,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 			System.out.println("surface准备中出错 ，错误信息 ："+e.toString()); 
 		} 
 		pDialog = new ProgressDialog(this);
-		pDialog.setMessage("视频加载中，请稍后");
+		pDialog.setMessage("视频加载中，请稍候...");
 		pDialog.setCancelable(false);
 		pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 		pDialog.show();

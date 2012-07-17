@@ -33,10 +33,10 @@ import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rushfusion.mat.page.FilmClassPage;
@@ -46,6 +46,7 @@ import com.rushfusion.mat.page.SearchResultPage;
 import com.rushfusion.mat.utils.DataParser;
 import com.rushfusion.mat.utils.HttpUtil;
 import com.rushfusion.mat.utils.ImageLoadTask;
+import com.rushfusion.mat.utils.ImageLoadTask.ImageViewCallback1;
 
 public class MATActivity extends Activity implements OnClickListener{
     /** Called when the activity is first created. */
@@ -67,15 +68,15 @@ public class MATActivity extends Activity implements OnClickListener{
 	private ViewGroup conditionBar;
 	private ViewGroup level2;
 	private ViewGroup searchBar;
+	private ImageView header_origin;
+	
 	
 	private String currentOrigin="sina";
-	private String currentOriginName="新浪视频";
-	private String currentCategory="首页";
+	private String currentCategory="";
 	private String currentType="";
 	private String currentYear="";
 	private String currentArea="";
 	private String currentSort="play";
-	private String currentSortInfo="";
 	
 	
 	private List<String> categories;
@@ -85,6 +86,10 @@ public class MATActivity extends Activity implements OnClickListener{
 	private List<String> areas;
 	
 	private Resources res;
+	
+	private ImageLoadTask imageTask;
+	
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,8 +108,17 @@ public class MATActivity extends Activity implements OnClickListener{
 		conditionBar = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.conditionbar, null);
 		res = getResources();
 		level2 = (ViewGroup) findViewById(R.id.level_2);
+		header_origin = (ImageView) findViewById(R.id.header_origin);
+		header_origin.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				showDialog(DIALOG_ORIGIN_MENU);
+			}
+		});
+		imageTask = new ImageLoadTask();
 		initSearchBar();
-		updateHeaderInfo();
 	}
     
     Handler handler = new Handler(){
@@ -166,22 +180,22 @@ public class MATActivity extends Activity implements OnClickListener{
 					return;
 				}
 				
-				Button shouye = new Button(MATActivity.this);
-				setCategoryBtnStyle(shouye,"首页");
+				final Button shouye = new Button(MATActivity.this);
+				setCategoryBtnStyle(shouye,res.getString(R.string.shouye));
 				shouye.setOnClickListener(new OnClickListener() {
 					
 					@Override
 					public void onClick(View v) {
-						currentCategory = "首页";
+						currentCategory = res.getString(R.string.shouye);
 						initConditionBar();
-						currentSortInfo = "";
 						updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
+						updateBackground(level1,shouye,R.drawable.btn_level1_selector,R.drawable.btn_level1_selected);
 					}
 				});
 				level1.addView(shouye);
 				
 				for(int i = 0;i<categories.size();i++){
-					Button btn = new Button(MATActivity.this);
+					final Button btn = new Button(MATActivity.this);
 					final String name = categories.get(i);
 					btn.setText(name);
 					setCategoryBtnStyle(btn, name);
@@ -195,15 +209,14 @@ public class MATActivity extends Activity implements OnClickListener{
 							currentArea = "";
 							currentYear = "";
 							currentSort = "play";
-							currentSortInfo = "热播";
 							updatePage(currentCategory,currentType, currentArea, currentYear, currentSort);
+							updateBackground(level1,btn,R.drawable.btn_level1_selector,R.drawable.btn_level1_selected);
 						}
 					});
 					level1.addView(btn);
 				}
 		    	initRecommendPage();
 		    	initChooseBar();
-		    	updateHeaderInfo();
 				
 			}
 			
@@ -212,7 +225,7 @@ public class MATActivity extends Activity implements OnClickListener{
 	
 	
 	private void initConditionBar() {
-		if(currentCategory.equals("首页")){
+		if(currentCategory.equals(res.getString(R.string.shouye))){
 			level2.setVisibility(View.GONE);
 			return;
 		}else
@@ -259,7 +272,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		}.execute(currentCategory);
 	}
 
-
+	
 	private void initMenu() {
 		String sourceUrl = "http://tvsrv.webhop.net:9061/source";
 		menu = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.menu, null);//findViewById(R.id.menu);
@@ -293,6 +306,14 @@ public class MATActivity extends Activity implements OnClickListener{
 						public void onClick(View v) {
 							changeDataByOriginName(source,name);
 							dismissDialog(DIALOG_ORIGIN_MENU);
+							imageTask.loadImage(header_origin, logoUrl, new ImageViewCallback1() {
+								
+								@Override
+								public void callbak(ImageView view, Bitmap bm) {
+									// TODO Auto-generated method stub
+									view.setImageBitmap(bm);
+								}
+							});
 						}
 					});
 					sourceGroup.addView(sourceBtn);
@@ -331,7 +352,7 @@ public class MATActivity extends Activity implements OnClickListener{
 			
 			@Override
 			public void onClick(View v) {
-				updateBackground(typeView,allType);
+				updateBackground(typeView,allType,R.drawable.btn_condition,R.drawable.filter_selected);
 				currentType = "";
 				updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			}
@@ -340,7 +361,7 @@ public class MATActivity extends Activity implements OnClickListener{
 			
 			@Override
 			public void onClick(View v) {
-				updateBackground(areaView,allArea);
+				updateBackground(areaView,allArea,R.drawable.btn_condition,R.drawable.filter_selected);
 				currentArea = "";
 				updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			}
@@ -349,7 +370,7 @@ public class MATActivity extends Activity implements OnClickListener{
 			
 			@Override
 			public void onClick(View v) {
-				updateBackground(yearView,allYear);
+				updateBackground(yearView,allYear,R.drawable.btn_condition,R.drawable.filter_selected);
 				currentYear = "";
 				updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			}
@@ -369,7 +390,7 @@ public class MATActivity extends Activity implements OnClickListener{
 				
 				@Override
 				public void onClick(View v) {
-					updateBackground(typeView,typeBtn);
+					updateBackground(typeView,typeBtn,R.drawable.btn_condition,R.drawable.filter_selected);
 					currentType = type;
 					updatePage(currentCategory,currentType, currentArea, currentYear, currentSort);
 				}
@@ -387,7 +408,7 @@ public class MATActivity extends Activity implements OnClickListener{
 				
 				@Override
 				public void onClick(View v) {
-					updateBackground(areaView,areaBtn);
+					updateBackground(areaView,areaBtn,R.drawable.btn_condition,R.drawable.filter_selected);
 					currentArea = area;
 					updatePage(currentCategory,currentType, currentArea, currentYear, currentSort);
 				}
@@ -405,7 +426,7 @@ public class MATActivity extends Activity implements OnClickListener{
 				
 				@Override
 				public void onClick(View v) {
-					updateBackground(yearView,yearBtn);
+					updateBackground(yearView,yearBtn,R.drawable.btn_condition,R.drawable.filter_selected);
 					currentYear = year;
 					updatePage(currentCategory,currentType, currentArea, currentYear, currentSort);
 				}
@@ -418,14 +439,12 @@ public class MATActivity extends Activity implements OnClickListener{
 	}
 	
 
-
-
-	private void updateBackground(ViewGroup cdsView,Button destBtn) {
+	private void updateBackground(ViewGroup cdsView,Button destBtn,int selectorId,int selectedId) {
 		for(int i =0;i<cdsView.getChildCount();i++){
 			Button v = (Button) cdsView.getChildAt(i);
-			v.setBackgroundResource(R.drawable.btn_condition);
+			v.setBackgroundResource(selectorId);
 		}
-		destBtn.setBackgroundResource(R.drawable.filter_selected);
+		destBtn.setBackgroundResource(selectedId);
 	}
 
 	protected void setCategoryBtnStyle(Button btn, String name) {
@@ -448,11 +467,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		btn.setTextColor(res.getColor(R.color.white));
 		btn.setBackgroundDrawable(res.getDrawable(R.drawable.btn_condition));
 	}
-	private void updateHeaderInfo() {
-		TextView headerInfo = (TextView) findViewById(R.id.headerInfo);
-		headerInfo.setText(currentOriginName+">"+currentCategory+">"+currentSortInfo);
-	}
-
+	
 	public static Bitmap zoomBitmap(Bitmap bitmap,int w,int h){    
         int width = bitmap.getWidth();    
         int height = bitmap.getHeight();    
@@ -481,8 +496,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		baseUrl.append("&page="+FILMCLASSPAGE+"&pagesize="+FILMCLASSPAGESIZE);
 		final String url = baseUrl.toString();
 		Log.d("MAT","LoadPage url==>"+url);
-		updateHeaderInfo();
-		if(currentCategory.equals("首页")){
+		if(currentCategory.equals(res.getString(R.string.shouye))){
 			initRecommendPage();
 		}else{
 			//to other page...
@@ -513,32 +527,27 @@ public class MATActivity extends Activity implements OnClickListener{
 		case R.id.byPlay:
 			updateChooseBar(level2.findViewById(R.id.indicator_play));
 			currentSort = "play";
-			currentSortInfo = "热播";
 			updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			break;
 		case R.id.byComment:
 			updateChooseBar(level2.findViewById(R.id.indicator_comment));
 			currentSort = "comment";
-			currentSortInfo = "热议";
 			updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);			
 			break;
 		case R.id.byScore:
 			updateChooseBar(level2.findViewById(R.id.indicator_score));
 			currentSort = "score";
-			currentSortInfo = "好评";
 			updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			break;
 		case R.id.byRecent:
 			updateChooseBar(level2.findViewById(R.id.indicator_recent));
 			currentSort = "recent";
-			currentSortInfo = "最新";
 			updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
 			break;
 		case R.id.byCondition:
 			showDialog(DIALOG_CONDITIONBAR);
 			break;
 		case R.id.bySearch:
-			currentSortInfo = "搜索结果";
 			showDialog(DIALOG_SEARCH);
 			break;
 			
@@ -559,7 +568,6 @@ public class MATActivity extends Activity implements OnClickListener{
 
 	private void changeDataByOriginName(String origin,String originName) {
 		currentOrigin = origin;
-		currentOriginName = originName;
 		initCategory(currentOrigin);
 		PageCache.getInstance().release();
 	}
@@ -584,9 +592,9 @@ public class MATActivity extends Activity implements OnClickListener{
 	protected Dialog onCreateDialog(int id) {
 		if(id==DIALOG_EXIT){
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle("提示");
-			builder.setMessage("确定退出吗？");
-			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+			builder.setTitle(res.getString(R.string.tip));
+			builder.setMessage(res.getString(R.string.areyousure));
+			builder.setPositiveButton(res.getString(R.string.sure), new DialogInterface.OnClickListener() {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
@@ -594,7 +602,7 @@ public class MATActivity extends Activity implements OnClickListener{
 					//finish();
 				}
 			});
-			builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+			builder.setNegativeButton(res.getString(R.string.cancel), new DialogInterface.OnClickListener() {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
@@ -604,17 +612,17 @@ public class MATActivity extends Activity implements OnClickListener{
 			return builder.create();
 		}else if(id==DIALOG_CONNECTEDREFUSED){
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle("提示");
+			builder.setTitle(res.getString(R.string.tip));
 			builder.setIcon(R.drawable.nowifi_icon);
-			builder.setMessage(currentOrigin+"服务器无响应，请联系客服010-xxxxxxx");
-			builder.setNegativeButton("退出程序", new DialogInterface.OnClickListener() {
+			builder.setMessage(currentOrigin+res.getString(R.string.noresponse));
+			builder.setNegativeButton(res.getString(R.string.exit), new DialogInterface.OnClickListener() {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					finish();
 				}
 			});
-			builder.setPositiveButton("重选视频源", new DialogInterface.OnClickListener() {
+			builder.setPositiveButton(res.getString(R.string.rechooseorigin), new DialogInterface.OnClickListener() {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
@@ -624,10 +632,10 @@ public class MATActivity extends Activity implements OnClickListener{
 			return builder.create();
 		}else if(id==DIALOG_WIRELESS_SETTING){
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle("提示");
+			builder.setTitle(res.getString(R.string.tip));
 			builder.setIcon(R.drawable.nowifi_icon);
-			builder.setMessage("网络没有连接，请检查您的网络！");
-			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+			builder.setMessage(res.getString(R.string.nonetwork));
+			builder.setPositiveButton(res.getString(R.string.sure), new DialogInterface.OnClickListener() {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
@@ -637,8 +645,8 @@ public class MATActivity extends Activity implements OnClickListener{
 			return builder.create();
 		}else if(id == DIALOG_LOADING){
 			ProgressDialog dialog = new ProgressDialog(this);
-			dialog.setTitle("提示:");
-			dialog.setMessage("数据正在加载中，请稍后...");
+			dialog.setTitle(res.getString(R.string.tip));
+			dialog.setMessage(res.getString(R.string.pleasewait));
 			dialog.setCancelable(false);
 			return dialog;
 			
@@ -672,10 +680,10 @@ public class MATActivity extends Activity implements OnClickListener{
 			return dialog;
 		}else if(id == DIALOG_NO_SOURCE){
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle("提示");
+			builder.setTitle(res.getString(R.string.tip));
 			builder.setIcon(R.drawable.nowifi_icon);
-			builder.setMessage("加载视频源失败，请退出重试！");
-			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+			builder.setMessage(res.getString(R.string.loadfailed));
+			builder.setPositiveButton(res.getString(R.string.sure), new DialogInterface.OnClickListener() {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
@@ -705,7 +713,6 @@ public class MATActivity extends Activity implements OnClickListener{
 					toSearchResultPage(getSearchUrl(bywhat,keywords),keywords);
 					keyEt.getText().clear();
 					dismissDialog(DIALOG_SEARCH);
-					updateHeaderInfo();
 				}else{
 					Toast.makeText(MATActivity.this, MATActivity.this.getString(R.string.qingshuru), 1).show();
 				}
@@ -778,7 +785,7 @@ public class MATActivity extends Activity implements OnClickListener{
 			page.setKey(searchKey);
 			page.loadPage(searchUrl, R.layout.page_search_result);
 		}else
-			Toast.makeText(this, "无效的关键字", 1).show();
+			Toast.makeText(this, res.getString(R.string.invalidkey), 1).show();
 	}
 
 
