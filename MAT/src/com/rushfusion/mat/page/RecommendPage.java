@@ -17,6 +17,7 @@ import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.Shader;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -39,9 +40,16 @@ public class RecommendPage extends BasePage{
 	Gallery fg;
 	TextView desc;
 	ViewGroup items;
+	static RecommendPage page;
 	
+	public static RecommendPage getInstance(Activity context, ViewGroup parent){
+		if(page==null){
+			page = new RecommendPage(context, parent);
+		}
+		return page;
+	}
 	
-	public RecommendPage(Activity context, ViewGroup parent) {
+	private RecommendPage(Activity context, ViewGroup parent) {
 		super(context, parent);
 	}
 
@@ -100,7 +108,6 @@ public class RecommendPage extends BasePage{
 		});
 		return v;
 	}
-
 	protected void init() {
         fg = (Gallery) contentView.findViewById(R.id.automoveview);//new FlingGallery(context);
         items = (ViewGroup) contentView.findViewById(R.id.items);
@@ -121,9 +128,10 @@ public class RecommendPage extends BasePage{
 				
 			}
 		});
-        
 	}
 
+	
+	
 	private class MyAdapter extends BaseAdapter{
 
 		List<Map<String, String>> result;
@@ -217,6 +225,12 @@ public class RecommendPage extends BasePage{
 		canvas.drawPath(path, paint);
 		
 		return bitmapWithReflection;
+	}
+
+	@Override
+	public void onKill() {
+		// TODO Auto-generated method stub
+		Log.w("MAT", "onKill--RecommendPage");
 	}
 }
 

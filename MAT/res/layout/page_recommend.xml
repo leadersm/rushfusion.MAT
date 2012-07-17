@@ -7,7 +7,7 @@
     <Gallery
         android:id="@+id/automoveview"
         android:layout_width="fill_parent"
-        android:layout_height="320dip" >
+        android:layout_height="310dip" >
 
     </Gallery>
 

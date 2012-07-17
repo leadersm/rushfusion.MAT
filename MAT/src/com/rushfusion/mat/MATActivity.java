@@ -10,9 +10,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -52,8 +50,8 @@ import com.rushfusion.mat.utils.ImageLoadTask;
 public class MATActivity extends Activity implements OnClickListener{
     /** Called when the activity is first created. */
 	
-	private static final int FilmClassPage = 1;
-	private static final int FilmClassPageSize = 8;
+	private static final int FILMCLASSPAGE = 1;
+	private static final int FILMCLASSPAGESIZE = 8;
 	
 	public static final int DIALOG_EXIT = 0;
 	public static final int DIALOG_CONNECTEDREFUSED = 1;
@@ -86,8 +84,6 @@ public class MATActivity extends Activity implements OnClickListener{
 	private List<String> years;
 	private List<String> areas;
 	
-	private SharedPreferences sp;
-	private SharedPreferences.Editor editor;
 	private Resources res;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -105,8 +101,6 @@ public class MATActivity extends Activity implements OnClickListener{
 	private void init() {
 		parent = (ViewGroup) findViewById(R.id.parent);
 		conditionBar = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.conditionbar, null);
-		sp = getSharedPreferences("MatHistory",Context.MODE_WORLD_READABLE);
-		editor = sp.edit();
 		res = getResources();
 		level2 = (ViewGroup) findViewById(R.id.level_2);
 		initSearchBar();
@@ -484,8 +478,8 @@ public class MATActivity extends Activity implements OnClickListener{
 		if(!area.equals(""))baseUrl.append("&area="+area);
 		if(!year.equals(""))baseUrl.append("&year="+year);
 		if(!sort.equals(""))baseUrl.append("&sort="+sort);
-		baseUrl.append("&page="+FilmClassPage+"&pagesize="+FilmClassPageSize);
-		String url = baseUrl.toString();
+		baseUrl.append("&page="+FILMCLASSPAGE+"&pagesize="+FILMCLASSPAGESIZE);
+		final String url = baseUrl.toString();
 		Log.d("MAT","LoadPage url==>"+url);
 		updateHeaderInfo();
 		if(currentCategory.equals("首页")){
@@ -500,13 +494,13 @@ public class MATActivity extends Activity implements OnClickListener{
 	private void initRecommendPage() {
 		String recommendUrl = "http://tvsrv.webhop.net:9061/query?source="
 				+currentOrigin+"&sort=play&page=1&pagesize=10";
-		RecommendPage recommendPage = new RecommendPage(this,parent);
+		RecommendPage  recommendPage = RecommendPage.getInstance(this,parent);
 		recommendPage.loadPage(recommendUrl,R.layout.page_recommend);
 		PageCache.getInstance().set(R.layout.page_recommend, recommendPage);
 	}
 
 	private void initFilmClassPage(String url) {
-		FilmClassPage page = new FilmClassPage(this, parent);
+		FilmClassPage page = FilmClassPage.getInstance(this,parent);
 		page.loadPage(url, R.layout.page_film_class);
 		page.setPageCache(page, R.layout.page_film_class);
 	}	
@@ -793,43 +787,19 @@ public class MATActivity extends Activity implements OnClickListener{
 		keywords = m.replaceAll("");
 		String url = "http://tvsrv.webhop.net:9061/query?"
 				+"source="+currentOrigin
-				+"&page="+FilmClassPage
-				+"&pagesize="+FilmClassPageSize
+				+"&page="+FILMCLASSPAGE
+				+"&pagesize="+FILMCLASSPAGESIZE
 				+"&"+bywhat+"="+keywords;
 		
 		Log.d("MAT", "search url==>"+url);
 		return url;
 	}
 
-
 	@Override
-	protected void onPause() {
-		super.onStop();
+	protected void onStop() {
+		// TODO Auto-generated method stub
 		PageCache.getInstance().release();
+		super.onStop();
 	}
-	
-    private String getLastWatchRecord() {
-		return sp.getString("origin", "sina");
-	}
-    
-    
-    
-    private void updateLastWatchRecord(String origin){
-    	currentOrigin = origin;
-    	new AsyncTask<String, String, String>(){
-
-			@Override
-			protected void onPreExecute() {
-				super.onPreExecute();
-				updateHeaderInfo();
-			}
-			@Override
-			protected String doInBackground(String... params) {
-				editor.putString("origin", params[0]);
-				editor.commit();
-				return null;
-			}
-		}.execute(origin);
-    }
 	
 }

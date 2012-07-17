@@ -9,6 +9,7 @@ public class PageCache{
 	private static final String TAG = "PageCache";
 	private static PageCache cache;
 	private HashMap<Integer,BasePage> data = null;
+	private BasePage lastPage;
 	
 	private PageCache(){
 		data = new HashMap<Integer, BasePage>();
@@ -23,6 +24,7 @@ public class PageCache{
 	
 	public void set(int key,BasePage value){
 		data.put(key, value);
+		lastPage = value;
 	}
 	
 	public BasePage get(int key){
@@ -34,5 +36,9 @@ public class PageCache{
 		Log.d(TAG, TAG+"---->release");
 		data = null;
 		cache = null;		
+	}
+
+	public BasePage getLastPage() {
+		return lastPage;
 	}
 }

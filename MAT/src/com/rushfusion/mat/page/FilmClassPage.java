@@ -53,7 +53,17 @@ public class FilmClassPage extends BasePage {
 			}
 		};
 	} ;
-	public FilmClassPage(Activity context, ViewGroup parent) {
+	
+	static FilmClassPage page;
+	
+	public static FilmClassPage getInstance(Activity context, ViewGroup parent){
+		if(page==null){
+			page = new FilmClassPage(context, parent);
+		}
+		return page;
+	}
+	
+	private FilmClassPage(Activity context, ViewGroup parent) {
 		super(context, parent);
 		mContext = context ;
 		mParent = parent ;
@@ -299,6 +309,12 @@ public class FilmClassPage extends BasePage {
 		}else{
 			contentView.findViewById(R.id.arrow_right_film_class).setBackgroundResource(R.drawable.arrow_right_film_class_enable) ;
 		}
+	}
+
+	@Override
+	public void onKill() {
+		// TODO Auto-generated method stub
+		Log.w("MAT", "onKill--FilmClassPage");
 	}
 	
 }
