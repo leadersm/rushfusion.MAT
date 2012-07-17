@@ -36,9 +36,12 @@ public abstract class BasePage {
 	}
 
 	public abstract void loadPage(String url,int layoutId);
+	public abstract void onKill();
+	
 	
 	private void setContentView(int layoutId) {
 		View contentView ;
+		this.onKill() ;
 		parent.removeAllViews();
 		if(PageCache.getInstance().get(layoutId)!=null){
 			contentView = PageCache.getInstance().get(layoutId).getContentView();

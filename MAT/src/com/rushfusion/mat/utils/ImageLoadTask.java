@@ -12,8 +12,12 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -290,8 +294,69 @@ public class ImageLoadTask {
 					}
 				}
 			}}).start();
-	}	
+	}
 	
+	private static final int LOAD_IMAGE_TASK = 10 ;
+	private static final int LOAD_IMAGEVIEW_TASK = LOAD_IMAGE_TASK + 10 ;
+	private Handler handler ;
+	public ImageLoadTask() {
+		handler = new Handler() {
+			public void handleMessage(android.os.Message msg) {
+				if(msg.what == LOAD_IMAGE_TASK) {
+					Bitmap bm = (Bitmap)msg.obj ;
+					Log.d("mImageView", mImageView+"") ;
+					mCallback.callbak(mImageView, bm) ;
+				}
+				if(msg.what == LOAD_IMAGEVIEW_TASK) {
+					String imageUrl = (String)msg.obj ;
+					//Log.d("mImageView", mImageView+"") ;
+					Bitmap bm = Cache.mHardBitmapCache.get(imageUrl) ;
+					if(bm!=null)
+						mCallback.callbak(imageMap.get(imageUrl), bm) ;
+				}
+			};
+		} ;
+	}
+	
+	private ImageViewCallback1 mCallback ;
+	private ImageView mImageView ;
+	public void loadImage(ImageView imageView, final String imageUrl, ImageViewCallback1 callback) {
+		Log.d("uuu", imageView+"") ;
+		this.mCallback = callback ;
+		this.mImageView = imageView ;
+		new Thread(){
+			public void run() {
+				Bitmap bitmap = loadBitmap(imageUrl) ;
+				Cache.mHardBitmapCache.put(imageUrl, bitmap) ;
+				Message msg = new Message() ;
+				msg.obj = bitmap ;
+				msg.what = LOAD_IMAGE_TASK ;
+				handler.sendMessage(msg) ;
+			};
+		}.start() ;
+	}
+	
+	private Map<String, ImageView> imageMap = new HashMap<String, ImageView>() ;
+	public void loadImage1(ImageView imageView, final String imageUrl, ImageViewCallback1 callback) {
+		Log.d("uuu", imageView+"") ;
+		this.mCallback = callback ;
+		//this.mImageView = imageView ;
+		imageMap.put(imageUrl, imageView) ;
+		new Thread(){
+			public void run() {
+				Bitmap bitmap = loadBitmap(imageUrl) ;
+				Cache.mHardBitmapCache.put(imageUrl, bitmap) ;
+				Message msg = new Message() ;
+				msg.obj = imageUrl ;
+				msg.what = LOAD_IMAGEVIEW_TASK ;
+				handler.sendMessage(msg) ;
+			};
+		}.start() ;
+	}
+	
+	public interface  ImageViewCallback1 {
+		public void callbak(ImageView view,Bitmap bm);
+	};
 	
 	public interface  ImageViewCallback {
 		public void callbak(ImageView view,String url,Bitmap bm);

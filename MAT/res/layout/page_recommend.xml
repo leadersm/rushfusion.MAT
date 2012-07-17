@@ -3,11 +3,11 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-
+
     <Gallery
         android:id="@+id/automoveview"
         android:layout_width="fill_parent"
-        android:layout_height="320dip" >
+        android:layout_height="310dip" >
 
     </Gallery>
 
@@ -64,15 +64,28 @@
             android:orientation="horizontal" >
         </LinearLayout>
     </HorizontalScrollView>
-
-    <TextView
-        android:id="@+id/desc"
+
+        
+    <LinearLayout
+        android:id="@+id/switch_bg"
         style="@style/font.header"
         android:layout_width="900dip"
         android:layout_height="30dip"
         android:layout_alignBottom="@+id/automoveview"
         android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"
+        android:orientation="horizontal"/>
+
+    <TextView
+        android:id="@+id/desc"
+        style="@style/font.header"
+        android:layout_width="900dip"
+        android:layout_height="30dip"
+        android:layout_above="@+id/switch_bg"
+        android:layout_alignLeft="@+id/switch_bg"
+        android:ellipsize="end"
+        android:gravity="center_horizontal"
+        android:singleLine="true"
         android:text="村里有个姑娘叫小芳……" />
 
 </RelativeLayout>

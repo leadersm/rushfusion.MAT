@@ -12,7 +12,6 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -42,7 +41,6 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.rushfusion.mat.control.ReceiveService;
 import com.rushfusion.mat.page.FilmClassPage;
 import com.rushfusion.mat.page.PageCache;
 import com.rushfusion.mat.page.RecommendPage;
@@ -53,8 +51,9 @@ import com.rushfusion.mat.utils.ImageLoadTask;
 
 public class MATActivity extends Activity implements OnClickListener{
     /** Called when the activity is first created. */
-	private static final int FilmClassPage = 1;
-	private static final int FilmClassPageSize = 8;
+	
+	private static final int FILMCLASSPAGE = 1;
+	private static final int FILMCLASSPAGESIZE = 8;
 	
 	public static final int DIALOG_EXIT = 0;
 	public static final int DIALOG_CONNECTEDREFUSED = 1;
@@ -110,17 +109,11 @@ public class MATActivity extends Activity implements OnClickListener{
 		editor = sp.edit();
 		res = getResources();
 		level2 = (ViewGroup) findViewById(R.id.level_2);
-//		initSearchBar();
+		initSearchBar();
 		updateHeaderInfo();
-		searchSTBs();
 	}
     
-    private void searchSTBs() {
-    	Intent i = new Intent(this,ReceiveService.class);
-    	startService(i);
-	}
-
-	Handler handler = new Handler(){
+    Handler handler = new Handler(){
     	public void handleMessage(android.os.Message msg) {
     		switch (msg.what) {
 			case DIALOG_CONNECTEDREFUSED:
@@ -491,7 +484,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		if(!area.equals(""))baseUrl.append("&area="+area);
 		if(!year.equals(""))baseUrl.append("&year="+year);
 		if(!sort.equals(""))baseUrl.append("&sort="+sort);
-		baseUrl.append("&page="+FilmClassPage+"&pagesize="+FilmClassPageSize);
+		baseUrl.append("&page="+FILMCLASSPAGE+"&pagesize="+FILMCLASSPAGESIZE);
 		String url = baseUrl.toString();
 		Log.d("MAT","LoadPage url==>"+url);
 		updateHeaderInfo();
@@ -507,13 +500,15 @@ public class MATActivity extends Activity implements OnClickListener{
 	private void initRecommendPage() {
 		String recommendUrl = "http://tvsrv.webhop.net:9061/query?source="
 				+currentOrigin+"&sort=play&page=1&pagesize=10";
-		RecommendPage recommendPage = new RecommendPage(this,parent);
+		RecommendPage recommendPage = RecommendPage.getInstance(this, parent) ;
 		recommendPage.loadPage(recommendUrl,R.layout.page_recommend);
-		PageCache.getInstance().set(R.layout.page_recommend, recommendPage);
+		if(PageCache.getInstance().get(R.layout.page_recommend)==null) {
+			PageCache.getInstance().set(R.layout.page_recommend, recommendPage);
+		}
 	}
 
 	private void initFilmClassPage(String url) {
-		FilmClassPage page = new FilmClassPage(this, parent);
+		FilmClassPage page = FilmClassPage.getInstance(this, parent);
 		page.loadPage(url, R.layout.page_film_class);
 		page.setPageCache(page, R.layout.page_film_class);
 	}	
@@ -601,7 +596,8 @@ public class MATActivity extends Activity implements OnClickListener{
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					finish();
+					System.exit(-1) ;
+					//finish();
 				}
 			});
 			builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -699,7 +695,7 @@ public class MATActivity extends Activity implements OnClickListener{
 
 	private String bywhat = "name";
 	
-	/*private void initSearchBar() {
+	private void initSearchBar() {
 		searchBar = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.page_search, null);
 		final EditText keyEt = (EditText) searchBar.findViewById(R.id.mat_search_key);
 		RadioGroup group = (RadioGroup) searchBar.findViewById(R.id.radioGroup1);
@@ -779,7 +775,7 @@ public class MATActivity extends Activity implements OnClickListener{
 				
 			}
 		});
-	}*/
+	}
 
 
 	protected void toSearchResultPage(String searchUrl,String searchKey) {
@@ -800,8 +796,8 @@ public class MATActivity extends Activity implements OnClickListener{
 		keywords = m.replaceAll("");
 		String url = "http://tvsrv.webhop.net:9061/query?"
 				+"source="+currentOrigin
-				+"&page="+FilmClassPage
-				+"&pagesize="+FilmClassPageSize
+				+"&page="+FILMCLASSPAGE
+				+"&pagesize="+FILMCLASSPAGESIZE
 				+"&"+bywhat+"="+keywords;
 		
 		Log.d("MAT", "search url==>"+url);
