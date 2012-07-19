@@ -4,6 +4,7 @@
     android:layout_height="fill_parent"
     android:background="@drawable/ring_box_selector"
     android:focusable="true"
+    android:clickable="true"
     android:orientation="vertical" >
 
     <ImageView

@@ -510,17 +510,13 @@ public class MATActivity extends Activity implements OnClickListener{
 				+currentOrigin+"&sort=play&page=1&pagesize=10";
 		RecommendPage  recommendPage = RecommendPage.getInstance(this,parent);
 		recommendPage.loadPage(recommendUrl,R.layout.page_recommend);
-		if(PageCache.getInstance().get(R.layout.page_recommend)==null) {
-			PageCache.getInstance().set(R.layout.page_recommend, recommendPage);
-		}
+		PageCache.getInstance().set(R.layout.page_recommend, recommendPage);
 	}
 
 	private void initFilmClassPage(String url) {
 		FilmClassPage page = FilmClassPage.getInstance(this,parent);
 		page.loadPage(url, R.layout.page_film_class);
-		if(PageCache.getInstance().get(R.layout.page_film_class)==null) {
-			PageCache.getInstance().set(R.layout.page_film_class, page);
-		}
+		PageCache.getInstance().set(R.layout.page_film_class, page);
 	}	
 	
 	@Override

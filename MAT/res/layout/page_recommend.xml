@@ -10,11 +10,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:background="#80000000" />
-
+
     <ImageView
         android:id="@+id/movie_show"
         android:layout_width="780dip"
-        android:layout_height="305dip"
+        android:layout_height="355dip"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="-35dip"

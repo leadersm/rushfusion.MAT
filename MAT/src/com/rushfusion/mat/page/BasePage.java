@@ -41,7 +41,6 @@ public abstract class BasePage {
 	
 	private void setContentView(int layoutId) {
 		View contentView ;
-		this.onKill() ;
 		parent.removeAllViews();
 		if(PageCache.getInstance().get(layoutId)!=null){
 			contentView = PageCache.getInstance().get(layoutId).getContentView();

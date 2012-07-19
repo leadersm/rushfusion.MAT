@@ -17,7 +17,6 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.rushfusion.mat.MATActivity;
 import com.rushfusion.mat.R;
@@ -28,7 +27,7 @@ import com.rushfusion.mat.video.entity.Movie;
 
 public class FilmClassPage extends BasePage {
 
-	private int currentPage = 1;
+	private static int currentPage = 1;
 	private int pagesize = 18;
 	private List<Movie> movies;
 	private BaseAdapter ba;
@@ -38,11 +37,13 @@ public class FilmClassPage extends BasePage {
 	private GridView gridView;
 
 	static FilmClassPage page;
+	private String mLoadUrl;
 
 	public static FilmClassPage getInstance(Activity context, ViewGroup parent) {
 		if (page == null) {
 			page = new FilmClassPage(context, parent);
 		}
+		currentPage = 1;
 		return page;
 	}
 
@@ -52,7 +53,8 @@ public class FilmClassPage extends BasePage {
 	}
 
 	@Override
-	public void loadPage(final String url, int layoutId) {
+	public void loadPage(String url, int layoutId) {
+		mLoadUrl = url;
 		Log.d("MAT", url);
 		loadPage(url, layoutId, new BasePage.onLoadingDataCallBack() {
 
@@ -65,7 +67,6 @@ public class FilmClassPage extends BasePage {
 					public void onItemClick(AdapterView<?> parent, View view,
 							int position, long id) {
 						// TODO Auto-generated method stub
-						Toast.makeText(context, "....", 1).show();
 						Movie movie = movies.get(position);
 						Intent i = new Intent(context,ItemDetailPage.class);
 						i.putExtra("movieInfo",movie);
@@ -103,17 +104,17 @@ public class FilmClassPage extends BasePage {
 								int visibleItemCount, int totalItemCount) {
 							// TODO Auto-generated method stub
 							if(view.getLastVisiblePosition()==view.getCount()-1){
-								if(currentPage>Math.ceil(parser.getTotal()/pagesize)){
+								if(currentPage>Math.ceil(parser.getTotal()/pagesize)+1){
 									return;
 								}
 								if(!isLoadingNextPage)
-									loadNextPage(url);
+									loadNextPage(mLoadUrl);
 							}
 						}
 
 						boolean isLoadingNextPage = false;
 						
-						private void loadNextPage(final String url) {
+						private void loadNextPage(String url) {
 							String nextPageUrl = getPageUrl(++currentPage,url);
 							Log.d("MAT", "currentPage->"+currentPage+"加载数据、、getTotal()-->"+parser.getTotal()+"--getTotal/size-->"+Math.ceil(parser.getTotal()/pagesize));
 							Log.d("MAT", "loadNextUrl--->"+nextPageUrl);
@@ -185,7 +186,7 @@ public class FilmClassPage extends BasePage {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
-			View v = LayoutInflater.from(context).inflate(R.layout.page_recommend_item, null);
+			View v = LayoutInflater.from(context).inflate(R.layout.page_film_class_item, null);
 			ImageView thumb = (ImageView) v.findViewById(R.id.ItemIcon);
 			TextView title = (TextView) v.findViewById(R.id.ItemTitle);
 			ImageLoadTask imageTask = new ImageLoadTask() ;

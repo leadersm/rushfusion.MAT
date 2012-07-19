@@ -5,7 +5,6 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -24,10 +23,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -60,8 +57,6 @@ public class RecommendPage extends BasePage{
 		return page;
 	}
 
-	
-	
 
 	public void loadPage(String url,int layoutId) {
 		// TODO Auto-generated method stub
@@ -403,7 +398,7 @@ public class RecommendPage extends BasePage{
 	@Override
 	public void onKill() {
 		// TODO Auto-generated method stub
-		Log.d("kill", "onKill method...........") ;
+		Log.d("MAT", "onKill----RecommendPage") ;
 		//stopTimer() ;
 	}
 }
