@@ -17,6 +17,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rushfusion.mat.MATActivity;
 import com.rushfusion.mat.R;
@@ -64,6 +65,7 @@ public class FilmClassPage extends BasePage {
 					public void onItemClick(AdapterView<?> parent, View view,
 							int position, long id) {
 						// TODO Auto-generated method stub
+						Toast.makeText(context, "....", 1).show();
 						Movie movie = movies.get(position);
 						Intent i = new Intent(context,ItemDetailPage.class);
 						i.putExtra("movieInfo",movie);
