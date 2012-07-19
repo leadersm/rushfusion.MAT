@@ -2,13 +2,48 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/main"
-    android:orientation="vertical">
-    
-    <RelativeLayout 
+    android:background="@drawable/blackmain"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/topLine"
+        android:layout_width="fill_parent"
+        android:layout_height="50dip" >
+
+        <View
+            android:id="@+id/greenLine"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/play_page_title_bg" />
+
+        <View
+            android:id="@+id/title_shadow"
+            android:layout_width="fill_parent"
+            android:layout_height="30dip"
+            android:layout_below="@+id/greenLine"
+            android:background="@drawable/play_page_title_shadow" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/main_left"
+        android:layout_width="400dip"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/topLine" >
+
+        <!--<ImageView
+            android:id="@+id/page_item_detail_image"
+            android:layout_width="300dip"
+            android:layout_height="300dip"
+            android:layout_centerHorizontal="true"
+            android:layout_weight="1"
+            android:scaleType="fitXY"
+            android:src="@drawable/film_bg_loading" />
+
+        -->
+        <RelativeLayout 
         android:id="@+id/subRelativeLayout_01"
         android:layout_width="400dip"
-        android:layout_height="400dip">
+        android:layout_height="350dip">
     <LinearLayout android:id="@+id/page_item_detail_main_left_top"
          android:layout_width="fill_parent"
          android:layout_height="fill_parent"
@@ -23,7 +58,7 @@
              android:layout_weight="1"
              android:orientation="vertical">
              <LinearLayout android:layout_width="fill_parent"
-                 android:layout_height="fill_parent"
+                 android:layout_height="350dip"
                  android:layout_weight="19"></LinearLayout>
              <LinearLayout android:layout_width="fill_parent"
                  android:layout_height="fill_parent"
@@ -47,216 +82,271 @@
      
      
 	</RelativeLayout>
-	<RelativeLayout 
-	    android:id="@+id/subRelativeLayout_01_right_filmName"
-	    android:layout_width="fill_parent"
-	    android:layout_height="50dip"
-	    android:layout_toRightOf="@+id/subRelativeLayout_01">
-    	<TextView android:id="@+id/page_item_detail_name"
-             android:layout_width="fill_parent"
-             android:layout_height="wrap_content"
-             android:layout_gravity="center|top"
-             android:singleLine="true"
-             android:gravity="center"
-             android:textSize="35dip"
-             android:textStyle="bold"
-             android:textColor="#ffffffff"
-             />
-	    
-	</RelativeLayout>
-	<RelativeLayout 
-         android:id="@+id/subRelativeLayout_01_right_top"
-         android:layout_width="fill_parent"
-         android:layout_height="150dip"
-         android:layout_toRightOf="@+id/subRelativeLayout_01">
-         <LinearLayout android:id="@+id/page_item_detail_main_right_top"
-	         android:layout_width="fill_parent"
-	         android:layout_height="fill_parent"
-	         android:layout_weight="4"
-	         android:layout_toRightOf="@+id/page_item_detail_main_left_top"
-	         android:orientation="vertical">
-         <LinearLayout android:id="@+id/page_item_detail_main_right_top_ue"
-             android:layout_width="fill_parent"
-             android:layout_height="fill_parent"
-             android:layout_weight="1"
-             android:orientation="horizontal">
-              <LinearLayout android:id="@+id/page_item_detail_main_right_top_ue_socres"
-                  android:layout_width="fill_parent"
-                  android:layout_height="fill_parent"
-                  android:layout_weight="1"
-                  android:orientation="horizontal"
-                  >
-                  <TextView android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:gravity="bottom"
-                      android:textColor="#80afffff"
-                      android:textSize="20dip"
-                      android:background="@drawable/bg_text"
-                      android:text="  评分 ："/>
-                  <TextView android:id="@+id/page_item_detail_socres"
-                      android:layout_width="fill_parent"
-                      android:layout_height="fill_parent"
-                      android:gravity="bottom|left"
-                      android:textColor="#ffffffff"
-                      android:textSize="25dip"
-                      android:singleLine="true"
-                      android:maxLines="1"
-                      android:ellipsize="marquee"
-                      android:layout_weight="1"/>
-              </LinearLayout>
-              <LinearLayout android:id="@+id/page_item_detail_main_right_top_ue_length"
-                  android:layout_width="fill_parent"
-                  android:layout_height="fill_parent"
-                  android:layout_weight="1"
-                  android:orientation="horizontal">
-                  <TextView android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:gravity="bottom"
-                      android:textColor="#80afffff"
-                      android:textSize="20dip"
-                      android:background="@drawable/bg_text"
-                      android:text="  时长 ："/>
-                  <TextView android:id="@+id/page_item_detail_length"
-                      android:layout_width="fill_parent"
-                      android:layout_height="fill_parent"
-                      android:singleLine="true"
-                      android:maxLines="1"
-                      android:ellipsize="marquee"
-                      android:gravity="bottom|left"
-                      android:textColor="#ffffffff"
-                      android:textSize="25dip"
-                      android:layout_weight="1"/>
-              </LinearLayout>
-              <LinearLayout android:id="@+id/page_item_detail_main_right_top_ue_year"
-                  android:layout_width="fill_parent"
-                  android:layout_height="fill_parent"
-                  android:layout_weight="1"
-                  android:orientation="horizontal">
-                  <TextView android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:gravity="bottom"
-                      android:textColor="#80afffff"
-                      android:textSize="20dip"
-                      android:background="@drawable/bg_text"
-                      android:text="  年代 ："/>
-                  <TextView android:id="@+id/page_item_detail_year"
-                      android:layout_width="fill_parent"
-                      android:layout_height="fill_parent"
-                      android:gravity="bottom|left"
-                      android:textColor="#ffffffff"
-                      android:textSize="25dip"
-                      android:singleLine="true"
-                      android:maxLines="1"
-                      android:ellipsize="marquee"
-                      android:layout_weight="1"/>
-              </LinearLayout>
-             
-         </LinearLayout>
-         <LinearLayout android:id="@+id/page_item_detail_main_right_top_sita"
-             android:layout_width="fill_parent"
-             android:layout_height="wrap_content"
-             android:layout_marginTop="10dip"
-             android:orientation="horizontal"
-             android:gravity="center_vertical">
-               <LinearLayout android:id="@+id/page_item_detail_main_right_top_sita_directors"
-                  android:layout_width="fill_parent"
-                  android:layout_height="fill_parent"
-                  android:layout_weight="2"
-                  android:orientation="horizontal">
-                  <TextView android:layout_width="wrap_content"
-                      android:layout_height="fill_parent"
-                      android:textColor="#80afffff"
-                      android:textSize="20dip"
-                      android:gravity="bottom"
-                      android:background="@drawable/bg_text"
-                      android:text="  导演 ："/>
-                  <TextView android:id="@+id/page_item_detail_directors"
-                      android:layout_width="fill_parent"
-                      android:layout_height="fill_parent"
-                      android:gravity="left"
-                      android:singleLine="true"
-                      android:maxLines="1"
-                      android:ellipsize="marquee"
-                      android:textColor="#ffffffff"
-                      android:textSize="25dip"
-                      android:layout_weight="1"/>
-              </LinearLayout>
-              <LinearLayout android:id="@+id/page_item_detail_main_right_top_ue_artists"
-                  android:layout_width="fill_parent"
-                  android:layout_height="fill_parent"
-                  android:layout_weight="1"
-                  android:orientation="horizontal">
-                  <TextView android:layout_width="wrap_content"
-                      android:layout_height="fill_parent"
-                      android:textColor="#80afffff"
-                      android:textSize="20dip"
-                      android:gravity="bottom"
-                      android:background="@drawable/bg_text"
-                      android:text="  演员 ："/>
-                  <TextView android:id="@+id/page_item_detail_artists"
-                      android:layout_width="fill_parent"
-                      android:layout_height="fill_parent"
-                      android:gravity="left"
-                      android:singleLine="true"
-                      android:maxLines="1"
-                      android:ellipsize="marquee"
-                      android:textColor="#ffffffff"
-                      android:textSize="25dip"
-                      android:layout_weight="1"/>
-              </LinearLayout>
-             
-         </LinearLayout>
-     </LinearLayout>
-     </RelativeLayout>
-     <RelativeLayout 
-         android:id="@+id/subRelativeLayout_01_right_bottom"
-         android:layout_width="fill_parent"
-         android:layout_height="200dip"
-         android:layout_toRightOf="@+id/subRelativeLayout_01"
-         android:layout_below="@+id/subRelativeLayout_01_right_top"
-         android:layout_marginTop="40dip">
-         <LinearLayout android:id="@+id/page_item_detail_main_left_bottom"
-         android:layout_width="fill_parent"
-         android:layout_height="fill_parent"
-         android:layout_weight="2"
-         android:orientation="vertical"
-         android:layout_marginRight="30dip"
-         android:gravity="top">
-         
-         
-	         <TextView android:id="@+id/page_item_detail_description"
-	             android:layout_width="fill_parent"
-	             android:layout_height="fill_parent"
-	             android:textSize="20dip"
-	             android:focusable="false"
-	             android:textColor="#66FF33"/>
-     </LinearLayout>
-         
-     </RelativeLayout>
-    <RelativeLayout 
-        android:id="@+id/subRelativeLayout_02"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/subRelativeLayout_01">
-    	<LinearLayout android:id="@+id/page_item_detail_main_right_bottom"
-         android:layout_width="fill_parent"
-         android:layout_height="fill_parent"
-         android:paddingLeft="30dip"
-         android:paddingRight="30dip"
-         android:layout_weight="1">
-             <GridView android:id="@+id/page_item_detail_episode"
-             android:layout_width="fill_parent"
-             android:layout_height="fill_parent"
-             android:layout_gravity="center"
-             android:numColumns="10"
-             android:padding="10dip"
-             android:horizontalSpacing="30dip"
-             android:verticalSpacing="15dip"
-	         android:gravity="center">
-       		</GridView>
-        </LinearLayout>
         
+        <RelativeLayout
+            android:id="@+id/subRelativeLayout_01_right_top"
+            android:layout_width="300dip"
+            android:layout_height="250dip"
+            android:layout_below="@+id/subRelativeLayout_01"
+            android:layout_marginLeft="50dip"
+            android:layout_marginTop="10dip"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/fileName"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/play_page_intro_bg_01"
+                android:gravity="center" >
+
+                <TextView
+                    android:id="@+id/fileNameTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="bottom"
+                    android:textColor="#b7ff00"
+                    android:textSize="30dip" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/page_item_detail_main_right_top_ue_socres"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/fileName"
+                android:background="@drawable/play_page_intro_bg_02"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    android:text="  评分 ："
+                    android:textColor="#b7ff00"
+                    android:textSize="25dip" />
+
+                <TextView
+                    android:id="@+id/page_item_detail_socres"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:ellipsize="marquee"
+                    android:gravity="bottom|left"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="#ffffffff"
+                    android:textSize="25dip" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/page_item_detail_main_right_top_ue_length"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/page_item_detail_main_right_top_ue_socres"
+                android:background="@drawable/play_page_intro_bg_01"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    android:text="  时长 ："
+                    android:textColor="#b7ff00"
+                    android:textSize="25dip" />
+
+                <TextView
+                    android:id="@+id/page_item_detail_length"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:ellipsize="marquee"
+                    android:gravity="bottom|left"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="#ffffffff"
+                    android:textSize="25dip" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/page_item_detail_main_right_top_ue_year"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/play_page_intro_bg_02"
+                android:layout_below="@+id/page_item_detail_main_right_top_ue_length"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    android:text="  年代 ："
+                    android:textColor="#b7ff00"
+                    android:textSize="25dip" />
+
+                <TextView
+                    android:id="@+id/page_item_detail_year"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:ellipsize="marquee"
+                    android:gravity="bottom|left"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="#ffffffff"
+                    android:textSize="25dip" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/page_item_detail_main_right_top_sita_directors"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/play_page_intro_bg_01"
+                android:layout_below="@+id/page_item_detail_main_right_top_ue_year"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:gravity="bottom"
+                    android:text="  导演 ："
+                    android:textColor="#b7ff00"
+                    android:textSize="25dip" />
+
+                <TextView
+                    android:id="@+id/page_item_detail_directors"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:ellipsize="marquee"
+                    android:gravity="left"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="#ffffffff"
+                    android:textSize="25dip" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/page_item_detail_main_right_top_ue_artists"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/play_page_intro_bg_02"
+                android:layout_below="@+id/page_item_detail_main_right_top_sita_directors"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:gravity="bottom"
+                    android:text="  演员 ："
+                    android:textColor="#b7ff00"
+                    android:textSize="25dip" />
+
+                <TextView
+                    android:id="@+id/page_item_detail_artists"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:gravity="left"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="#ffffffff"
+                    android:textSize="25dip" />
+            </LinearLayout>
+        </RelativeLayout>
     </RelativeLayout>
-    
+
+    <RelativeLayout
+        android:id="@+id/main_right"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/topLine"
+        android:layout_toRightOf="@+id/main_left"
+        android:background="@drawable/play_page_infor_bg" >
+
+        <TextView
+            android:id="@+id/page_item_detail_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="#b7ff00"
+            android:layout_marginTop="20dip"
+            android:textSize="40dip"
+            android:textStyle="bold" />
+		<ScrollView
+		    android:id="@+id/descibleSV"
+		    android:layout_width="fill_parent"
+            android:layout_marginTop="30dip"
+            android:layout_below="@+id/page_item_detail_name"
+            android:layout_marginLeft="50dip"
+		    android:layout_height="180dip" >
+        <TextView
+            android:id="@+id/page_item_detail_description"
+            android:layout_width="fill_parent"
+            android:layout_height="180dip"
+            android:lineSpacingExtra="3dp"
+            android:focusable="false"
+            android:textColor="#ffffffff"
+            android:textSize="25dip" />
+        </ScrollView>
+
+        <RelativeLayout
+            android:id="@+id/subRelativeLayout_02"
+            android:layout_width="fill_parent"
+            android:layout_height="400dip"
+            android:background="#80000000"
+            android:layout_marginLeft="15dip"
+            android:layout_marginTop="50dip"
+            android:layout_below="@+id/descibleSV"
+            android:layout_marginBottom="50dip">
+
+            <GridView
+                android:id="@+id/page_item_detail_episode"
+                android:layout_width="fill_parent"
+                android:layout_height="300dp"
+                android:gravity="center"
+                android:horizontalSpacing="25dip"
+                android:numColumns="7"
+                android:padding="20dip"
+                android:layout_marginLeft="15dip"
+                android:listSelector="@drawable/btn_choosebar"
+                android:verticalSpacing="10dip" >
+            </GridView>
+            
+            <Button 
+                android:id="@+id/playMovieImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/playmovie_selector"
+                android:focusable="true"
+                android:layout_centerInParent="true"/>
+            <!--
+
+            <TableRow
+                android:id="@+id/tableRow1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="100dip"
+                android:layout_below="@+id/page_item_detail_episode"
+                >
+
+                <Button
+                    android:id="@+id/firstTenButton"
+                    android:layout_width="100dip"
+                    android:layout_height="60dip"
+                    android:layout_marginRight="30dip"
+                    android:text="1-21"/>
+
+                <Button
+                    android:id="@+id/restButton"
+                    android:layout_width="100dip"
+                    android:layout_height="60dip"
+                    android:text="22-40" />
+
+            </TableRow>
+        -->--></RelativeLayout>
+    </RelativeLayout>
 
 </RelativeLayout>
