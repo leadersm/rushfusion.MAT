@@ -3,6 +3,7 @@ package com.rushfusion.mat.page;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Handler;
@@ -71,7 +72,6 @@ public class SearchResultPage extends BasePage {
 		mCurrentOrigin = currentOrigin;
 		mCurrentCategory = currentCategory;
 		parser = DataParser.getInstance(context, "");
-		//imageTask = new ImageLoadTask();
 	}
 	
 
@@ -88,7 +88,10 @@ public class SearchResultPage extends BasePage {
 					public void onItemClick(AdapterView<?> parent, View view,
 							int position, long id) {
 						// TODO Auto-generated method stub
-						
+						Movie movie = movies.get(position);
+						Intent i = new Intent(context,ItemDetailPage.class);
+						i.putExtra("movieInfo",movie);
+						context.startActivity(i);
 					}
 				});
 			}
