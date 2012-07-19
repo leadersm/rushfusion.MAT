@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.rushfusion.mat.MATActivity;
 import com.rushfusion.mat.R;
+import com.rushfusion.mat.utils.Cache;
 import com.rushfusion.mat.utils.DataParser;
 import com.rushfusion.mat.utils.ImageLoadTask;
 import com.rushfusion.mat.video.entity.Movie;
@@ -268,15 +269,19 @@ public class SearchResultPage extends BasePage {
 			View v = LayoutInflater.from(context).inflate(R.layout.page_recommend_item, null);
 			ImageView thumb = (ImageView) v.findViewById(R.id.ItemIcon);
 			TextView title = (TextView) v.findViewById(R.id.ItemTitle);
-			imageTask.loadImage(thumb, result.get(position).getThumb(), new ImageLoadTask.ImageViewCallback1() {
-
-				@Override
-				public void callbak(ImageView view, Bitmap bm) {
-					// TODO Auto-generated method stub
-					view.setImageBitmap(bm);
-				}
-				
-			});
+			if(Cache.getBitmapFromCache(result.get(position).getThumb())!=null) {
+				thumb.setImageBitmap(Cache.getBitmapFromCache(result.get(position).getThumb())) ;
+			}else{
+				imageTask.loadImage(thumb, result.get(position).getThumb(), new ImageLoadTask.ImageViewCallback1() {
+					
+					@Override
+					public void callbak(ImageView view, Bitmap bm) {
+						// TODO Auto-generated method stub
+						view.setImageBitmap(bm);
+					}
+					
+				});
+			}
 			title.setText(result.get(position).getName());
 			return v;
 		}
