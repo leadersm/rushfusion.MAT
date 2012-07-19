@@ -50,7 +50,7 @@ public class ItemDetailPage extends Activity{
 //		}
 		image = (ImageView) findViewById(R.id.page_item_detail_image);
 		name = (TextView) findViewById(R.id.page_item_detail_name);
-		nameleft = (TextView)findViewById(R.id.fileNameTextView);
+//		nameleft = (TextView)findViewById(R.id.fileNameTextView);
 		description = (TextView) findViewById(R.id.page_item_detail_description);
 		socres = (TextView) findViewById(R.id.page_item_detail_socres);
 		length = (TextView) findViewById(R.id.page_item_detail_length);
@@ -63,7 +63,7 @@ public class ItemDetailPage extends Activity{
 		ImageLoadTask.imageLoad(image, movie.getThumb());
 		image.setScaleType(ScaleType.FIT_XY);
 		name.setText(movie.getName());
-		nameleft.setText(movie.getName());
+//		nameleft.setText(movie.getName());
 		description.setText("        "+movie.getDescription());
 		socres.setText(movie.getScore()+"");
 		length.setText(movie.getLength());

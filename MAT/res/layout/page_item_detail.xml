@@ -30,21 +30,11 @@
         android:layout_height="fill_parent"
         android:layout_below="@+id/topLine" >
 
-        <!--<ImageView
-            android:id="@+id/page_item_detail_image"
-            android:layout_width="300dip"
-            android:layout_height="300dip"
-            android:layout_centerHorizontal="true"
-            android:layout_weight="1"
-            android:scaleType="fitXY"
-            android:src="@drawable/film_bg_loading" />
-
-        -->
         <RelativeLayout 
         android:id="@+id/subRelativeLayout_01"
         android:layout_width="400dip"
         android:layout_height="350dip">
-    <LinearLayout android:id="@+id/page_item_detail_main_left_top"
+    	<LinearLayout android:id="@+id/page_item_detail_main_left_top"
          android:layout_width="fill_parent"
          android:layout_height="fill_parent"
          android:layout_weight="3"
@@ -88,11 +78,11 @@
             android:layout_width="300dip"
             android:layout_height="250dip"
             android:layout_below="@+id/subRelativeLayout_01"
-            android:layout_marginLeft="50dip"
-            android:layout_marginTop="10dip"
+            android:layout_marginLeft="55dip"
+            android:layout_marginTop="35dip"
             android:orientation="vertical" >
 
-            <LinearLayout
+            <!--<LinearLayout
                 android:id="@+id/fileName"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -109,12 +99,11 @@
                     android:textSize="30dip" />
             </LinearLayout>
 
-            <LinearLayout
+            --><LinearLayout
                 android:id="@+id/page_item_detail_main_right_top_ue_socres"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/fileName"
-                android:background="@drawable/play_page_intro_bg_02"
                 android:orientation="horizontal" >
 
                 <TextView
@@ -143,7 +132,6 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/page_item_detail_main_right_top_ue_socres"
-                android:background="@drawable/play_page_intro_bg_01"
                 android:orientation="horizontal" >
 
                 <TextView
@@ -171,7 +159,6 @@
                 android:id="@+id/page_item_detail_main_right_top_ue_year"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/play_page_intro_bg_02"
                 android:layout_below="@+id/page_item_detail_main_right_top_ue_length"
                 android:orientation="horizontal" >
 
@@ -200,7 +187,6 @@
                 android:id="@+id/page_item_detail_main_right_top_sita_directors"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/play_page_intro_bg_01"
                 android:layout_below="@+id/page_item_detail_main_right_top_ue_year"
                 android:orientation="horizontal" >
 
@@ -229,7 +215,6 @@
                 android:id="@+id/page_item_detail_main_right_top_ue_artists"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/play_page_intro_bg_02"
                 android:layout_below="@+id/page_item_detail_main_right_top_sita_directors"
                 android:orientation="horizontal" >
 
@@ -280,12 +265,14 @@
             android:layout_marginTop="30dip"
             android:layout_below="@+id/page_item_detail_name"
             android:layout_marginLeft="50dip"
+            android:layout_marginRight="34dip"
 		    android:layout_height="180dip" >
         <TextView
             android:id="@+id/page_item_detail_description"
             android:layout_width="fill_parent"
             android:layout_height="180dip"
-            android:lineSpacingExtra="3dp"
+            android:layout_marginRight="10dip"
+            android:lineSpacingExtra="15dp"
             android:focusable="false"
             android:textColor="#ffffffff"
             android:textSize="25dip" />
@@ -294,10 +281,11 @@
         <RelativeLayout
             android:id="@+id/subRelativeLayout_02"
             android:layout_width="fill_parent"
-            android:layout_height="400dip"
+            android:layout_height="300dip"
             android:background="#80000000"
-            android:layout_marginLeft="15dip"
-            android:layout_marginTop="50dip"
+            android:layout_marginLeft="20dip"
+            android:layout_marginRight="15dip"
+            android:layout_marginTop="80dip"
             android:layout_below="@+id/descibleSV"
             android:layout_marginBottom="50dip">
 
@@ -321,32 +309,7 @@
                 android:background="@drawable/playmovie_selector"
                 android:focusable="true"
                 android:layout_centerInParent="true"/>
-            <!--
-
-            <TableRow
-                android:id="@+id/tableRow1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="100dip"
-                android:layout_below="@+id/page_item_detail_episode"
-                >
-
-                <Button
-                    android:id="@+id/firstTenButton"
-                    android:layout_width="100dip"
-                    android:layout_height="60dip"
-                    android:layout_marginRight="30dip"
-                    android:text="1-21"/>
-
-                <Button
-                    android:id="@+id/restButton"
-                    android:layout_width="100dip"
-                    android:layout_height="60dip"
-                    android:text="22-40" />
-
-            </TableRow>
-        -->--></RelativeLayout>
+            </RelativeLayout>
     </RelativeLayout>
 
 </RelativeLayout>
