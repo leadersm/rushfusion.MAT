@@ -518,7 +518,9 @@ public class MATActivity extends Activity implements OnClickListener{
 	private void initFilmClassPage(String url) {
 		FilmClassPage page = FilmClassPage.getInstance(this,parent);
 		page.loadPage(url, R.layout.page_film_class);
-		page.setPageCache(page, R.layout.page_film_class);
+		if(PageCache.getInstance().get(R.layout.page_film_class)==null) {
+			PageCache.getInstance().set(R.layout.page_film_class, page);
+		}
 	}	
 	
 	@Override
@@ -645,7 +647,6 @@ public class MATActivity extends Activity implements OnClickListener{
 			return builder.create();
 		}else if(id == DIALOG_LOADING){
 			ProgressDialog dialog = new ProgressDialog(this);
-			dialog.setTitle(res.getString(R.string.tip));
 			dialog.setMessage(res.getString(R.string.pleasewait));
 			dialog.setCancelable(false);
 			return dialog;
@@ -797,8 +798,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		keywords = m.replaceAll("");
 		String url = "http://tvsrv.webhop.net:9061/query?"
 				+"source="+currentOrigin
-				+"&page="+FILMCLASSPAGE
-				+"&pagesize="+FILMCLASSPAGESIZE
+				+"&page=1&pagesize="+18
 				+"&"+bywhat+"="+keywords;
 		
 		Log.d("MAT", "search url==>"+url);

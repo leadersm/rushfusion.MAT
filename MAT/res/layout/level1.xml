@@ -13,7 +13,7 @@
         android:scaleType="fitCenter"
         android:padding="5dip"
         android:adjustViewBounds="true"
-        android:background="#00000000"
+        android:background="@drawable/origin_bg_selector"
         />
 
     <HorizontalScrollView

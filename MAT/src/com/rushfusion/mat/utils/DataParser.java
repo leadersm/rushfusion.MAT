@@ -9,11 +9,15 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import android.app.Activity;
 import android.util.Log;
+
+import com.rushfusion.mat.video.entity.Movie;
 public class DataParser {
 	private String CATEGORY_URL = "http://tvsrv.webhop.net:9061/" ;
 	private static final String TAG = "DataParser" ;
@@ -93,7 +97,7 @@ public class DataParser {
 		return null;
 	}
 	
-	public List<Map<String,String>> get(String url) {
+	public List<Movie> getMovies(String url) {
 		HttpUtil httpUtil = HttpUtil.getInstance(mContext) ;
 		String strUrl = url ;
 		if(httpUtil.connectServerByURL(strUrl)) {
@@ -101,7 +105,6 @@ public class DataParser {
 		}
 		return null;
 	}
-	
 	
 	public List<Map<String,String>> loadSource(InputStream inputSteam) {
 		List<Map<String,String>> sourceList = null ;
@@ -168,11 +171,13 @@ public class DataParser {
 	}
 	
 	
-	public List<Map<String,String>> loadFileData(InputStream inputSteam) {
+	public List<Movie> loadFileData(InputStream inputSteam) {
 		String[] PROPERTIES = {"total","score","comment","artists","name","area","play","count","length","recent","year","directors","thumb","url","type","id","description","category"} ;
 		Map<String, String> nodeMap = null ;
+		Movie movie;
 		if(inputSteam==null)return null;
-		List<Map<String,String>> dataList = new ArrayList<Map<String,String>>() ;
+//		List<Map<String,String>> dataList = new ArrayList<Map<String,String>>() ;
+		List<Movie> dataList = new ArrayList<Movie>();
 		try {
 			StringBuilder builder = new StringBuilder() ;
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputSteam)) ;
@@ -180,17 +185,37 @@ public class DataParser {
 				builder.append(s) ;
 			}
 			Log.d("JSON", builder.toString()) ;
-			JSONObject jsonObject = new JSONObject(builder.toString()) ;
-			total = jsonObject.getInt("total");
-			JSONArray itemsArray = jsonObject.getJSONArray("items") ;
+			JSONObject obj = new JSONObject(builder.toString()) ;
+			total = obj.getInt("total");
+			JSONArray itemsArray = obj.getJSONArray("items") ;
 			for(int i=0; i<itemsArray.length(); i++) {
-				nodeMap = new HashMap<String, String>() ;
-				JSONObject object = itemsArray.getJSONObject(i) ;
-				for(int j=0; j<PROPERTIES.length; j++) {
-					String str = object.getString(PROPERTIES[j]) ;
-					nodeMap.put(PROPERTIES[j], str) ;
-				}
-				dataList.add(nodeMap) ;
+//				nodeMap = new HashMap<String, String>() ;
+//				JSONObject object = itemsArray.getJSONObject(i) ;
+//				for(int j=0; j<PROPERTIES.length; j++) {
+//					String str = object.getString(PROPERTIES[j]) ;
+//					nodeMap.put(PROPERTIES[j], str) ;
+//				}
+//				dataList.add(nodeMap) ;
+				JSONObject jsonObject = (JSONObject) itemsArray.get(i);
+				movie = new Movie(jsonObject.getInt("count"),
+						jsonObject.getInt("total"), 
+						jsonObject.getInt("score"), 
+						jsonObject.getInt("comment"), 
+						jsonObject.getString("category"),
+						jsonObject.getString("name"),
+						jsonObject.getString("type"),
+						jsonObject.getInt("year"),
+						jsonObject.getString("directors"),
+						jsonObject.getString("artists"),
+						jsonObject.getString("area"),
+						jsonObject.getString("description"), 
+						jsonObject.getString("thumb"),
+						jsonObject.getString("length"),
+						jsonObject.getString("url"),
+						jsonObject.getInt("play"), 
+						jsonObject.getString("id"),
+						jsonObject.getLong("recent"));
+				dataList.add(movie);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

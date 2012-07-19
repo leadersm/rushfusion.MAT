@@ -1,15 +1,12 @@
 package com.rushfusion.mat.page;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -52,13 +49,10 @@ public class RecommendPage extends BasePage{
 	private LinearLayout switchLiner ;
 	private Context mContext ;
 	private ImageView childImage ;
-	private ViewGroup mParent ;
-	private boolean isLoading = false ;
 	
 	private RecommendPage(Activity context, ViewGroup parent) {
 		super(context, parent);
 		mContext = context ;
-		mParent = parent ;
 	}
 	
 	static RecommendPage page;
@@ -79,20 +73,20 @@ public class RecommendPage extends BasePage{
 			@Override
 			public void onPrepare() {
 				// TODO Auto-generated method stub
-				isLoading = true ;
 				init();
 			}
 
 			@Override
-			public List<Map<String, String>> onExcute(String url) {
+			public List<Movie> onExcute(String url) {
 				// TODO Auto-generated method stub
 				DataParser parser = DataParser.getInstance(context, "") ;
-				return parser.get(url);
+				return parser.getMovies(url);
 			}
 
 			@Override
-			public void onFinished(List<Map<String, String>> result) {
+			public void onFinished(List<Movie> result) {
 				// TODO Auto-generated method stub
+				if(result.size()<=0)return;
 				fg.setAdapter(new MyAdapter(result));
 				fg.setSelection(currentPosition);
 				images = new ImageView[result.size()] ;
@@ -108,7 +102,6 @@ public class RecommendPage extends BasePage{
 				}
 				stopTimer() ;
 				startTimer() ;
-				isLoading = false ;
 			}
 
 		});
@@ -116,8 +109,8 @@ public class RecommendPage extends BasePage{
 	
 	ImageView[] images ;
 	
-	protected void setImgBitmap(final Map<String, String> map, ImageView image, int index) {
-		String imageUrl = map.get("thumb") ;
+	protected void setImgBitmap(final Movie map, ImageView image, int index) {
+		String imageUrl = map.getThumb() ;
 		if(Cache.getBitmapFromCache(imageUrl)!=null) {
 			images[index].setImageBitmap(createMirrorImageWithOrigain(Cache.getBitmapFromCache(imageUrl))) ;
 		} else {
@@ -130,11 +123,11 @@ public class RecommendPage extends BasePage{
 		}
 	}
 	
-	protected View getView(final Map<String, String> map, int index) {
+	protected View getView(final Movie movie, int index) {
 		View v = LayoutInflater.from(context).inflate(R.layout.page_recommend_item, null);
 		images[index] = (ImageView) v.findViewById(R.id.ItemIcon);
 		TextView title = (TextView) v.findViewById(R.id.ItemTitle);
-		String imageUrl = map.get("thumb") ;
+		String imageUrl = movie.getThumb() ;
 		if(Cache.getBitmapFromCache(imageUrl)!=null) {
 			images[index].setImageBitmap(createMirrorImageWithOrigain(Cache.getBitmapFromCache(imageUrl))) ;
 		} else {
@@ -147,16 +140,12 @@ public class RecommendPage extends BasePage{
 				} ;
 			}) ;
 		}
-		title.setText(map.get("name"));
+		title.setText(movie.getName());
 		v.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Movie movie = new Movie(Integer.parseInt(map.get("count")),Integer.parseInt(map.get("total")),Integer.parseInt(map.get("score")),
-						Integer.parseInt(map.get("comment")),map.get("category"),map.get("name"),map.get("type"),Integer.parseInt(map.get("year")),
-						map.get("directors"),map.get("artists"),map.get("area"),map.get("description"),
-						map.get("thumb"),map.get("length"),map.get("url"),Integer.parseInt(map.get("play")),map.get("id"),Long.parseLong(map.get("recent"))) ;
 				Intent intent = new Intent(context,ItemDetailPage.class) ;
 				Bundle bundle = new Bundle() ;
 				bundle.putSerializable("movieInfo", movie) ;
@@ -184,9 +173,9 @@ public class RecommendPage extends BasePage{
 					int position, long id) {
 				Log.d("test", "=============onItemSelected============") ;
 				// TODO Auto-generated method stub
-				HashMap<String,String> map = (HashMap<String, String>) parent.getItemAtPosition(position);
-				if(map==null) return ;
-				desc.setText(map.get("description"));
+				Movie movie = (Movie) parent.getItemAtPosition(position);
+				if(movie==null) return ;
+				desc.setText(movie.getDescription());
 				if(mResult==null) return ;
 				Log.d("position", "onItemSelected position:"+position) ;
 				Log.d("position", "mResult.size():"+mResult.size()) ;
@@ -262,10 +251,10 @@ public class RecommendPage extends BasePage{
 	}
 
 	int mGalleryItemBackground;
-	List<Map<String, String>> mResult;
+	List<Movie> mResult;
 	private class MyAdapter extends BaseAdapter{
 
-		public MyAdapter(List<Map<String, String>> result) {
+		public MyAdapter(List<Movie> result) {
 			// TODO Auto-generated constructor stub
 			mResult = result ;
 			TypedArray typedArray = mContext.obtainStyledAttributes(R.styleable.Gallery);
@@ -293,17 +282,17 @@ public class RecommendPage extends BasePage{
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
-			HashMap<String, String> map = (HashMap<String, String>) mResult.get(position%mResult.size());
+			Movie movie = mResult.get(position%mResult.size());
 			ImageView bigImage = new ImageView(context);
 			bigImage.setLayoutParams(new Gallery.LayoutParams(900, 330));
 			bigImage.setScaleType(ScaleType.FIT_XY);
-			String imageUrl = map.get("thumb") ;
+			String imageUrl = movie.getThumb() ;
 			//bigImage.setImageBitmap(ImageLoadTask.loadBitmap(map.get("thumb")));
 			ImageLoadTask imageLoadTask = new ImageLoadTask() ;
 			if(Cache.getBitmapFromCache(imageUrl)!=null) {
 				bigImage.setImageBitmap(Cache.getBitmapFromCache(imageUrl)) ;
 			} else {
-				imageLoadTask.loadImage(bigImage, map.get("thumb"), new ImageLoadTask.ImageViewCallback1() {
+				imageLoadTask.loadImage(bigImage, movie.getThumb(), new ImageLoadTask.ImageViewCallback1() {
 					
 					public void callbak(ImageView view, Bitmap bm) {
 						view.setImageBitmap(bm) ;

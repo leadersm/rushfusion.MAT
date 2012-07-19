@@ -6,11 +6,20 @@
     android:background="@color/bg_color"
     android:orientation="vertical" >
 
+    <TextView
+        android:id="@+id/resultInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        style="@style/font.header"
+        android:text="" />
+
     <GridView
-        android:id="@+id/gridView1"
+        android:id="@+id/searchResultGridView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:numColumns="3" >
+        android:listSelector="@drawable/ring_box_selector"
+        android:numColumns="6" >
     </GridView>
 
 </LinearLayout>
