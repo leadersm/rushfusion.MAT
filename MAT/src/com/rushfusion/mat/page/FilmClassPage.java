@@ -317,7 +317,7 @@ public class FilmClassPage extends BasePage {
 	@Override
 	public void onKill() {
 		// TODO Auto-generated method stub
-		Log.w("MAT", "onKill--FilmClassPage");
+		Log.d("MAT", "onKill--FilmClassPage");
 	}
 	
 }

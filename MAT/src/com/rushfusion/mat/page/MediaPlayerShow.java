@@ -179,7 +179,8 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	public void seekTo(int pos) {
 		if(mediaPlayer!=null){
 //			mediaPlayer.pause();
-			pDialog.show();
+			if(!pDialog.isShowing())
+				pDialog.show();
 			mediaPlayer.seekTo(pos);
 		}else{
 			System.out.println("mediaplayer.seekto 出错了！");

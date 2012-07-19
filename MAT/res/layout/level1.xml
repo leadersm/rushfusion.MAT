@@ -7,11 +7,13 @@
 
     <ImageButton
         android:id="@+id/header_origin"
+        android:layout_marginLeft="10dip"
         android:layout_width="100dip"
         android:layout_height="50dip"
-        android:src="@drawable/souhu" 
-        android:scaleType="fitXY"
+        android:scaleType="fitCenter"
+        android:padding="5dip"
         android:adjustViewBounds="true"
+        android:background="#00000000"
         />
 
     <HorizontalScrollView
