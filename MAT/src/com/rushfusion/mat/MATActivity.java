@@ -52,7 +52,7 @@ public class MATActivity extends Activity implements OnClickListener{
     /** Called when the activity is first created. */
 	
 	private static final int FILMCLASSPAGE = 1;
-	private static final int FILMCLASSPAGESIZE = 8;
+	private static final int FILMCLASSPAGESIZE = 18;
 	
 	public static final int DIALOG_EXIT = 0;
 	public static final int DIALOG_CONNECTEDREFUSED = 1;
