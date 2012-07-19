@@ -55,6 +55,7 @@ public class RecommendPage extends BasePage{
 	private ViewGroup mParent ;
 	private boolean isLoading = false ;
 	
+	
 	private RecommendPage(Activity context, ViewGroup parent) {
 		super(context, parent);
 		mContext = context ;
@@ -93,8 +94,18 @@ public class RecommendPage extends BasePage{
 			@Override
 			public void onFinished(List<Map<String, String>> result) {
 				// TODO Auto-generated method stub
-				fg.setAdapter(new MyAdapter(result));
-				fg.setSelection(currentPosition);
+				//fg.setAdapter(new MyAdapter(result));
+				mResult = result; 
+				
+				ImageAdapter adapter = new ImageAdapter(mContext, result);
+		        //adapter.createReflectedImages();//创建倒影效果
+		        fg.setFadingEdgeLength(0);
+		        fg.setSpacing(-112); //图片之间的间距
+		        fg.setAdapter(adapter);
+		        //fg.setSelection(50);
+				
+				
+				
 				images = new ImageView[result.size()] ;
 				items.removeAllViews() ;
 				for(int i=0;i<result.size();i++){
@@ -106,8 +117,8 @@ public class RecommendPage extends BasePage{
 					childImage.setImageResource(R.drawable.image_switcher_btn) ;
 					switchLiner.addView(childImage) ;
 				}
-				stopTimer() ;
-				startTimer() ;
+				//stopTimer() ;
+				//startTimer() ;
 				isLoading = false ;
 			}
 
@@ -167,8 +178,9 @@ public class RecommendPage extends BasePage{
 		return v;
 	}
 
-	private int currentPosition = 200 ;
-	private int oldPosition = 200;
+	private int currentPosition = 0 ;
+	private int oldPosition = 0;
+	//int mIndex = 0;
 	ImageLoadTask imageLoadTask2 = new ImageLoadTask() ; ;
 	protected void init() {
         fg = (Gallery) contentView.findViewById(R.id.automoveview);//new FlingGallery(context);
@@ -184,7 +196,8 @@ public class RecommendPage extends BasePage{
 					int position, long id) {
 				Log.d("test", "=============onItemSelected============") ;
 				// TODO Auto-generated method stub
-				HashMap<String,String> map = (HashMap<String, String>) parent.getItemAtPosition(position);
+				HashMap<String,String> map = (HashMap<String, String>)mResult.get(position%mResult.size()) ;
+				//HashMap<String,String> map = (HashMap<String, String>) parent.getItemAtPosition(position);
 				if(map==null) return ;
 				desc.setText(map.get("description"));
 				if(mResult==null) return ;
@@ -192,26 +205,46 @@ public class RecommendPage extends BasePage{
 				Log.d("position", "mResult.size():"+mResult.size()) ;
 				Log.d("position", "position mResult.size()%:"+position%mResult.size()) ;
 				currentPosition = position ;
+				Log.d("position", "onItemSelected currentPosition:"+currentPosition) ;
+				Log.d("position", "onItemSelected oldPosition:"+oldPosition) ;
+				Log.d("position", "===========================================") ;
 				if(currentPosition>oldPosition) {
-					oldPosition = currentPosition ;
 					int num = position%mResult.size() ;
 					if(position%mResult.size()==0) {
 						num = mResult.size() - 1 ;
 					} else {
 						num = position%mResult.size() - 1 ;
 					}
-					dismissSwitch(num) ;
-					showSwitch(position%mResult.size()) ;
-				} else {
+					if(currentPosition-oldPosition>=2) {
+						dismissBehindSwitch(num) ;
+					}
+					if(oldPosition%mResult.size()==mResult.size()-1 && currentPosition-oldPosition>=2) {
+						dismissSwitch(mResult.size() - 1) ;
+						showSwitch(currentPosition%mResult.size()) ;
+					} else {
+						dismissSwitch(num) ;
+						showSwitch(position%mResult.size()) ;
+					}
 					oldPosition = currentPosition ;
+				} else {
 					int num = position%mResult.size() ;
 					if(mResult.size()-(position%mResult.size())==1) {
 						num = 0 ;
 					} else {
 						num = position%mResult.size()+1 ;
 					}
-					showSwitch(position%mResult.size()) ;
-					dismissSwitch(num) ;
+					if(currentPosition-oldPosition<=-2) {
+						dismissHeadSwitch(num) ;
+					}
+					
+					if(currentPosition%mResult.size()==mResult.size()-1 && currentPosition-oldPosition<=-2) {
+						dismissSwitch(mResult.size() - 1) ;
+						showSwitch(oldPosition%mResult.size()) ;
+					} else {
+						showSwitch(position%mResult.size()) ;
+						dismissSwitch(num) ;
+					}
+					oldPosition = currentPosition ;
 				}
 			}
 
@@ -224,35 +257,53 @@ public class RecommendPage extends BasePage{
         
         
         //==================timer===================
-        mHandler = new Handler(){
-			@Override
-			public void handleMessage(Message msg) {
-				switch (msg.what) {
-				case UPDATE_TEXTVIEW:
-					//flipper.showNext();
-					fg.setSelection(currentPosition++) ;
-					break;
-				case UPDATE_DATA:
-					break ;
-				default:
-					break;
-				}
-			}
-		};
-		
-		new Thread(){
+/*//        mHandler = new Handler(){
+//			@Override
+//			public void handleMessage(Message msg) {
+//				switch (msg.what) {
+//				case UPDATE_TEXTVIEW:
+//					//flipper.showNext();
+//					fg.setSelection(currentPosition++) ;
+//					break;
+//				case UPDATE_DATA:
+//					break ;
+//				default:
+//					break;
+//				}
+//			}
+//		};
+*/		
+		/*new Thread(){
 			public void run() {
 				//getCategories() ;
 				if(mHandler!=null) 
 					mHandler.sendEmptyMessage(UPDATE_DATA) ;
 			};
-		}.start() ;
+		}.start() ;*/
 	}
 	
 	private void showSwitch(int position) {
 		ImageView imageView = (ImageView)switchLiner.getChildAt(position) ;
 		if(imageView!=null)
 			imageView.setImageResource(R.drawable.image_switcher_btn_selected) ;
+	}
+	
+	private void dismissBehindSwitch(int num) {
+		Log.d("position", "dismissBehindSwitch method ..........") ;
+		for(int i=num; i>=0; i--) {
+			ImageView imageView = (ImageView)switchLiner.getChildAt(i) ;
+			if(imageView!=null)
+				imageView.setImageResource(R.drawable.image_switcher_btn) ;
+		}
+	}
+	
+	private void dismissHeadSwitch(int num) {
+		Log.d("position", "dismissBehindSwitch method ..........") ;
+		for(int i=num; i<(mResult.size()-1); i++) {
+			ImageView imageView = (ImageView)switchLiner.getChildAt(i) ;
+			if(imageView!=null)
+				imageView.setImageResource(R.drawable.image_switcher_btn) ;
+		}
 	}
 	
 	private void dismissSwitch(int position) {
@@ -371,11 +422,12 @@ public class RecommendPage extends BasePage{
 		return bitmapWithReflection;
 	}
 	
+	
 	//==========================timer==========================//
-	private Timer mTimer = null;
-	private TimerTask mTimerTask = null;
-	private Handler mHandler = null;
-	private static int delay = 2000;  
+	//private Timer mTimer = null;
+	//private TimerTask mTimerTask = null;
+	//private Handler mHandler = null;
+	/*private static int delay = 2000;  
 	private static int period = 2000;  
 	private static final int UPDATE_TEXTVIEW = 0;
 	private static final int UPDATE_DATA = UPDATE_TEXTVIEW + 1;
@@ -406,22 +458,22 @@ public class RecommendPage extends BasePage{
 			mTimerTask.cancel();
 			mTimerTask = null;
 		}	
-	}
+	}*/
 	
 	
-	public void sendMessage(int id){
+	/*public void sendMessage(int id){
 		if (mHandler != null) {
 			Log.d("message", "sendmessage...........") ;
 			Message message = Message.obtain(mHandler, id);   
 			mHandler.sendMessage(message); 
 		}
-	}
+	}*/
 
 	@Override
 	public void onKill() {
 		// TODO Auto-generated method stub
-		Log.d("MAT", "onKill RecommendPage") ;
-		stopTimer() ;
+		Log.d("kill", "onKill method...........") ;
+		//stopTimer() ;
 	}
 }
 

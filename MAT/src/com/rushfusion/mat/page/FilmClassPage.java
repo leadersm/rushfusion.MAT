@@ -62,6 +62,7 @@ public class FilmClassPage extends BasePage {
 		if(page==null){
 			page = new FilmClassPage(context, parent);
 		}
+		page.currentPage = 1 ;
 		return page;
 	}
 	

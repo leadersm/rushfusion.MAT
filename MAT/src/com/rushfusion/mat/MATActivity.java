@@ -189,7 +189,7 @@ public class MATActivity extends Activity implements OnClickListener{
 						currentCategory = res.getString(R.string.shouye);
 						initConditionBar();
 						updatePage(currentCategory,currentType,currentArea,currentYear,currentSort);
-						updateBackground(level1,shouye,R.drawable.btn_level1_selector,R.drawable.btn_level1_selected);
+						updateBackground(level1,shouye,R.drawable.btn_level1_selector,R.drawable.btn_selector_pressed);
 					}
 				});
 				level1.addView(shouye);
@@ -210,7 +210,7 @@ public class MATActivity extends Activity implements OnClickListener{
 							currentYear = "";
 							currentSort = "play";
 							updatePage(currentCategory,currentType, currentArea, currentYear, currentSort);
-							updateBackground(level1,btn,R.drawable.btn_level1_selector,R.drawable.btn_level1_selected);
+							updateBackground(level1,btn,R.drawable.btn_level1_selector,R.drawable.btn_selector_pressed);
 						}
 					});
 					level1.addView(btn);

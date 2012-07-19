@@ -89,6 +89,13 @@
         <item name="android:gravity">center_horizontal</item>
         <item name="android:background">@drawable/btn_level1_selector</item>
     </style>
+    
+    <style name="font.button_category.menu">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:background">@drawable/btn_middle_selector</item>
+    </style>
 
     <style name="font.button_choosebar">
         <item name="android:textSize">24sp</item>
@@ -121,5 +128,4 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
-        
 </resources>
