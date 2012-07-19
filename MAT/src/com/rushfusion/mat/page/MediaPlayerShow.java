@@ -215,7 +215,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 		} 
 		pDialog = new ProgressDialog(this);
 		pDialog.setMessage("视频加载中，请稍后");
-		pDialog.setCancelable(false);
+//		pDialog.setCancelable(false);
 		pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 		pDialog.show();
 	}

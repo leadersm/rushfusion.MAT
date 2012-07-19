@@ -9,12 +9,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView.ScaleType;
 
 import com.rushfusion.mat.R;
 import com.rushfusion.mat.utils.ImageLoadTask;
@@ -24,6 +26,7 @@ import com.rushfusion.mat.video.entity.Movie;
 public class ItemDetailPage extends Activity{
 	ImageView image;
 	TextView name;
+	TextView nameleft;
 	TextView description;
 	TextView socres;
 	TextView length;
@@ -31,6 +34,7 @@ public class ItemDetailPage extends Activity{
 	TextView directors;
 	TextView artists;
 	GridView episode;
+	Button playMovieImage;
 	Movie movie ;
 	ItemDetailGridViewAdapter gda;
 
@@ -46,6 +50,7 @@ public class ItemDetailPage extends Activity{
 //		}
 		image = (ImageView) findViewById(R.id.page_item_detail_image);
 		name = (TextView) findViewById(R.id.page_item_detail_name);
+		nameleft = (TextView)findViewById(R.id.fileNameTextView);
 		description = (TextView) findViewById(R.id.page_item_detail_description);
 		socres = (TextView) findViewById(R.id.page_item_detail_socres);
 		length = (TextView) findViewById(R.id.page_item_detail_length);
@@ -53,16 +58,49 @@ public class ItemDetailPage extends Activity{
 		directors = (TextView) findViewById(R.id.page_item_detail_directors);
 		artists = (TextView) findViewById(R.id.page_item_detail_artists);
 		episode = (GridView) findViewById(R.id.page_item_detail_episode);
+		playMovieImage = (Button)findViewById(R.id.playMovieImage);
 //		image.setImageURI(Uri.parse(movie.getThumb()));
 		ImageLoadTask.imageLoad(image, movie.getThumb());
 		image.setScaleType(ScaleType.FIT_XY);
 		name.setText(movie.getName());
-		description.setText(movie.getDescription());
+		nameleft.setText(movie.getName());
+		description.setText("        "+movie.getDescription());
 		socres.setText(movie.getScore()+"");
 		length.setText(movie.getLength());
 		year.setText(movie.getYear()+"");
 		directors.setText(movie.getDirectors());
 		artists.setText(movie.getArtists());
+		
+		String category = movie.getCategory();
+		if(category.equals("电影")){
+			episode.setVisibility(View.GONE);
+			playMovieImage.setVisibility(View.VISIBLE);
+			playMovieImage.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					String path = movie.getUrl();
+					Log.d("MovieUrl", path);
+					if(path.indexOf("html")==(path.length()-4)){
+						Intent it = new Intent(Intent.ACTION_VIEW , Uri.parse(path));
+						startActivity(it);
+					}else{
+						Intent it =  new Intent(ItemDetailPage.this, MediaPlayerShow.class);
+						Bundle bd = new Bundle();
+						bd.putString("url", path);
+						bd.putString("id", movie.getId());
+//						bd.putString("id", movie.getId()+""+arg2);
+						it.putExtras(bd);
+						startActivity(it);
+					}
+				}
+			});
+		}else{
+			playMovieImage.setVisibility(View.INVISIBLE);
+		}
+		
+		
 		list = new ArrayList<String>();
 		if(movie.getUrl().indexOf("^")==-1){
 			list.add(movie.getUrl()); 
