@@ -172,11 +172,8 @@ public class DataParser {
 	
 	
 	public List<Movie> loadFileData(InputStream inputSteam) {
-		String[] PROPERTIES = {"total","score","comment","artists","name","area","play","count","length","recent","year","directors","thumb","url","type","id","description","category"} ;
-		Map<String, String> nodeMap = null ;
 		Movie movie;
 		if(inputSteam==null)return null;
-//		List<Map<String,String>> dataList = new ArrayList<Map<String,String>>() ;
 		List<Movie> dataList = new ArrayList<Movie>();
 		try {
 			StringBuilder builder = new StringBuilder() ;
@@ -189,13 +186,6 @@ public class DataParser {
 			total = obj.getInt("total");
 			JSONArray itemsArray = obj.getJSONArray("items") ;
 			for(int i=0; i<itemsArray.length(); i++) {
-//				nodeMap = new HashMap<String, String>() ;
-//				JSONObject object = itemsArray.getJSONObject(i) ;
-//				for(int j=0; j<PROPERTIES.length; j++) {
-//					String str = object.getString(PROPERTIES[j]) ;
-//					nodeMap.put(PROPERTIES[j], str) ;
-//				}
-//				dataList.add(nodeMap) ;
 				JSONObject jsonObject = (JSONObject) itemsArray.get(i);
 				movie = new Movie(jsonObject.getInt("count"),
 						jsonObject.getInt("total"), 
@@ -218,10 +208,8 @@ public class DataParser {
 				dataList.add(movie);
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return dataList;
