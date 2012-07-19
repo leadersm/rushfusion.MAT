@@ -180,7 +180,8 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 	public void seekTo(int pos) {
 		if(mediaPlayer!=null){
 //			mediaPlayer.pause();
-			pDialog.show();
+			if(!pDialog.isShowing())
+				pDialog.show();
 			mediaPlayer.seekTo(pos);
 		}else{
 			System.out.println("mediaplayer.seekto 出错了！");
@@ -214,8 +215,8 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 			System.out.println("surface准备中出错 ，错误信息 ："+e.toString()); 
 		} 
 		pDialog = new ProgressDialog(this);
-		pDialog.setMessage("视频加载中，请稍后");
-//		pDialog.setCancelable(false);
+		pDialog.setMessage("视频加载中，请稍候...");
+		pDialog.setCancelable(false);
 		pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 		pDialog.show();
 	}

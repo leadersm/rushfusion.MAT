@@ -1,15 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/title_bg"
-    android:scrollbars="none" >
+    android:background="@drawable/middle_menu_bg"
+    android:gravity="center" >
 
-    <LinearLayout
-        android:id="@+id/level1"
-        android:layout_width="wrap_content"
+    <ImageButton
+        android:id="@+id/header_origin"
+        android:layout_marginLeft="10dip"
+        android:layout_width="100dip"
+        android:layout_height="50dip"
+        android:scaleType="fitCenter"
+        android:padding="5dip"
+        android:adjustViewBounds="true"
+        android:background="@drawable/origin_bg_selector"
+        />
+
+    <HorizontalScrollView
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical" >
-    </LinearLayout>
+        android:scrollbars="none" >
 
-</HorizontalScrollView>
+        <LinearLayout
+            android:id="@+id/level1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical" >
+        </LinearLayout>
+    </HorizontalScrollView>
+
+</LinearLayout>

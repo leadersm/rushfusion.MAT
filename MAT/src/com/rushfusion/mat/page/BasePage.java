@@ -1,7 +1,6 @@
 package com.rushfusion.mat.page;
 
 import java.util.List;
-import java.util.Map;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -11,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.rushfusion.mat.R;
+import com.rushfusion.mat.video.entity.Movie;
 
 public abstract class BasePage {
 
@@ -57,7 +57,7 @@ public abstract class BasePage {
 	}
 	
 	
-	public AsyncTask<String, Void, List<Map<String, String>>> task ;
+	public AsyncTask<String, Void, List<Movie>> task ;
 	
 	public void loadPage(String url,int layoutId,final onLoadingDataCallBack callback){
 		if(PageCache.getInstance().getLastPage()!=null)PageCache.getInstance().getLastPage().onKill();
@@ -67,7 +67,7 @@ public abstract class BasePage {
 			task=null;
 			isLoading = false;
 		}else{
-			task = new AsyncTask<String, Void, List<Map<String, String>>>(){
+			task = new AsyncTask<String, Void, List<Movie>>(){
 				
 				@Override
 				protected void onPreExecute() {
@@ -80,7 +80,7 @@ public abstract class BasePage {
 				}
 
 				@Override
-				protected void onPostExecute(List<Map<String, String>> result) {
+				protected void onPostExecute(List<Movie> result) {
 					// TODO Auto-generated method stub
 					super.onPostExecute(result);
 					isLoading = false;
@@ -89,7 +89,7 @@ public abstract class BasePage {
 				}
 
 				@Override
-				protected List<Map<String, String>> doInBackground(String... params) {
+				protected List<Movie> doInBackground(String... params) {
 					// TODO Auto-generated method stub
 					return callback.onExcute(params[0]);
 				}};
@@ -97,6 +97,37 @@ public abstract class BasePage {
 		}
 			
 		
+	}
+	
+	public void loadData(String url,final onLoadingDataCallBack callback){
+		if(isLoading&&task!=null){
+			return;
+		}else{
+			task = new AsyncTask<String, Void, List<Movie>>(){
+				
+				@Override
+				protected void onPreExecute() {
+					// TODO Auto-generated method stub
+					super.onPreExecute();
+					isLoading = true;
+					callback.onPrepare();
+				}
+
+				@Override
+				protected void onPostExecute(List<Movie> result) {
+					// TODO Auto-generated method stub
+					super.onPostExecute(result);
+					isLoading = false;
+					callback.onFinished(result);
+				}
+
+				@Override
+				protected List<Movie> doInBackground(String... params) {
+					// TODO Auto-generated method stub
+					return callback.onExcute(params[0]);
+				}};
+			task.execute(url);
+		}
 	}
 	
 	public interface onLoadingDataCallBack{
@@ -113,13 +144,13 @@ public abstract class BasePage {
 		 * @param url
 		 * @return
 		 */
-		public List<Map<String, String>> onExcute(String url);
+		public List<Movie> onExcute(String url);
 		/**
 		 * //hide ..
 		 * @param result 
 		 * @param progress
 		 */
-		public void onFinished(List<Map<String,String>> result);
+		public void onFinished(List<Movie> result);
 	}
 	
 	
