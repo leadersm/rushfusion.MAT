@@ -42,7 +42,7 @@ public class SearchResultPage extends BasePage {
 	private List<Movie> movies;
 	private BaseAdapter ba;
 	private DataParser parser;
-	ImageLoadTask imageTask;
+	//ImageLoadTask imageTask;
 	
 	private GridView gridView;
 	private TextView info;
@@ -71,7 +71,7 @@ public class SearchResultPage extends BasePage {
 		mCurrentOrigin = currentOrigin;
 		mCurrentCategory = currentCategory;
 		parser = DataParser.getInstance(context, "");
-		imageTask = new ImageLoadTask();
+		//imageTask = new ImageLoadTask();
 	}
 	
 
@@ -140,6 +140,7 @@ public class SearchResultPage extends BasePage {
 								View v = LayoutInflater.from(context).inflate(R.layout.page_recommend_item, null);
 								ImageView thumb = (ImageView) v.findViewById(R.id.ItemIcon);
 								TextView title = (TextView) v.findViewById(R.id.ItemTitle);
+								ImageLoadTask imageTask = new ImageLoadTask() ;
 								imageTask.loadImage(thumb, result.get(i).getThumb(), new ImageLoadTask.ImageViewCallback1() {
 
 									@Override
@@ -254,13 +255,13 @@ public class SearchResultPage extends BasePage {
 		@Override
 		public Object getItem(int position) {
 			// TODO Auto-generated method stub
-			return null;
+			return result.get(position);
 		}
 
 		@Override
 		public long getItemId(int position) {
 			// TODO Auto-generated method stub
-			return 0;
+			return position;
 		}
 
 		@Override
@@ -269,6 +270,7 @@ public class SearchResultPage extends BasePage {
 			View v = LayoutInflater.from(context).inflate(R.layout.page_recommend_item, null);
 			ImageView thumb = (ImageView) v.findViewById(R.id.ItemIcon);
 			TextView title = (TextView) v.findViewById(R.id.ItemTitle);
+			ImageLoadTask imageTask = new ImageLoadTask() ;
 			if(Cache.getBitmapFromCache(result.get(position).getThumb())!=null) {
 				thumb.setImageBitmap(Cache.getBitmapFromCache(result.get(position).getThumb())) ;
 			}else{
