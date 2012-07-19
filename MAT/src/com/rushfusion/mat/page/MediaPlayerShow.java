@@ -2,6 +2,7 @@ package com.rushfusion.mat.page;
 
 import java.io.IOException;
 
+import com.rushfusion.mat.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -23,17 +24,16 @@ import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.SurfaceHolder;
-import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.SurfaceHolder.Callback;
+import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
-import android.widget.MediaController.MediaPlayerControl;
 import android.widget.Toast;
+import android.widget.MediaController.MediaPlayerControl;
 
-import com.rushfusion.mat.R;
 
 public class MediaPlayerShow extends Activity implements OnBufferingUpdateListener,
 														 OnVideoSizeChangedListener,
