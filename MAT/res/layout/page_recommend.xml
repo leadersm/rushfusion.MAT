@@ -2,30 +2,97 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
-
+    android:gravity="center" >
+
     <com.rushfusion.mat.page.GalleryFlow
         android:id="@+id/automoveview"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:background="#80000000" />
-
+        android:focusable="true"
+        android:layout_marginTop="5dip"
+        android:nextFocusDown="@+id/play" />
+
     <ImageView
-        android:id="@+id/movie_show"
-        android:layout_width="780dip"
-        android:layout_height="305dip"
+        android:id="@+id/imageView1"
+        android:layout_width="975dip"
+        android:layout_height="600dip"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="-35dip"
+        android:layout_marginTop="-145dip"
         android:src="@drawable/movie_show_light" />
+   <View 
+       android:id="@+id/nothing_view"
+       android:layout_width="900dip"
+       android:layout_height="5dip"
+       android:layout_centerHorizontal="true"
+       android:background="#80000000"
+        android:layout_above="@+id/switch_bg"
+       />
+    
+    <LinearLayout
+        android:id="@+id/switch_bg"
+        style="@style/font.header"
+        android:layout_width="900dip"
+        android:layout_height="20dip"
+        android:layout_above="@+id/view1"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:background="#80000000"  >
+    </LinearLayout>
 
-     <HorizontalScrollView
+    <LinearLayout
+        android:id="@+id/view1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageView1"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="92dip"
+        android:background="@drawable/middle_menu_bg"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/play"
+            style="@style/font.button_category.menu"
+            android:layout_width="150dip"
+            android:layout_height="wrap_content"
+            android:nextFocusUp="@+id/automoveview"
+            android:text="今日热播" />
+
+        <Button
+            android:id="@+id/score"
+            style="@style/font.button_category.menu"
+            android:layout_width="150dip"
+            android:layout_height="wrap_content"
+            android:nextFocusUp="@+id/automoveview"
+            android:text="今日好评" />
+
+        <Button
+            android:id="@+id/comment"
+            style="@style/font.button_category.menu"
+            android:layout_width="150dip"
+            android:layout_height="wrap_content"
+            android:nextFocusUp="@+id/automoveview"
+            android:text="今日热议" />
+
+        <Button
+            android:id="@+id/recent"
+            style="@style/font.button_category.menu"
+            android:layout_width="150dip"
+            android:layout_height="wrap_content"
+            android:nextFocusUp="@+id/automoveview"
+            android:text="今日更新" />
+    </LinearLayout>
+
+    <HorizontalScrollView
         android:id="@+id/horizontalScrollView1"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/view1"
+        android:layout_marginTop="-104dip"
         android:scrollbars="none" >
 
         <LinearLayout
@@ -41,63 +108,12 @@
         style="@style/font.header"
         android:layout_width="900dip"
         android:layout_height="30dip"
-        android:layout_above="@+id/switch_bg"
+        android:layout_above="@+id/nothing_view"
         android:layout_alignLeft="@+id/switch_bg"
+        android:background="#80000000"
         android:ellipsize="end"
         android:gravity="center_horizontal"
         android:singleLine="true"
-        android:background="#80000000"
         android:text="村里有个姑娘叫小芳……" />
-
-    <LinearLayout
-        android:id="@+id/view1"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/movie_show"
-        android:background="@drawable/middle_menu_bg"
-        android:gravity="center"
-        android:orientation="horizontal" >
-
-        <Button
-            android:id="@+id/play"
-            style="@style/font.button_category.menu"
-            android:layout_width="150dip"
-            android:layout_height="wrap_content"
-            android:text="今日热播" />
-
-        <Button
-            android:id="@+id/score"
-            style="@style/font.button_category.menu"
-            android:layout_width="150dip"
-            android:layout_height="wrap_content"
-            android:text="今日好评" />
-
-        <Button
-            android:id="@+id/comment"
-            style="@style/font.button_category.menu"
-            android:layout_width="150dip"
-            android:layout_height="wrap_content"
-            android:text="今日热议" />
-
-        <Button
-            android:id="@+id/recent"
-            style="@style/font.button_category.menu"
-            android:layout_width="150dip"
-            android:layout_height="wrap_content"
-            android:text="今日更新" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/switch_bg"
-        style="@style/font.header"
-        android:layout_width="900dip"
-        android:layout_height="30dip"
-        android:layout_above="@+id/view1"
-        android:layout_centerHorizontal="true"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        android:background="#80000000" >
-    </LinearLayout>
 
 </RelativeLayout>

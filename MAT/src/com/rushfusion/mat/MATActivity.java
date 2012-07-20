@@ -67,6 +67,7 @@ public class MATActivity extends Activity implements OnClickListener{
 	private ViewGroup menu;
 	private ViewGroup conditionBar;
 	private ViewGroup level2;
+	private ViewGroup level1;
 	private ViewGroup searchBar;
 	private ImageView header_origin;
 	
@@ -107,6 +108,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		parent = (ViewGroup) findViewById(R.id.parent);
 		conditionBar = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.conditionbar, null);
 		res = getResources();
+		level1 = (ViewGroup) findViewById(R.id.level_1);
 		level2 = (ViewGroup) findViewById(R.id.level_2);
 		header_origin = (ImageView) findViewById(R.id.header_origin);
 		header_origin.setOnClickListener(new OnClickListener() {
@@ -318,7 +320,7 @@ public class MATActivity extends Activity implements OnClickListener{
 					});
 					sourceGroup.addView(sourceBtn);
 				}
-				sourceGroup.getChildAt(0).requestFocus();
+				//sourceGroup.getChildAt(0).requestFocus();
 				
 			}
 
@@ -584,6 +586,18 @@ public class MATActivity extends Activity implements OnClickListener{
 		case KeyEvent.KEYCODE_BACK:
 			showDialog(DIALOG_EXIT);
 			break;
+		case KeyEvent.KEYCODE_DPAD_LEFT:
+			//level1.setFocusable(false) ;
+			break ;
+		case KeyEvent.KEYCODE_DPAD_RIGHT:
+			//level1.setFocusable(false) ;
+			break ;
+		case KeyEvent.KEYCODE_DPAD_DOWN:
+			//level1.setFocusable(false) ;
+			break ;
+		case KeyEvent.KEYCODE_DPAD_UP:
+			//level1.setFocusable(true) ;
+			break ;
 		default:
 			break;
 		}
