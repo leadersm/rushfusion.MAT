@@ -13,7 +13,7 @@ import android.widget.ImageView;
 public class GalleryFlow extends Gallery {
     private Camera mCamera = new Camera();//相机类
     private int mMaxRotationAngle = 40;//最大转动角度
-    private int mMaxZoom = -45;////最大缩放值
+    private int mMaxZoom = -300;////最大缩放值
     private int mCoveflowCenter;//半径值
     public GalleryFlow(Context context) {
         super(context);

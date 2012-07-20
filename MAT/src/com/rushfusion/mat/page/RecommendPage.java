@@ -15,6 +15,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.Shader;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.rushfusion.mat.R;
+import com.rushfusion.mat.movie.message.XmlHttpClient;
 import com.rushfusion.mat.utils.Cache;
 import com.rushfusion.mat.utils.DataParser;
 import com.rushfusion.mat.utils.ImageLoadTask;
@@ -79,13 +81,14 @@ public class RecommendPage extends BasePage{
 			public void onFinished(List<Movie> result) {
 				// TODO Auto-generated method stub
 				//fg.setAdapter(new MyAdapter(result));
+				initBrief() ;
 				mResult = result; 
 				
-				ImageAdapter adapter = new ImageAdapter(mContext, result);
+				//ImageAdapter adapter = new ImageAdapter(mContext, result);
 		        //adapter.createReflectedImages();//创建倒影效果
-		        fg.setFadingEdgeLength(0);
+		        /*fg.setFadingEdgeLength(0);
 		        fg.setSpacing(-112); //图片之间的间距
-		        fg.setAdapter(adapter);
+		        fg.setAdapter(adapter);*/
 		        //fg.setSelection(50);
 				
 				
@@ -94,12 +97,6 @@ public class RecommendPage extends BasePage{
 				items.removeAllViews() ;
 				for(int i=0;i<result.size();i++){
 					items.addView(getView(result.get(i),i));
-				}
-				switchLiner.removeAllViews() ;
-				for(int i=0; i<result.size(); i++) {
-					childImage = new ImageView(mContext) ;
-					childImage.setImageResource(R.drawable.image_switcher_btn) ;
-					switchLiner.addView(childImage) ;
 				}
 				//stopTimer() ;
 				//startTimer() ;
@@ -122,6 +119,37 @@ public class RecommendPage extends BasePage{
 			}) ;
 		}
 	}
+	
+	
+	private void initBrief() {
+		new AsyncTask<String, Void, List<String>>() {
+
+			@Override
+			protected List<String> doInBackground(String... params) {
+				List<String> list = (List<String>)XmlHttpClient.getInstance().get(params[0]) ;
+				return list;
+			}
+			
+			protected void onPostExecute(java.util.List<String> result) {
+				briefList = result ;
+				fg.setFadingEdgeLength(0);
+				fg.setSpacing(40); //图片之间的间距
+		        //galleryFlow.setAdapter(adapter);
+				fg.setAdapter(new ImageAdapter(mContext, result)) ;
+				
+				switchLiner.removeAllViews() ;
+				for(int i=0; i<result.size(); i++) {
+					childImage = new ImageView(mContext) ;
+					childImage.setImageResource(R.drawable.image_switcher_btn) ;
+					switchLiner.addView(childImage) ;
+				}
+				fg.setSelection(currentPosition);
+				//fg.getResources() ;
+			};
+			
+		}.execute(XmlHttpClient.PATH) ;
+	}
+	
 	
 	protected View getView(final Movie movie, int index) {
 		View v = LayoutInflater.from(context).inflate(R.layout.page_recommend_item, null);
@@ -156,17 +184,17 @@ public class RecommendPage extends BasePage{
 		return v;
 	}
 
-	private int currentPosition = 0 ;
-	private int oldPosition = 0;
+	private int currentPosition = 4 ;
+	private int oldPosition = 4;
 	//int mIndex = 0;
 	ImageLoadTask imageLoadTask2 = new ImageLoadTask() ; ;
 	protected void init() {
         fg = (Gallery) contentView.findViewById(R.id.automoveview);//new FlingGallery(context);
         items = (ViewGroup) contentView.findViewById(R.id.items);
-        //items.removeAllViews() ;
+        items.removeAllViews() ;
         desc = (TextView) contentView.findViewById(R.id.desc);
         switchLiner = (LinearLayout)contentView.findViewById(R.id.switch_bg) ;
-        //switchLiner.removeAllViews() ;
+        switchLiner.removeAllViews() ;
         fg.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			@Override
@@ -174,52 +202,52 @@ public class RecommendPage extends BasePage{
 					int position, long id) {
 				Log.d("test", "=============onItemSelected============") ;
 				// TODO Auto-generated method stub
-				Movie movie = (Movie)mResult.get(position%mResult.size()) ;
+				//Movie movie = (Movie)mResult.get(position%mResult.size()) ;
 				//HashMap<String,String> map = (HashMap<String, String>) parent.getItemAtPosition(position);
-				if(movie==null) return ;
-				desc.setText(movie.getDescription());
-				if(mResult==null) return ;
+				/*if(movie==null) return ;
+				desc.setText(movie.getDescription());*/
+				if(briefList==null) return ;
 				Log.d("position", "onItemSelected position:"+position) ;
-				Log.d("position", "mResult.size():"+mResult.size()) ;
-				Log.d("position", "position mResult.size()%:"+position%mResult.size()) ;
+				Log.d("position", "mResult.size():"+briefList.size()) ;
+				Log.d("position", "position mResult.size()%:"+position%briefList.size()) ;
 				currentPosition = position ;
 				Log.d("position", "onItemSelected currentPosition:"+currentPosition) ;
 				Log.d("position", "onItemSelected oldPosition:"+oldPosition) ;
 				Log.d("position", "===========================================") ;
 				if(currentPosition>oldPosition) {
-					int num = position%mResult.size() ;
-					if(position%mResult.size()==0) {
-						num = mResult.size() - 1 ;
+					int num = position%briefList.size() ;
+					if(position%briefList.size()==0) {
+						num = briefList.size() - 1 ;
 					} else {
-						num = position%mResult.size() - 1 ;
+						num = position%briefList.size() - 1 ;
 					}
 					if(currentPosition-oldPosition>=2) {
 						dismissBehindSwitch(num) ;
 					}
-					if(oldPosition%mResult.size()==mResult.size()-1 && currentPosition-oldPosition>=2) {
-						dismissSwitch(mResult.size() - 1) ;
-						showSwitch(currentPosition%mResult.size()) ;
+					if(oldPosition%briefList.size()==briefList.size()-1 && currentPosition-oldPosition>=2) {
+						dismissSwitch(briefList.size() - 1) ;
+						showSwitch(currentPosition%briefList.size()) ;
 					} else {
 						dismissSwitch(num) ;
-						showSwitch(position%mResult.size()) ;
+						showSwitch(position%briefList.size()) ;
 					}
 					oldPosition = currentPosition ;
 				} else {
-					int num = position%mResult.size() ;
-					if(mResult.size()-(position%mResult.size())==1) {
+					int num = position%briefList.size() ;
+					if(briefList.size()-(position%briefList.size())==1) {
 						num = 0 ;
 					} else {
-						num = position%mResult.size()+1 ;
+						num = position%briefList.size()+1 ;
 					}
 					if(currentPosition-oldPosition<=-2) {
 						dismissHeadSwitch(num) ;
 					}
 					
-					if(currentPosition%mResult.size()==mResult.size()-1 && currentPosition-oldPosition<=-2) {
-						dismissSwitch(mResult.size() - 1) ;
-						showSwitch(oldPosition%mResult.size()) ;
+					if(currentPosition%briefList.size()==briefList.size()-1 && currentPosition-oldPosition<=-2) {
+						dismissSwitch(briefList.size() - 1) ;
+						showSwitch(oldPosition%briefList.size()) ;
 					} else {
-						showSwitch(position%mResult.size()) ;
+						showSwitch(position%briefList.size()) ;
 						dismissSwitch(num) ;
 					}
 					oldPosition = currentPosition ;
@@ -232,6 +260,7 @@ public class RecommendPage extends BasePage{
 				Log.d("test", "=============onNothingSelected============") ;
 			}
 		});
+        
         
         
         //==================timer===================
@@ -292,6 +321,7 @@ public class RecommendPage extends BasePage{
 
 	int mGalleryItemBackground;
 	List<Movie> mResult;
+	List<String> briefList ;
 	
 	private Bitmap createMirrorImageWithOrigain(Bitmap bitmap) {
 		int w = bitmap.getWidth();
