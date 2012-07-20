@@ -298,7 +298,7 @@
                 android:numColumns="7"
                 android:padding="20dip"
                 android:layout_marginLeft="15dip"
-                android:listSelector="@drawable/btn_choosebar"
+                android:listSelector="@drawable/btn_item_item"
                 android:verticalSpacing="10dip" >
             </GridView>
             
