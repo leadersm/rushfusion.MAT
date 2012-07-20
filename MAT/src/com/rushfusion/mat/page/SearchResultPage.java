@@ -144,6 +144,7 @@ public class SearchResultPage extends BasePage {
 								ImageView thumb = (ImageView) v.findViewById(R.id.ItemIcon);
 								TextView title = (TextView) v.findViewById(R.id.ItemTitle);
 								ImageLoadTask imageTask = new ImageLoadTask() ;
+								v.setTag(result.get(i));
 								imageTask.loadImage(thumb, result.get(i).getThumb(), new ImageLoadTask.ImageViewCallback1() {
 
 									@Override
@@ -154,6 +155,18 @@ public class SearchResultPage extends BasePage {
 									
 								});
 								title.setText(result.get(i).getName());
+								v.setOnClickListener(new OnClickListener() {
+									
+									@Override
+									public void onClick(View v) {
+										// TODO Auto-generated method stub
+										Movie movie = (Movie) v.getTag();
+										Intent i = new Intent(context,ItemDetailPage.class);
+										i.putExtra("movieInfo",movie);
+										context.startActivity(i);
+									}
+								});
+								
 								items.addView(v);
 							}
 							
@@ -237,10 +250,7 @@ public class SearchResultPage extends BasePage {
 		return style;
 	}
 	
-	@Override
-	public void onKill() {
-		Log.w("MAT", "onKill--SearchResultPage");
-	}
+	
 	
 	class MATAdapter extends BaseAdapter{
 		List<Movie> result;
@@ -270,7 +280,7 @@ public class SearchResultPage extends BasePage {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
-			View v = LayoutInflater.from(context).inflate(R.layout.page_recommend_item, null);
+			View v = LayoutInflater.from(context).inflate(R.layout.page_film_class_item, null);
 			ImageView thumb = (ImageView) v.findViewById(R.id.ItemIcon);
 			TextView title = (TextView) v.findViewById(R.id.ItemTitle);
 			ImageLoadTask imageTask = new ImageLoadTask() ;
@@ -292,6 +302,10 @@ public class SearchResultPage extends BasePage {
 		}
 		
 	}
-
+	
+	@Override
+	public void onKill() {
+		Log.d("MAT", "onKill--SearchResultPage");
+	}
 	
 }

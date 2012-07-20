@@ -11,9 +11,9 @@
         android:layout_alignParentTop="true"
         android:focusable="true"
         android:layout_marginTop="5dip"
-        android:nextFocusDown="@+id/play" />
-
-    <ImageView
+        android:nextFocusDown="@+id/play" 
+        android:background="#80000000" />
+    <ImageView
         android:id="@+id/imageView1"
         android:layout_width="975dip"
         android:layout_height="600dip"

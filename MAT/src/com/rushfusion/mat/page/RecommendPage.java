@@ -59,8 +59,6 @@ public class RecommendPage extends BasePage{
 		return page;
 	}
 
-	
-	
 
 	public void loadPage(String url,int layoutId) {
 		// TODO Auto-generated method stub
@@ -430,7 +428,7 @@ public class RecommendPage extends BasePage{
 	@Override
 	public void onKill() {
 		// TODO Auto-generated method stub
-		Log.d("kill", "onKill method...........") ;
+		Log.d("MAT", "onKill----RecommendPage") ;
 		//stopTimer() ;
 	}
 }
