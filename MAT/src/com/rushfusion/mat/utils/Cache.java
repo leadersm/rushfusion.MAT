@@ -3,12 +3,14 @@ package com.rushfusion.mat.utils;
 import java.lang.ref.SoftReference;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 
 import android.graphics.Bitmap;
 
 public class Cache {
 	public static int HARD_CACHE_CAPACITY = 30;
+	public static int MAX_STACK = 300 ;
 	public final static ConcurrentHashMap<String, SoftReference<Bitmap>> mSoftBitmapCache = new ConcurrentHashMap<String, SoftReference<Bitmap>>(HARD_CACHE_CAPACITY / 2);
 	public final static HashMap<String, Bitmap> mHardBitmapCache = new LinkedHashMap<String, Bitmap>(HARD_CACHE_CAPACITY / 2, 0.75f, true) {
 		@Override
@@ -42,7 +44,7 @@ public class Cache {
                 return bitmap; 
             } 
         } 
-        SoftReference<Bitmap>bitmapReference = mSoftBitmapCache.get(url); 
+        SoftReference<Bitmap> bitmapReference = mSoftBitmapCache.get(url); 
         if (bitmapReference != null) { 
             final Bitmap bitmap =bitmapReference.get(); 
             if (bitmap != null) { 
@@ -51,6 +53,11 @@ public class Cache {
                 mSoftBitmapCache.remove(url); 
             } 
         } 
+        
+        /*Stack<SoftReference<Bitmap>> softStack = new Stack<SoftReference<Bitmap>>() ;
+        if(softStack.size()>MAX_STACK) {
+        	softStack.pop() ;
+        }*/
         return null; 
     } 
 	

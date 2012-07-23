@@ -3,7 +3,7 @@
     android:id="@+id/ScrollView1"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/level_title_bg"
+    android:background="@drawable/play_page_title_bg"
     android:orientation="horizontal" >
 
     <Button

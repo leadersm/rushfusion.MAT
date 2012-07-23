@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ComposeShader;
@@ -68,6 +69,7 @@ public class RecommendPage extends BasePage{
 			public void onPrepare() {
 				// TODO Auto-generated method stub
 				init();
+				initBrief() ;
 			}
 
 			@Override
@@ -81,8 +83,7 @@ public class RecommendPage extends BasePage{
 			public void onFinished(List<Movie> result) {
 				// TODO Auto-generated method stub
 				//fg.setAdapter(new MyAdapter(result));
-				initBrief() ;
-				mResult = result; 
+				//mResult = result; 
 				
 				//ImageAdapter adapter = new ImageAdapter(mContext, result);
 		        //adapter.createReflectedImages();//创建倒影效果
@@ -114,6 +115,9 @@ public class RecommendPage extends BasePage{
 			imageLoadTask2.loadImage(images[index], imageUrl, new ImageLoadTask.ImageViewCallback1() {
 				
 				public void callbak(ImageView view, Bitmap bm) {
+					BitmapFactory.Options options = new BitmapFactory.Options();
+					options.inSampleSize = 2 ;
+					bm.getWidth() ;
 					view.setImageBitmap(createMirrorImageWithOrigain(bm)) ;
 				} ;
 			}) ;

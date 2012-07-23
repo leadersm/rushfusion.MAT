@@ -447,6 +447,11 @@ public class MATActivity extends Activity implements OnClickListener{
 			v.setBackgroundResource(selectorId);
 		}
 		destBtn.setBackgroundResource(selectedId);
+		if(destBtn.getText().equals(this.getResources().getString(R.string.shouye))) {
+			level1.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.level_title_bg)) ;
+		} else {
+			level1.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.middle_menu_bg)) ;
+		}
 	}
 
 	protected void setCategoryBtnStyle(Button btn, String name) {
