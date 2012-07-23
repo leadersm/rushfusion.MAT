@@ -154,7 +154,7 @@ public class MATActivity extends Activity implements OnClickListener{
 
 	private void initCategory(String origin) {
 		parent.removeAllViews();
-		final ViewGroup level1 = (ViewGroup) findViewById(R.id.level1);
+		level1 = (ViewGroup) findViewById(R.id.level1);
 		level1.removeAllViews();
 		new AsyncTask<String, Void, List<String>>(){
 
@@ -704,6 +704,7 @@ public class MATActivity extends Activity implements OnClickListener{
 	}
 
 	private String bywhat = "name";
+	private ViewGroup level1;
 	
 	private void initSearchBar() {
 		searchBar = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.page_search, null);
