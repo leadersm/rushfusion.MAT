@@ -2,81 +2,44 @@ package com.rushfusion.mat.page;
 
 import java.util.List;
 
+import com.rushfusion.mat.R;
+import com.rushfusion.mat.utils.Cache;
+import com.rushfusion.mat.utils.ImageLoadTask;
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.LinearGradient;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Shader.TileMode;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
-
-import com.rushfusion.mat.utils.Cache;
-import com.rushfusion.mat.utils.ImageLoadTask;
-import com.rushfusion.mat.video.entity.Movie;
 
 public class ImageAdapter extends BaseAdapter {
-    //int mGalleryItemBackground;
+    int mGalleryItemBackground;
     private Context mContext;
     private Integer[] mImageIds;
-    //private ImageView[] mImages;
-    private List<Movie> mResult ;
+    private ImageView[] mImages;
     
-    public ImageAdapter(Context c, List<Movie> result) {
+    private List<String> mList ;
+    
+    public ImageAdapter(Context c, Integer[] ImageIds) {
      mContext = c;
-     mResult = result;
-     //mImages = new ImageView[result.size()];
-     //TypedArray typedArray = mContext.obtainStyledAttributes(R.styleable.Gallery);
-	 //mGalleryItemBackground = typedArray.getResourceId(R.styleable.Gallery_android_galleryItemBackground, 0);
+     mImageIds = ImageIds;
+     mImages = new ImageView[mImageIds.length];
     }
     
-    
-    
-    public static Bitmap createReflectionImageWithOrigin(Bitmap bitmap) {
-		final int reflectionGap = 4;
-		int width = bitmap.getWidth();
-		int height = bitmap.getHeight();
-
-		Matrix matrix = new Matrix();
-		matrix.preScale(1, -1);
-
-		Bitmap reflectionImage = Bitmap.createBitmap(bitmap, 0, height / 2,
-				width, height / 2, matrix, false);
-
-		Bitmap bitmapWithReflection = Bitmap.createBitmap(width,
-				(height + height / 2), Config.ARGB_8888);
-
-		Canvas canvas = new Canvas(bitmapWithReflection);
-		canvas.drawBitmap(bitmap, 0, 0, null);
-		Paint deafalutPaint = new Paint();
-		canvas.drawRect(0, height, width, height + reflectionGap, deafalutPaint);
-
-		canvas.drawBitmap(reflectionImage, 0, height + reflectionGap, null);
-
-		Paint paint = new Paint();
-		LinearGradient shader = new LinearGradient(0, bitmap.getHeight(), 0,
-				bitmapWithReflection.getHeight() + reflectionGap, 0x70ffffff,
-				0x00ffffff, TileMode.CLAMP);
-		paint.setShader(shader);
-		// Set the Transfer mode to be porter duff and destination in
-		paint.setXfermode(new PorterDuffXfermode(Mode.DST_IN));
-		// Draw a rectangle using the paint with our linear gradient
-		canvas.drawRect(0, height, width, bitmapWithReflection.getHeight()
-				+ reflectionGap, paint);
-
-		return bitmapWithReflection;
-	}
-
-    
-    
+    public ImageAdapter(Context c, List<String> list) {
+    	this.mContext = c;
+    	this.mList = list ;
+    }
     /**
      * 创建倒影效果
      * @return
@@ -87,7 +50,7 @@ public class ImageAdapter extends BaseAdapter {
      int index = 0;
      //for (int imageId : mImageIds) {
       //返回原图解码之后的bitmap对象
-      Bitmap originalImage = bitmap;
+      Bitmap originalImage = bitmap ;
       int width = originalImage.getWidth();
       int height = originalImage.getHeight();
       //创建矩阵对象
@@ -105,7 +68,7 @@ public class ImageAdapter extends BaseAdapter {
       
       //创建一个宽度不变，高度为原图+倒影图高度的位图	
       Bitmap bitmapWithReflection = Bitmap.createBitmap(width,
-        (height + height / 2), Config.ARGB_8888);
+        (height + height / 2), Config.ARGB_4444);
       
       //将上面创建的位图初始化到画布
       Canvas canvas = new Canvas(bitmapWithReflection);
@@ -134,10 +97,9 @@ public class ImageAdapter extends BaseAdapter {
       canvas.drawRect(0, height, width, bitmapWithReflection.getHeight()+ reflectionGap, paint);
       
       //创建一个ImageView用来显示已经画好的bitmapWithReflection
-      //ImageView imageView = new ImageView(mContext);
       imageView.setImageBitmap(bitmapWithReflection);
       //设置imageView大小 ，也就是最终显示的图片大小
-      imageView.setLayoutParams(new GalleryFlow.LayoutParams(518, 320));
+      imageView.setLayoutParams(new GalleryFlow.LayoutParams(385, 400));
       //imageView.setScaleType(ScaleType.MATRIX);
       //mImages[index++] = imageView;
      //}
@@ -147,52 +109,36 @@ public class ImageAdapter extends BaseAdapter {
     private Resources getResources() {
         return null;
     }
-    
-    public int getLength() {
-		return mResult.size();
-	}
-    
-    @Override
-	public int getCount() {
-		// TODO Auto-generated method stub
-		return Integer.MAX_VALUE;
-	}
-
-	@Override
-	public Object getItem(int position) {
-		// TODO Auto-generated method stub
-		return mResult.get(position%mResult.size());
-	}
-
-	@Override
-	public long getItemId(int position) {
-		// TODO Auto-generated method stub
-		return position ;
-	}
-    
-    public View getView(int position, View convertView, ViewGroup parent) {
-        	//return mImages[position%getLength()];
-    	Movie movie =  mResult.get(position%mResult.size());
-		ImageView bigImage = new ImageView(mContext);
-		//bigImage.setLayoutParams(new Gallery.LayoutParams(512, 320));
-		bigImage.setScaleType(ScaleType.FIT_XY);
-		//bigImage.setPadding(0, 58, 0, 58) ;
-		String imageUrl = movie.getThumb();
-		//bigImage.setImageBitmap(ImageLoadTask.loadBitmap(map.get("thumb")));
-		ImageLoadTask imageLoadTask = new ImageLoadTask() ;
-		if(Cache.getBitmapFromCache(imageUrl)!=null) {
-			//bigImage.setImageBitmap(createReflectionImageWithOrigin(Cache.getBitmapFromCache(imageUrl))) ;
-			createReflectedImages(bigImage, Cache.getBitmapFromCache(imageUrl)) ;
-		} else {
-			imageLoadTask.loadImage(bigImage, movie.getThumb(), new ImageLoadTask.ImageViewCallback1() {
-				
-				public void callbak(ImageView view, Bitmap bm) {
-					//view.setImageBitmap(createReflectionImageWithOrigin(bm)) ;
-					if(bm!=null) createReflectedImages(view, bm) ;
-				} ;
-			}) ;
-		}
-		//bigImage.setBackgroundResource(mGalleryItemBackground);
-		return bigImage;
+    public int getCount() {
+        return Integer.MAX_VALUE;
     }
+    public int getLength() {
+		return mImageIds.length;
+	}
+    public Object getItem(int position) {
+        return mList.get(position%mList.size());
+    }
+    public long getItemId(int position) {
+        return position;
+    }
+    public View getView(int position, View convertView, ViewGroup parent) {
+    	ImageView imageView = new ImageView(mContext) ;
+    	imageView.setFocusable(true) ;
+    	//imageView.requestFocus() ;
+    	//imageView.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.btn_gallery_selector)) ;
+    	ImageLoadTask imageLoadTask = new ImageLoadTask() ;
+    	if(Cache.getBitmapFromCache(mList.get(position%mList.size()))!=null) {
+    		createReflectedImages(imageView, Cache.getBitmapFromCache(mList.get(position%mList.size()))) ;
+    	} else {
+    		imageLoadTask.loadImage(imageView, mList.get(position%mList.size()), new ImageLoadTask.ImageViewCallback1() {
+    			public void callbak(ImageView view, Bitmap bm) {
+    				createReflectedImages(view, bm) ;
+    			}
+    		}) ;
+    	}
+    	return imageView ;
+    }
+//    public float getScale(boolean focused, int offset) {
+//        return Math.max(0, 1.0f / (float) Math.pow(2, Math.abs(offset)));
+//    }
    }

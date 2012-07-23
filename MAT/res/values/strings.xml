@@ -65,6 +65,10 @@
     <string name="searchinfo_e">个</string>
     <string name="search_result_top">观看排行：</string>
     <string name="pleaseinputkey">请输入搜索关键字</string>
+    <string name="today_play">今日热播</string>
+    <string name="today_score">今日好评</string>
+    <string name="today_comment">今日热议</string>
+    <string name="today_recent">今日更新</string>
     
     
 </resources>

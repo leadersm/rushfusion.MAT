@@ -108,6 +108,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		parent = (ViewGroup) findViewById(R.id.parent);
 		conditionBar = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.conditionbar, null);
 		level2 = (ViewGroup) findViewById(R.id.level_2);
+		level2.setVisibility(View.INVISIBLE);
 		header_origin = (ImageView) findViewById(R.id.header_origin);
 		header_origin.setOnClickListener(new OnClickListener() {
 			
@@ -460,6 +461,7 @@ public class MATActivity extends Activity implements OnClickListener{
 	private void setSourceButtonStyle(ImageButton btn,String name,String logourl) {
 		btn.setLayoutParams(new LayoutParams(200,80));
 		Bitmap bm = ImageLoadTask.loadBitmap(logourl) ;
+		if(bm==null)return;
 		btn.setImageBitmap(zoomBitmap(bm, 180, 60));
 	}
 	
@@ -510,7 +512,7 @@ public class MATActivity extends Activity implements OnClickListener{
 	
 	private void initRecommendPage() {
 		String recommendUrl = "http://tvsrv.webhop.net:9061/query?source="
-				+currentOrigin+"&sort=play&page=1&pagesize=10";
+				+currentOrigin+"&page=1&pagesize=10";
 		RecommendPage  recommendPage = RecommendPage.getInstance(this,parent);
 		recommendPage.loadPage(recommendUrl,R.layout.page_recommend);
 		PageCache.getInstance().set(R.layout.page_recommend, recommendPage);
@@ -800,6 +802,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		keywords = m.replaceAll("");
 		String url = "http://tvsrv.webhop.net:9061/query?"
 				+"source="+currentOrigin
+				+"&category="+currentCategory
 				+"&page=1&pagesize="+FILMCLASSPAGESIZE
 				+"&"+bywhat+"="+keywords;
 		

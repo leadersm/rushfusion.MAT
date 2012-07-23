@@ -184,19 +184,24 @@ public class FilmClassPage extends BasePage {
 			}else{
 				holder=(ViewHolder) convertView.getTag();
 			}
-			ImageLoadTask imageTask = new ImageLoadTask() ;
-			if(Cache.getBitmapFromCache(movies.get(position).getThumb())!=null) {
-				holder.thumb.setImageBitmap(Cache.getBitmapFromCache(movies.get(position).getThumb())) ;
-			}else{
-				imageTask.loadImage(holder.thumb, movies.get(position).getThumb(), new ImageLoadTask.ImageViewCallback1() {
-					
-					@Override
-					public void callbak(ImageView view, Bitmap bm) {
-						view.setImageBitmap(bm);
-					}
-					
-				});
-			}
+//			ImageLoadTask imageTask = new ImageLoadTask() ;
+//			if(Cache.getBitmapFromCache(movies.get(position).getThumb())!=null) {
+//				holder.thumb.setImageBitmap(Cache.getBitmapFromCache(movies.get(position).getThumb())) ;
+//			}else{
+//				imageTask.loadImage(holder.thumb, movies.get(position).getThumb(), new ImageLoadTask.ImageViewCallback1() {
+//					
+//					@Override
+//					public void callbak(ImageView view, Bitmap bm) {
+//						view.setImageBitmap(bm);
+//					}
+//					
+//				});
+//			}
+			String imageUrl = movies.get(position).getThumb() ;
+			holder.thumb.setTag(imageUrl) ;
+			holder.thumb.setImageResource(R.drawable.film_bg_loading) ;
+			ImageLoadTask.loadImageLimited(holder.thumb, imageUrl) ;
+
 			holder.title.setText(movies.get(position).getName());
             return convertView;
 		}
@@ -242,7 +247,7 @@ public class FilmClassPage extends BasePage {
 			public void onFinished(List<Movie> result) {
 				context.dismissDialog(MATActivity.DIALOG_LOADING);
 				isLoading = false;
-				if(result.size()<=0)return;
+				if(result==null||result.size()<=0)return;
 				movies.clear();
 				movies = result;
 				ba.notifyDataSetChanged();
@@ -276,7 +281,7 @@ public class FilmClassPage extends BasePage {
 			public void onFinished(List<Movie> result) {
 				context.dismissDialog(MATActivity.DIALOG_LOADING);
 				isLoading = false;
-				if(result.size()<=0)return;
+				if(result==null||result.size()<=0)return;
 				Log.d("MAT","result.size--->"+result.size());
 				movies.clear();
 				movies = result;

@@ -215,7 +215,7 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 		} 
 		pDialog = new ProgressDialog(this);
 		pDialog.setMessage("视频加载中，请稍候...");
-		pDialog.setCancelable(false);
+//		pDialog.setCancelable(false);
 		pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 		pDialog.show();
 	}
@@ -430,4 +430,11 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 		return super.onKeyDown(keyCode, event);
 	}
 
+	
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		if(pDialog.isShowing())pDialog.dismiss();
+		super.onDestroy();
+	}
 }
