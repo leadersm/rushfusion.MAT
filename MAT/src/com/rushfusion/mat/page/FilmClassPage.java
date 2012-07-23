@@ -1,5 +1,6 @@
 package com.rushfusion.mat.page;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -8,12 +9,14 @@ import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,13 +31,16 @@ import com.rushfusion.mat.video.entity.Movie;
 public class FilmClassPage extends BasePage {
 
 	private static int currentPage = 1;
-	private int pagesize = 18;
-	private List<Movie> movies;
+	private int totalPage = 0;
+	
+	private List<Movie> movies = new ArrayList<Movie>();
 	private BaseAdapter ba;
 	private DataParser parser;
-	// ImageLoadTask imageTask;
+//	private ImageLoadTask imageTask;
 
 	private GridView gridView;
+	private Button preBtn,nextBtn;
+	private TextView pageIndex;
 
 	static FilmClassPage page;
 	private String mLoadUrl;
@@ -50,8 +56,12 @@ public class FilmClassPage extends BasePage {
 	private FilmClassPage(Activity context, ViewGroup parent) {
 		super(context, parent);
 		parser = DataParser.getInstance(context, "");
+//		imageTask = new ImageLoadTask() ;
 	}
 
+	
+	boolean isLoading = false;
+	
 	@Override
 	public void loadPage(String url, int layoutId) {
 		mLoadUrl = url;
@@ -61,33 +71,51 @@ public class FilmClassPage extends BasePage {
 			@Override
 			public void onPrepare() {
 				gridView = (GridView) contentView.findViewById(R.id.gridView_filmclass);
+				ba = new MATAdapter();
+				gridView.setAdapter(ba);
 				gridView.setOnItemClickListener(new OnItemClickListener() {
 
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view,
 							int position, long id) {
-						// TODO Auto-generated method stub
 						Movie movie = movies.get(position);
 						Intent i = new Intent(context,ItemDetailPage.class);
 						i.putExtra("movieInfo",movie);
 						context.startActivity(i);
 					}
 				});
+				preBtn = (Button) contentView.findViewById(R.id.page_pre);
+				nextBtn = (Button) contentView.findViewById(R.id.page_next);
+				pageIndex = (TextView) contentView.findViewById(R.id.page_index);
+				preBtn.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						loadPrePage(mLoadUrl);
+					}
+				});
+				nextBtn.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						loadNextPage(mLoadUrl);
+					}
+				});
+				
 			}
 
 			@Override
 			public List<Movie> onExcute(String url) {
-				// TODO Auto-generated method stub
-				// contentView.findViewById(R.id.image) ;
 				return parser.getMovies(url);
 			}
 
 			@Override
 			public void onFinished(List<Movie> result) {
-				movies = result;
 				if(result!=null&&result.size()>0){
-					ba = new MATAdapter(movies);
-					gridView.setAdapter(ba);
+					movies = result;
+					ba.notifyDataSetChanged();
+					totalPage = (int)Math.ceil((double)parser.getTotal()/MATActivity.FILMCLASSPAGESIZE);
+					updatePageIndex();
 				}
 				
 				if(movies.size()>12)
@@ -95,123 +123,184 @@ public class FilmClassPage extends BasePage {
 						
 						@Override
 						public void onScrollStateChanged(AbsListView view, int scrollState) {
-							// TODO Auto-generated method stub
-							
+							Log.i("MAT", "state-->"+scrollState);
+							if(scrollState==OnScrollListener.SCROLL_STATE_FLING){
+								if(view.getFirstVisiblePosition()==0){
+									if(!isLoading)
+										loadPrePage(mLoadUrl);
+								}
+								if(view.getLastVisiblePosition()==view.getCount()-1){
+									if(!isLoading)
+										loadNextPage(mLoadUrl);
+								}
+							}
 						}
 						
 						@Override
 						public void onScroll(AbsListView view, int firstVisibleItem,
 								int visibleItemCount, int totalItemCount) {
-							// TODO Auto-generated method stub
-							if(view.getLastVisiblePosition()==view.getCount()-1){
-								if(currentPage>Math.ceil(parser.getTotal()/pagesize)+1){
-									return;
-								}
-								if(!isLoadingNextPage)
-									loadNextPage(mLoadUrl);
-							}
+							
 						}
 
-						boolean isLoadingNextPage = false;
-						
-						private void loadNextPage(String url) {
-							String nextPageUrl = getPageUrl(++currentPage,url);
-							Log.d("MAT", "currentPage->"+currentPage+"加载数据、、getTotal()-->"+parser.getTotal()+"--getTotal/size-->"+Math.ceil(parser.getTotal()/pagesize));
-							Log.d("MAT", "loadNextUrl--->"+nextPageUrl);
-							loadData(nextPageUrl, new BasePage.onLoadingDataCallBack() {
-								
-								@Override
-								public void onPrepare() {
-									// TODO Auto-generated method stub
-									context.showDialog(MATActivity.DIALOG_LOADING);
-									isLoadingNextPage = true;
-								}
-								
-								
-								@Override
-								public List<Movie> onExcute(String url) {
-									// TODO Auto-generated method stub
-									return parser.getMovies(url);
-								}
-								
-								@Override
-								public void onFinished(List<Movie> result) {
-									// TODO Auto-generated method stub
-									context.dismissDialog(MATActivity.DIALOG_LOADING);
-									isLoadingNextPage = false;
-									if(movies.size()<=0)return;
-									movies.addAll(result);
-									ba.notifyDataSetChanged();
-								}
-							});
-						}
 
-						private String getPageUrl(int currentPage,String url) {
-							url = url.replaceAll("&page=(\\d)+", "") ;
-							url = url.replaceAll("&pagesize=(\\d)+", "") ;
-							return url+"&page="+currentPage+"&pagesize="+pagesize;
-						}
 					});
 			}
 		});
 	}
 	
+	private String getPageUrl(int currentPage,String url) {
+		url = url.replaceAll("&page=(\\d)+", "") ;
+		url = url.replaceAll("&pagesize=(\\d)+", "") ;
+		return url+"&page="+currentPage+"&pagesize="+MATActivity.FILMCLASSPAGESIZE;
+	}
 	
 	
 	class MATAdapter extends BaseAdapter{
-		List<Movie> result;
-		public MATAdapter(List<Movie> result) {
-			// TODO Auto-generated constructor stub
-			this.result = result;
-		}
 
 		@Override
 		public int getCount() {
-			// TODO Auto-generated method stub
-			return result.size();
+			return movies.size();
 		}
 
 		@Override
 		public Object getItem(int position) {
-			// TODO Auto-generated method stub
-			return result.get(position);
+			return movies.get(position);
 		}
 
 		@Override
 		public long getItemId(int position) {
-			// TODO Auto-generated method stub
 			return position;
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			// TODO Auto-generated method stub
-			View v = LayoutInflater.from(context).inflate(R.layout.page_film_class_item, null);
-			ImageView thumb = (ImageView) v.findViewById(R.id.ItemIcon);
-			TextView title = (TextView) v.findViewById(R.id.ItemTitle);
-			ImageLoadTask imageTask = new ImageLoadTask() ;
-			if(Cache.getBitmapFromCache(result.get(position).getThumb())!=null) {
-				thumb.setImageBitmap(Cache.getBitmapFromCache(result.get(position).getThumb())) ;
+			ViewHolder holder = null;
+			if(convertView==null){
+				convertView = LayoutInflater.from(context).inflate(R.layout.page_film_class_item, null);
+				holder = new ViewHolder();
+				holder.thumb = (ImageView) convertView.findViewById(R.id.ItemIcon);
+				holder.title = (TextView) convertView.findViewById(R.id.ItemTitle);
+				convertView.setTag(holder);
 			}else{
-				imageTask.loadImage(thumb, result.get(position).getThumb(), new ImageLoadTask.ImageViewCallback1() {
+				holder=(ViewHolder) convertView.getTag();
+			}
+			ImageLoadTask imageTask = new ImageLoadTask() ;
+			if(Cache.getBitmapFromCache(movies.get(position).getThumb())!=null) {
+				holder.thumb.setImageBitmap(Cache.getBitmapFromCache(movies.get(position).getThumb())) ;
+			}else{
+				imageTask.loadImage(holder.thumb, movies.get(position).getThumb(), new ImageLoadTask.ImageViewCallback1() {
 					
 					@Override
 					public void callbak(ImageView view, Bitmap bm) {
-						// TODO Auto-generated method stub
 						view.setImageBitmap(bm);
 					}
 					
 				});
 			}
-			title.setText(result.get(position).getName());
-			return v;
+			holder.title.setText(movies.get(position).getName());
+            return convertView;
 		}
 		
 	}
+	
+	private void updatePageIndex() {
+		// TODO Auto-generated method stub
+		if(currentPage <= 1){
+			preBtn.setEnabled(false);
+		}else if(currentPage>=totalPage){
+			nextBtn.setEnabled(false);
+		}else{
+			preBtn.setEnabled(true);
+			nextBtn.setEnabled(true);
+		}
+		pageIndex.setText(currentPage+"/"+totalPage);
+	}
+	
+	private void loadPrePage(String url) {
+		if(currentPage<=1){
+			return;
+		}
+		String prePageUrl = getPageUrl(--currentPage,url);
+		Log.d("MAT", "currentPage->"+currentPage+"加载数据、、getTotal()-->"+parser.getTotal());
+		Log.d("MAT", "loadNextUrl--->"+prePageUrl);
+		loadData(prePageUrl, new BasePage.onLoadingDataCallBack() {
+			
+			@Override
+			public void onPrepare() {
+				updatePageIndex();
+				context.showDialog(MATActivity.DIALOG_LOADING);
+				isLoading = true;
+			}
+			
+			
+			@Override
+			public List<Movie> onExcute(String url) {
+				return parser.getMovies(url);
+			}
+			
+			@Override
+			public void onFinished(List<Movie> result) {
+				context.dismissDialog(MATActivity.DIALOG_LOADING);
+				isLoading = false;
+				if(result.size()<=0)return;
+				movies.clear();
+				movies = result;
+				ba.notifyDataSetChanged();
+				gridView.setSelection(0);
+			}
+		});
+	}
+	private void loadNextPage(String url) {
+		if(currentPage>=totalPage){
+			return;
+		}
+		String nextPageUrl = getPageUrl(++currentPage,url);
+		Log.d("MAT", "currentPage->"+currentPage+"加载数据、、getTotal()-->"+parser.getTotal()+"--totalPage-->"+totalPage);
+		Log.d("MAT", "loadNextUrl--->"+nextPageUrl);
+		loadData(nextPageUrl, new BasePage.onLoadingDataCallBack() {
+			
+			@Override
+			public void onPrepare() {
+				updatePageIndex();
+				context.showDialog(MATActivity.DIALOG_LOADING);
+				isLoading = true;
+			}
+			
+			
+			@Override
+			public List<Movie> onExcute(String url) {
+				return parser.getMovies(url);
+			}
+			
+			@Override
+			public void onFinished(List<Movie> result) {
+				context.dismissDialog(MATActivity.DIALOG_LOADING);
+				isLoading = false;
+				if(result.size()<=0)return;
+				Log.d("MAT","result.size--->"+result.size());
+				movies.clear();
+				movies = result;
+				ba.notifyDataSetChanged();
+				gridView.setSelection(0);
+			}
+		});
+	}
+	
 	@Override
 	public void onKill() {
-		// TODO Auto-generated method stub
 		Log.d("MAT", "onKill--FilmClassPage");
 	}
 
+	
+	
+	class ViewHolder{
+		private ImageView thumb;
+		private TextView title;
+	}
+	
+	
+	
+	
+	
+	
 }

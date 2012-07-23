@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/LinearLayout1"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@color/bg_color"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/resultInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        style="@style/font.header"
-        android:text="" />
-
     <GridView
         android:id="@+id/searchResultGridView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:listSelector="@drawable/ring_box_selector"
-        android:verticalSpacing="10dip"
+        android:layout_above="@+id/page_info"
         android:background="#00000000"
-        android:numColumns="6" >
+        android:listSelector="@drawable/ring_box_selector"
+        android:numColumns="6"
+        android:verticalSpacing="10dip" >
     </GridView>
 
-</LinearLayout>
+    <include
+        android:id="@+id/page_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        layout="@layout/page_info_bar" />
+
+</RelativeLayout>

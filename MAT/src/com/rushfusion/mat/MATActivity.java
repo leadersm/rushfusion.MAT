@@ -51,8 +51,8 @@ import com.rushfusion.mat.utils.ImageLoadTask.ImageViewCallback1;
 public class MATActivity extends Activity implements OnClickListener{
     /** Called when the activity is first created. */
 	
-	private static final int FILMCLASSPAGE = 1;
-	private static final int FILMCLASSPAGESIZE = 18;
+	public static final int FILMCLASSPAGE = 1;
+	public static final int FILMCLASSPAGESIZE = 24;
 	
 	public static final int DIALOG_EXIT = 0;
 	public static final int DIALOG_CONNECTEDREFUSED = 1;
@@ -67,7 +67,6 @@ public class MATActivity extends Activity implements OnClickListener{
 	private ViewGroup menu;
 	private ViewGroup conditionBar;
 	private ViewGroup level2;
-	private ViewGroup level1;
 	private ViewGroup searchBar;
 	private ImageView header_origin;
 	
@@ -95,6 +94,7 @@ public class MATActivity extends Activity implements OnClickListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        res = getResources();
         if(HttpUtil.checkNetworkEnabled(this)){
         	init();
         	showDialog(DIALOG_ORIGIN_MENU);
@@ -107,8 +107,6 @@ public class MATActivity extends Activity implements OnClickListener{
 	private void init() {
 		parent = (ViewGroup) findViewById(R.id.parent);
 		conditionBar = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.conditionbar, null);
-		res = getResources();
-		level1 = (ViewGroup) findViewById(R.id.level_1);
 		level2 = (ViewGroup) findViewById(R.id.level_2);
 		header_origin = (ImageView) findViewById(R.id.header_origin);
 		header_origin.setOnClickListener(new OnClickListener() {
@@ -210,14 +208,16 @@ public class MATActivity extends Activity implements OnClickListener{
 							currentType = "";
 							currentArea = "";
 							currentYear = "";
-							currentSort = "play";
+							currentSort = "";
 							updatePage(currentCategory,currentType, currentArea, currentYear, currentSort);
 							updateBackground(level1,btn,R.drawable.btn_level1_selector,R.drawable.btn_selector_pressed);
+							updateChooseBar(null);
 						}
 					});
 					level1.addView(btn);
 				}
 		    	initRecommendPage();
+		    	updateBackground(level1,shouye,R.drawable.btn_level1_selector,R.drawable.btn_selector_pressed);
 		    	initChooseBar();
 				
 			}
@@ -320,7 +320,7 @@ public class MATActivity extends Activity implements OnClickListener{
 					});
 					sourceGroup.addView(sourceBtn);
 				}
-				//sourceGroup.getChildAt(0).requestFocus();
+				sourceGroup.getChildAt(0).requestFocus();
 				
 			}
 
@@ -494,6 +494,7 @@ public class MATActivity extends Activity implements OnClickListener{
 	 * @param sort
 	 */
 	private void updatePage(String category,String type,String area,String year,String sort) {
+		System.gc();
 		StringBuffer baseUrl = new StringBuffer("http://tvsrv.webhop.net:9061/query?source="+currentOrigin);
 		if(!category.equals(""))baseUrl.append("&category="+category);
 		if(!type.equals(""))baseUrl.append("&type="+type);
@@ -567,7 +568,10 @@ public class MATActivity extends Activity implements OnClickListener{
 		level2.findViewById(R.id.indicator_score).setBackgroundResource(R.drawable.red_normal);
 		level2.findViewById(R.id.indicator_comment).setBackgroundResource(R.drawable.red_normal);
 		level2.findViewById(R.id.indicator_recent).setBackgroundResource(R.drawable.red_normal);
-		indicator.setBackgroundResource(R.drawable.red_active);
+		if(indicator!=null){
+			indicator.setBackgroundResource(R.drawable.red_active);
+		}
+			
 	}
 
 
@@ -587,18 +591,6 @@ public class MATActivity extends Activity implements OnClickListener{
 		case KeyEvent.KEYCODE_BACK:
 			showDialog(DIALOG_EXIT);
 			break;
-		case KeyEvent.KEYCODE_DPAD_LEFT:
-			//level1.setFocusable(false) ;
-			break ;
-		case KeyEvent.KEYCODE_DPAD_RIGHT:
-			//level1.setFocusable(false) ;
-			break ;
-		case KeyEvent.KEYCODE_DPAD_DOWN:
-			//level1.setFocusable(false) ;
-			break ;
-		case KeyEvent.KEYCODE_DPAD_UP:
-			//level1.setFocusable(true) ;
-			break ;
 		default:
 			break;
 		}
@@ -813,7 +805,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		keywords = m.replaceAll("");
 		String url = "http://tvsrv.webhop.net:9061/query?"
 				+"source="+currentOrigin
-				+"&page=1&pagesize="+18
+				+"&page=1&pagesize="+FILMCLASSPAGESIZE
 				+"&"+bywhat+"="+keywords;
 		
 		Log.d("MAT", "search url==>"+url);
