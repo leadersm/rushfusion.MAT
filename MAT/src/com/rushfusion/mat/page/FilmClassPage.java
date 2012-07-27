@@ -2,10 +2,12 @@ package com.rushfusion.mat.page;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -184,24 +186,27 @@ public class FilmClassPage extends BasePage {
 			}else{
 				holder=(ViewHolder) convertView.getTag();
 			}
-//			ImageLoadTask imageTask = new ImageLoadTask() ;
-//			if(Cache.getBitmapFromCache(movies.get(position).getThumb())!=null) {
-//				holder.thumb.setImageBitmap(Cache.getBitmapFromCache(movies.get(position).getThumb())) ;
-//			}else{
-//				imageTask.loadImage(holder.thumb, movies.get(position).getThumb(), new ImageLoadTask.ImageViewCallback1() {
-//					
-//					@Override
-//					public void callbak(ImageView view, Bitmap bm) {
-//						view.setImageBitmap(bm);
-//					}
-//					
-//				});
-//			}
-			String imageUrl = movies.get(position).getThumb() ;
-			holder.thumb.setTag(imageUrl) ;
 			holder.thumb.setImageResource(R.drawable.film_bg_loading) ;
-			ImageLoadTask.loadImageLimited(holder.thumb, imageUrl) ;
-
+			ImageLoadTask imageTask = new ImageLoadTask() ;
+			Log.d("cache", "mSoftBitmapCache:"+Cache.mSoftBitmapCache.size()) ;
+			
+			
+			if(Cache.getBitmapFromCache(movies.get(position).getThumb())!=null) {
+				Log.d("loadimage", "load from cache.....") ;
+				holder.thumb.setImageBitmap(Cache.getBitmapFromCache(movies.get(position).getThumb())) ;
+			}else{
+				Log.d("loadimage", "load from net.....") ;
+				imageTask.loadImage(holder.thumb, movies.get(position).getThumb(), new ImageLoadTask.ImageViewCallback1() {
+					
+					@Override
+					public void callbak(ImageView view, Bitmap bm) {
+						view.setImageBitmap(bm);
+					}
+					
+				});
+			}
+			//holder.thumb.setTag(imageUrl) ;
+			//ImageLoadTask.loadImageLimited(holder.thumb, imageUrl) ;
 			holder.title.setText(movies.get(position).getName());
             return convertView;
 		}
@@ -228,11 +233,13 @@ public class FilmClassPage extends BasePage {
 		String prePageUrl = getPageUrl(--currentPage,url);
 		Log.d("MAT", "currentPage->"+currentPage+"加载数据、、getTotal()-->"+parser.getTotal());
 		Log.d("MAT", "loadNextUrl--->"+prePageUrl);
+		
 		loadData(prePageUrl, new BasePage.onLoadingDataCallBack() {
 			
 			@Override
 			public void onPrepare() {
 				updatePageIndex();
+				//recycle() ;
 				context.showDialog(MATActivity.DIALOG_LOADING);
 				isLoading = true;
 			}
@@ -267,6 +274,7 @@ public class FilmClassPage extends BasePage {
 			@Override
 			public void onPrepare() {
 				updatePageIndex();
+				//recycle() ;
 				context.showDialog(MATActivity.DIALOG_LOADING);
 				isLoading = true;
 			}
@@ -303,9 +311,19 @@ public class FilmClassPage extends BasePage {
 		private TextView title;
 	}
 	
-	
-	
-	
-	
-	
+	/*public void recycle() {
+		System.out.println("bitmap is recycle!");
+		List<Bitmap> bitList = ImageLoadTask.bitList ;
+		System.out.println("recycle head :"+bitList.size());
+		for(int i=0; i<bitList.size(); i++) {
+			Bitmap bitmap = bitList.get(i) ;
+			if(bitmap!=null && !bitmap.isRecycled()) {
+				bitmap.recycle() ;
+				bitmap = null ;
+			}
+		}
+		bitList.clear() ;
+		System.out.println("recycle end :"+bitList.size());
+		System.gc() ;
+	}*/
 }
