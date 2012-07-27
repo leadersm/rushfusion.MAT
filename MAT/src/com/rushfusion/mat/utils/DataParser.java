@@ -190,6 +190,7 @@ public class DataParser {
 			StringBuilder builder = new StringBuilder();
 			BufferedReader bufferedReader = new BufferedReader(
 					new InputStreamReader(inputSteam));
+			inputSteam.close() ;
 			for (String s = bufferedReader.readLine(); s != null; s = bufferedReader
 					.readLine()) {
 				builder.append(s);
@@ -245,7 +246,6 @@ public class DataParser {
 						thumb, length, url, play, id, recent);
 				dataList.add(movie);
 			}
-			inputSteam.close() ;
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (JSONException e) {
