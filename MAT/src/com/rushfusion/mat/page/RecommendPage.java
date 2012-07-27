@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ComposeShader;
@@ -67,6 +68,7 @@ public class RecommendPage extends BasePage {
 			@Override
 			public void onPrepare() {
 				init();
+				//initBrief() ;
 			}
 
 			@Override
@@ -76,22 +78,23 @@ public class RecommendPage extends BasePage {
 
 			@Override
 			public void onFinished(List<Movie> result) {
-				// fg.setAdapter(new MyAdapter(result));
-				initBrief();
-				mResult = result;
-
-				// ImageAdapter adapter = new ImageAdapter(mContext, result);
-				// adapter.createReflectedImages();//创建倒影效果
-				/*
-				 * fg.setFadingEdgeLength(0); fg.setSpacing(-112); //图片之间的间距
-				 * fg.setAdapter(adapter);
-				 */
-				// fg.setSelection(50);
-
-				images = new ImageView[result.size()];
-				items.removeAllViews();
-				for (int i = 0; i < result.size(); i++) {
-					items.addView(getView(result.get(i), i));
+				// TODO Auto-generated method stub
+				//fg.setAdapter(new MyAdapter(result));
+				//mResult = result; 
+				
+				//ImageAdapter adapter = new ImageAdapter(mContext, result);
+		        //adapter.createReflectedImages();//创建倒影效果
+		        /*fg.setFadingEdgeLength(0);
+		        fg.setSpacing(-112); //图片之间的间距
+		        fg.setAdapter(adapter);*/
+		        //fg.setSelection(50);
+				
+				
+				
+				images = new ImageView[result.size()] ;
+				items.removeAllViews() ;
+				for(int i=0;i<result.size();i++){
+					items.addView(getView(result.get(i),i));
 				}
 				// stopTimer() ;
 				// startTimer() ;
@@ -107,13 +110,15 @@ public class RecommendPage extends BasePage {
 			images[index].setImageBitmap(createMirrorImageWithOrigain(Cache
 					.getBitmapFromCache(imageUrl)));
 		} else {
-			imageLoadTask2.loadImage(images[index], imageUrl,
-					new ImageLoadTask.ImageViewCallback1() {
-
-						public void callbak(ImageView view, Bitmap bm) {
-							view.setImageBitmap(createMirrorImageWithOrigain(bm));
-						};
-					});
+			imageLoadTask2.loadImage(images[index], imageUrl, new ImageLoadTask.ImageViewCallback1() {
+				
+				public void callbak(ImageView view, Bitmap bm) {
+					BitmapFactory.Options options = new BitmapFactory.Options();
+					options.inSampleSize = 2 ;
+					bm.getWidth() ;
+					view.setImageBitmap(createMirrorImageWithOrigain(bm)) ;
+				} ;
+			}) ;
 		}
 	}
 

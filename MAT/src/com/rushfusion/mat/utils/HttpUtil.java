@@ -60,8 +60,10 @@ public class HttpUtil {
 				return true ;
 			}
 		} catch (ClientProtocolException e) {
+			httpRequest.abort() ;
 			e.printStackTrace();
 		} catch (IOException e) {
+			httpRequest.abort() ;
 			e.printStackTrace();
 		}
 		return false;

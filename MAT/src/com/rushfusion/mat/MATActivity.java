@@ -34,6 +34,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
@@ -108,7 +109,6 @@ public class MATActivity extends Activity implements OnClickListener{
 		parent = (ViewGroup) findViewById(R.id.parent);
 		conditionBar = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.conditionbar, null);
 		level2 = (ViewGroup) findViewById(R.id.level_2);
-		level2.setVisibility(View.INVISIBLE);
 		header_origin = (ImageView) findViewById(R.id.header_origin);
 		header_origin.setOnClickListener(new OnClickListener() {
 			
@@ -155,7 +155,7 @@ public class MATActivity extends Activity implements OnClickListener{
 
 	private void initCategory(String origin) {
 		parent.removeAllViews();
-		final ViewGroup level1 = (ViewGroup) findViewById(R.id.level1);
+		level1 = (ViewGroup) findViewById(R.id.level1);
 		level1.removeAllViews();
 		new AsyncTask<String, Void, List<String>>(){
 
@@ -701,6 +701,7 @@ public class MATActivity extends Activity implements OnClickListener{
 	}
 
 	private String bywhat = "name";
+	private ViewGroup level1;
 	
 	private void initSearchBar() {
 		searchBar = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.page_search, null);

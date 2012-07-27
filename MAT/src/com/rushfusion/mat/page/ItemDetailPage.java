@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +20,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView.ScaleType;
 
 import com.rushfusion.mat.R;
+import com.rushfusion.mat.utils.Cache;
 import com.rushfusion.mat.utils.ImageLoadTask;
 import com.rushfusion.mat.utils.ItemDetailGridViewAdapter;
 import com.rushfusion.mat.video.entity.Movie;
@@ -61,6 +63,20 @@ public class ItemDetailPage extends Activity{
 		playMovieImage = (Button)findViewById(R.id.playMovieImage);
 //		image.setImageURI(Uri.parse(movie.getThumb()));
 		ImageLoadTask.imageLoad(image, movie.getThumb());
+		/*ImageLoadTask  imageTask = new ImageLoadTask() ;
+		if(Cache.getBitmapFromCache(movie.getThumb())!=null) {
+			image.setImageBitmap(Cache.getBitmapFromCache(movie.getThumb())) ;
+		}else{
+			imageTask.loadImage(image, movie.getThumb(), new ImageLoadTask.ImageViewCallback1() {
+				
+				@Override
+				public void callbak(ImageView view, Bitmap bm) {
+					view.setImageBitmap(bm);
+				}
+				
+			});
+		}*/
+		
 		image.setScaleType(ScaleType.FIT_XY);
 		name.setText(movie.getName());
 //		nameleft.setText(movie.getName());
