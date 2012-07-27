@@ -69,7 +69,7 @@ public class RecommendPage extends BasePage{
 			public void onPrepare() {
 				// TODO Auto-generated method stub
 				init();
-				initBrief() ;
+				//initBrief() ;
 			}
 
 			@Override

@@ -136,6 +136,7 @@ public class DataParser {
 				sourceMap.put("name", obj.get("name").toString());
 				sourceList.add(sourceMap);
 			}
+			inputSteam.close() ;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -167,6 +168,7 @@ public class DataParser {
 			for (int i = 0; i < itemsArray.length(); i++) {
 				dataList.add(itemsArray.getString(i));
 			}
+			inputSteam.close() ;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -243,6 +245,7 @@ public class DataParser {
 						thumb, length, url, play, id, recent);
 				dataList.add(movie);
 			}
+			inputSteam.close() ;
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (JSONException e) {

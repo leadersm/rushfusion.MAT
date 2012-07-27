@@ -1,7 +1,9 @@
 package com.rushfusion.mat.utils;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.http.HttpEntity;
@@ -15,7 +17,6 @@ import org.apache.http.params.HttpParams;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -26,6 +27,7 @@ public class ImageLoadTask {
 	public static final String TAG = "HttpUtil" ;
 	private static int NETWORK_CONNECT_TIMEOUT = 20000;
 	private static int NETWORK_SO_TIMEOUT = 20000;
+	private boolean falg = true ;
 	
 	public static Bitmap loadBitmap(String url) {
 		Log.d(TAG, "loadbitmap url:" + url);
@@ -70,9 +72,11 @@ public class ImageLoadTask {
 				return bmp;
 		} catch (OutOfMemoryError oe) {
 			Log.i(TAG, "OutOfMemoryError : " + oe);
+			mHttpGet.abort();
 			return null;
 		} catch (Exception e) {
 			Log.i(TAG, "Exception : " + e);
+			mHttpGet.abort();
 			return null;
 		}
 	}
@@ -132,9 +136,11 @@ public class ImageLoadTask {
 			
 		}catch(OutOfMemoryError oe){
 			Log.i(TAG, "OutOfMemoryError : " + oe);
+			mHttpGet.abort() ;
 			return null;
 		}catch(Exception e){
 			Log.i(TAG, "Exception : " + e);
+			mHttpGet.abort() ;
 			return null;
 		}
 	}
@@ -146,7 +152,7 @@ public class ImageLoadTask {
 			public void run() {
 				Log.d("loadImage","murl:"+mUrl);
 				final Bitmap bmp = loadBitmap(mUrl);
-				if(bmp !=null){
+				if(bmp !=null && !bmp.isRecycled()){
 					mView.post(new Runnable(){
 						public void run() {
 							mView.setImageBitmap(bmp);
@@ -193,7 +199,7 @@ public class ImageLoadTask {
 	}
 	
 	public static void loadImageLimited(final ImageView view,final String url){
-		loadImageLimited(view,url,null);
+		loadImageLimited(view,url,null); 
 	}
 	
 	static int nMaxThreadNum = 6;
@@ -260,9 +266,9 @@ public class ImageLoadTask {
 					nThreadLoadImage ++;
 				}
 				try {
-					Log.d("TAG","loadImageLimited loading the image murl:" + mUrl);
 					final Bitmap bmp = loadBitmap(mUrl);
-					if(bmp !=null){
+					Log.d("TAG","loadImageLimited loading the image murl:" + mUrl);
+					if(bmp !=null&&!bmp.isRecycled()){
 						attachedUrl = getUrlFromViewTag(mView);
 						if(mUrl.equals(attachedUrl)){
 							mView.post(new Runnable(){
@@ -272,7 +278,7 @@ public class ImageLoadTask {
 										cb.callbak(mView, mUrl, bmp);
 									}else{
 										if (mView.getWindowVisibility() == View.VISIBLE) {
-											mView.setImageBitmap(bmp);
+											if(!bmp.isRecycled())mView.setImageBitmap(bmp);
 											Log.d("TAG","loadImageLimited update image v:" + mView + "from:"+mUrl);
 										} else {
 											Log.d("TAG","loadImageLimited update image cancled");
@@ -291,6 +297,7 @@ public class ImageLoadTask {
 				}finally{
 					synchronized(mLoadImageLock) {
 						nThreadLoadImage --;
+						Log.d("TAG","finally method execute....");
 					}
 				}
 			}}).start();
@@ -324,10 +331,14 @@ public class ImageLoadTask {
 		Log.d("uuu", imageView+"") ;
 		this.mCallback = callback ;
 		this.mImageView = imageView ;
+		//Cache.checkCachIsRelease() ;
 		new Thread(){
 			public void run() {
 				Bitmap bitmap = loadBitmap(imageUrl) ;
-				Cache.mHardBitmapCache.put(imageUrl, bitmap) ;
+				Log.d("ImageLoadTask", bitmap+"") ;
+				if(Cache.mHardBitmapCache!=null) {
+					Cache.mHardBitmapCache.put(imageUrl, bitmap) ;
+				}
 				Message msg = new Message() ;
 				msg.obj = bitmap ;
 				msg.what = LOAD_IMAGE_TASK ;
