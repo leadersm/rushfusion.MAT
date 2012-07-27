@@ -34,6 +34,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
@@ -448,9 +449,10 @@ public class MATActivity extends Activity implements OnClickListener{
 		}
 		destBtn.setBackgroundResource(selectedId);
 		if(destBtn.getText().equals(this.getResources().getString(R.string.shouye))) {
-			level1.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.level_title_bg)) ;
+			//level1.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.level_title_bg)) ;
 		} else {
-			level1.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.middle_menu_bg)) ;
+			//level1.setBackgroundDrawable(null) ;
+			//level1.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.title_one_bg)) ;
 		}
 	}
 
