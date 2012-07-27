@@ -33,6 +33,7 @@ import android.widget.MediaController;
 import android.widget.MediaController.MediaPlayerControl;
 import android.widget.Toast;
 
+import com.rushfusion.mat.MATActivity;
 import com.rushfusion.mat.R;
 
 public class MediaPlayerShow extends Activity implements OnBufferingUpdateListener,
@@ -330,6 +331,8 @@ public class MediaPlayerShow extends Activity implements OnBufferingUpdateListen
 
 	@Override
 	public void onBufferingUpdate(MediaPlayer mp, int percent) {
+		Log.d("MAT", "mat onBufferingUpdate-->"+percent);
+		
 	}
 
 	@Override
