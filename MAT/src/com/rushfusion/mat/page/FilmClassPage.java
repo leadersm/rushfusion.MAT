@@ -254,7 +254,7 @@ public class FilmClassPage extends BasePage {
 			public void onFinished(List<Movie> result) {
 				context.dismissDialog(MATActivity.DIALOG_LOADING);
 				isLoading = false;
-				if(result.size()<=0)return;
+				if(result==null||result.size()<=0)return;
 				movies.clear();
 				movies = result;
 				ba.notifyDataSetChanged();
@@ -289,7 +289,7 @@ public class FilmClassPage extends BasePage {
 			public void onFinished(List<Movie> result) {
 				context.dismissDialog(MATActivity.DIALOG_LOADING);
 				isLoading = false;
-				if(result.size()<=0)return;
+				if(result==null||result.size()<=0)return;
 				Log.d("MAT","result.size--->"+result.size());
 				movies.clear();
 				movies = result;

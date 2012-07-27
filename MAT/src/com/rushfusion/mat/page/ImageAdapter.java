@@ -68,7 +68,7 @@ public class ImageAdapter extends BaseAdapter {
       
       //创建一个宽度不变，高度为原图+倒影图高度的位图	
       Bitmap bitmapWithReflection = Bitmap.createBitmap(width,
-        (height + height / 2), Config.ARGB_8888);
+        (height + height / 2), Config.ARGB_4444);
       
       //将上面创建的位图初始化到画布
       Canvas canvas = new Canvas(bitmapWithReflection);

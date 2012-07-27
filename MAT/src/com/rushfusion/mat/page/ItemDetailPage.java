@@ -112,8 +112,10 @@ public class ItemDetailPage extends Activity{
 					}
 				}
 			});
+			playMovieImage.requestFocus();
 		}else{
 			playMovieImage.setVisibility(View.INVISIBLE);
+			episode.requestFocus();
 		}
 		
 		
@@ -129,6 +131,7 @@ public class ItemDetailPage extends Activity{
 		}
 		gda = new ItemDetailGridViewAdapter(this, list);
 		episode.setAdapter(gda);
+		
 		episode.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override

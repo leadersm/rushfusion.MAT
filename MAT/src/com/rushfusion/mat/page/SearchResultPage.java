@@ -120,7 +120,7 @@ public class SearchResultPage extends BasePage {
 			@Override
 			public void onFinished(List<Movie> result) {
 				if(result!=null&&result.size()>0){
-					String msg = "搜索与\""+getKey()+"\"相关的内容，共计结果:"+parser.getTotal()+"个";
+					String msg = "在<"+mCurrentCategory+">中搜索与\""+getKey()+"\"相关的内容，共计结果:"+parser.getTotal()+"个";
 					Toast.makeText(context, createInfoMessage(msg), 1).show();
 					movies = result;
 					ba.notifyDataSetChanged();
@@ -128,7 +128,7 @@ public class SearchResultPage extends BasePage {
 					updatePageIndex();
 				}else{
 					String recommendUrl = "http://tvsrv.webhop.net:9061/query?source="
-				+mCurrentOrigin+"&category="+mCurrentCategory+"&sort=play&page=1&pagesize=6";
+				+mCurrentOrigin+"&category="+mCurrentCategory+"&sort=play&page=1&pagesize=10";
 					loadPage(recommendUrl, R.layout.page_search_noresult,new BasePage.onLoadingDataCallBack() {
 						
 						ViewGroup items;
@@ -136,7 +136,7 @@ public class SearchResultPage extends BasePage {
 						@Override
 						public void onPrepare() {
 							TextView key = (TextView) contentView.findViewById(R.id.search_failed_key);
-							String msg = "非常抱歉，没有找到与\""+getKey()+"\"相关的内容。";
+							String msg = "非常抱歉，在<"+mCurrentCategory+">中没有找到与\""+getKey()+"\"相关的内容。";
 							items = (ViewGroup) contentView.findViewById(R.id.gallery_search);
 							key.setText(createInfoMessage(msg));
 							Button research = (Button) contentView.findViewById(R.id.search_result_researchBtn);

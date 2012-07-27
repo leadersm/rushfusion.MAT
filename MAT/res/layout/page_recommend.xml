@@ -35,7 +35,7 @@
         style="@style/font.header"
         android:layout_width="900dip"
         android:layout_height="20dip"
-        android:layout_above="@+id/view1"
+        android:layout_above="@+id/group_btns"
         android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
@@ -43,7 +43,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/view1"
+        android:id="@+id/group_btns"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/imageView1"
@@ -59,7 +59,7 @@
             android:layout_width="150dip"
             android:layout_height="wrap_content"
             android:nextFocusUp="@+id/automoveview"
-            android:text="今日热播" />
+            android:text="@string/today_play" />
 
         <Button
             android:id="@+id/score"
@@ -67,7 +67,7 @@
             android:layout_width="150dip"
             android:layout_height="wrap_content"
             android:nextFocusUp="@+id/automoveview"
-            android:text="今日好评" />
+            android:text="@string/today_score" />
 
         <Button
             android:id="@+id/comment"
@@ -75,7 +75,7 @@
             android:layout_width="150dip"
             android:layout_height="wrap_content"
             android:nextFocusUp="@+id/automoveview"
-            android:text="今日热议" />
+            android:text="@string/today_comment" />
 
         <Button
             android:id="@+id/recent"
@@ -83,7 +83,7 @@
             android:layout_width="150dip"
             android:layout_height="wrap_content"
             android:nextFocusUp="@+id/automoveview"
-            android:text="今日更新" />
+            android:text="@string/today_recent" />
     </LinearLayout>
 
     <HorizontalScrollView
@@ -91,13 +91,13 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/view1"
+        android:layout_below="@+id/group_btns"
         android:layout_marginTop="-104dip"
         android:scrollbars="none" >
 
         <LinearLayout
             android:id="@+id/items"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:orientation="horizontal" >
         </LinearLayout>

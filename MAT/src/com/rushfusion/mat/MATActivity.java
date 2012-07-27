@@ -448,12 +448,6 @@ public class MATActivity extends Activity implements OnClickListener{
 			v.setBackgroundResource(selectorId);
 		}
 		destBtn.setBackgroundResource(selectedId);
-		if(destBtn.getText().equals(this.getResources().getString(R.string.shouye))) {
-			//level1.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.level_title_bg)) ;
-		} else {
-			//level1.setBackgroundDrawable(null) ;
-			//level1.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.title_one_bg)) ;
-		}
 	}
 
 	protected void setCategoryBtnStyle(Button btn, String name) {
@@ -467,6 +461,7 @@ public class MATActivity extends Activity implements OnClickListener{
 	private void setSourceButtonStyle(ImageButton btn,String name,String logourl) {
 		btn.setLayoutParams(new LayoutParams(200,80));
 		Bitmap bm = ImageLoadTask.loadBitmap(logourl) ;
+		if(bm==null)return;
 		btn.setImageBitmap(zoomBitmap(bm, 180, 60));
 	}
 	
@@ -517,7 +512,7 @@ public class MATActivity extends Activity implements OnClickListener{
 	
 	private void initRecommendPage() {
 		String recommendUrl = "http://tvsrv.webhop.net:9061/query?source="
-				+currentOrigin+"&sort=play&page=1&pagesize=10";
+				+currentOrigin+"&page=1&pagesize=10";
 		RecommendPage  recommendPage = RecommendPage.getInstance(this,parent);
 		recommendPage.loadPage(recommendUrl,R.layout.page_recommend);
 		PageCache.getInstance().set(R.layout.page_recommend, recommendPage);
@@ -808,6 +803,7 @@ public class MATActivity extends Activity implements OnClickListener{
 		keywords = m.replaceAll("");
 		String url = "http://tvsrv.webhop.net:9061/query?"
 				+"source="+currentOrigin
+				+"&category="+currentCategory
 				+"&page=1&pagesize="+FILMCLASSPAGESIZE
 				+"&"+bywhat+"="+keywords;
 		
