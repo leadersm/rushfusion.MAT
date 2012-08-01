@@ -159,6 +159,7 @@ public class ItemDetailPage extends Activity{
 			}
 
 		});
+		episode.setSelection(0) ;
 	}
 	
 	
