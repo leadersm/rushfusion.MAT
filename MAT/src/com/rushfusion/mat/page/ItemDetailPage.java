@@ -62,8 +62,8 @@ public class ItemDetailPage extends Activity{
 		episode = (GridView) findViewById(R.id.page_item_detail_episode);
 		playMovieImage = (Button)findViewById(R.id.playMovieImage);
 //		image.setImageURI(Uri.parse(movie.getThumb()));
-		ImageLoadTask.imageLoad(image, movie.getThumb());
-		/*ImageLoadTask  imageTask = new ImageLoadTask() ;
+		//ImageLoadTask.imageLoad(image, movie.getThumb());
+		ImageLoadTask  imageTask = new ImageLoadTask() ;
 		if(Cache.getBitmapFromCache(movie.getThumb())!=null) {
 			image.setImageBitmap(Cache.getBitmapFromCache(movie.getThumb())) ;
 		}else{
@@ -75,7 +75,7 @@ public class ItemDetailPage extends Activity{
 				}
 				
 			});
-		}*/
+		}
 		
 		image.setScaleType(ScaleType.FIT_XY);
 		name.setText(movie.getName());
