@@ -51,7 +51,6 @@ import com.rushfusion.mat.utils.ImageLoadTask.ImageViewCallback1;
 
 public class MATActivity extends Activity implements OnClickListener{
     /** Called when the activity is first created. */
-	
 	public static final int FILMCLASSPAGE = 1;
 	public static final int FILMCLASSPAGESIZE = 24;
 	
